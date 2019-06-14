@@ -39,7 +39,7 @@ void section_reset(uint32_t *bsection, size_t size)
 }
 
 //
-// initialize()
+// initialize() - the real add-in entry.
 // We are currently running in the storage memory, so we should
 // load data in RAM and wipe the bss section for initialize static
 // and global variables.

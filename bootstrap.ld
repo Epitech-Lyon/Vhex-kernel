@@ -22,6 +22,10 @@ SECTIONS
 
 	.rodata	: SUBALIGN(4) {
 		*(.rodata)
+		. = ALIGN(4);
+		_bcmd_cache = . ;
+		*(.cmd.cache)
+		_ecmd_cache = . ;
 	} > rom
 
 

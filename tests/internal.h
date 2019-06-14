@@ -8,6 +8,7 @@
 // status_t - all status available for hook.
 //	* FAIL_NONE	: force malloc to work normaly.
 //	* FAIL_NEXT	: force the next call of malloc to return NULL.
+//	* FAIL_NEXT_DYN	: force X-nth call of malloc to return NULL.
 //	* FAIL_ALWAYS	: force all malloc to return NULL.
 //
 typedef enum status_e

@@ -73,8 +73,9 @@ static void *my_malloc_hook(size_t size, const void *caller)
 // This function is the only way to interact with the hook; it will
 // define the behavior of malloc:
 //	* FAIL_NEXT	: force the next call of malloc to return NULL.
+//	* FAIL_NEXT_DYN	: force X-nth call of malloc to return NULL.
 //	* FAIL_ALWAYS	: force all malloc return NULL.
-//	* NORMAL	: force malloc to work normally.
+//	* FAIL_NONE	: force malloc to work normally.
 //
 void malloc_hook_update(status_t status, ...)
 {

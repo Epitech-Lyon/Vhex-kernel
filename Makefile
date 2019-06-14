@@ -5,7 +5,7 @@
 # ---
 include global.mk
 
-NAME	:= dump
+NAME	:= vhex
 EXEC	:= $(NAME).g1a
 HEADER	:= -Iinclude
 DEBUG	:= link_map.txt

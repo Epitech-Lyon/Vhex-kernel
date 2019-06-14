@@ -14,7 +14,7 @@
 #define KEY_UP		30018
 #define KEY_DOWN	30023
 #define KEY_LEFT	30020
-#define KEY_RIGHT	30021
+#define KEY_RIGHT	30020
 #define KEY_OPTN	30008
 
 #define KEY_F1	30009
@@ -32,6 +32,7 @@
 #define KEY_INS		30033
 #define KEY_PI		0xd0
 #define KEY_QUOTE	KEY_PI
+#define KEY_EXIT	30002
 
 #define KEY_A	 0x41
 #define KEY_B	 0x42
@@ -76,20 +77,18 @@
 #define SESSIONS_SLOT		6
 #define CMD_LENGHT_MAX		15
 
-enum mode_e
+enum session_mode_e
 {
 	UNUSED,
 	COMMAND,
 	NORMAL,
-	FREE
 };
 
 struct session_s
 {
-	enum mode_e mode;
+	enum session_mode_e mode;
 	ptrdiff_t anchor;
-	off_t cursor;
-	size_t size;
+	int cursor;
 };
 
 enum insert_mode
@@ -101,7 +100,7 @@ enum insert_mode
 };
 
 
-struct dump_s
+struct vhex_s
 {
 	int current_session;
 	struct session_s session[SESSIONS_SLOT];
@@ -119,6 +118,6 @@ void dclear(void);
 void dupdate(void);
 
 void display_instructions(const struct session_s *session);
-void display_metainfos(const struct dump_s *dump, const struct session_s *session);
-void key_handling(struct dump_s *dump, struct session_s *session, unsigned int key);
+void display_metainfos(const struct vhex_s *vhex, const struct session_s *session);
+void key_handling(struct vhex_s *vhex, struct session_s *session, unsigned int key);
 #endif /*__UTILS_H__*/

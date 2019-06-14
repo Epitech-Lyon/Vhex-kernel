@@ -8,10 +8,17 @@
 #include <string.h>
 #include <errno.h>
 
-// TODO:write docs !
-// *-*
-// |A| --> 
-// *-*
+//---
+// history_update()
+// Add new history node to the chained list. This is a singly
+// linked list, but the node insertion from the beginning.
+//
+// Exemple: add node A, B, C and D
+// 1. A -> NULL
+// 2. B -> A -> NULL
+// 3. C -> B -> A -> NULL
+// 4. D -> C -> B -> A -> NULL
+//---
 int history_update(struct node **list, const char *data)
 {
 	void *swap;
@@ -29,6 +36,11 @@ int history_update(struct node **list, const char *data)
 	return (0);
 }
 
+//
+// history_get()
+// primitive function which will return the data stored in
+// the "offset" position in the list.
+//
 const void *history_get(struct node *list, off_t offset)
 {
 	if (list == NULL)
@@ -38,6 +50,10 @@ const void *history_get(struct node *list, off_t offset)
 	return (history_get(list->next, offset - 1));
 }
 
+//
+// history_quit()
+// Free all allocated memory.
+//
 void history_quit(struct node **list)
 {
 	if (list == NULL || *list == NULL)

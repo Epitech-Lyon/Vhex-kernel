@@ -10,7 +10,8 @@ LD		:= $(COMPILER)ld
 WRAPPER		:= g1a-wrapper
 
 CFLAGS		:= -Werror -Wall -W -Wextra -std=c18 -m3 -mb -mrenesas \
-			-ffreestanding -nostdlib -fstrict-volatile-bitfields
+			-ffreestanding -nostdlib -fstrict-volatile-bitfields \
+			-Wno-unused-const-variable
 
 BUILD-DIR	:= build/
 SRC-DIR		:= src/

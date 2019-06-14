@@ -1,9 +1,9 @@
 .global	_casio_GetKey
 .global	_casio_PrintMini
 .global	_casio_Bdisp_PutDisp_DD
-.global	_casio_Bdisp_AllClr_DDVRAM
+.global	_casio_Bdisp_AllClr_VRAM
 .global	_casio_Bdisp_DrawLine_VRAM
-.global	_casio_Bdisp_AreaClr_DDVRAM
+.global	_casio_Bdisp_AreaClr_VRAM
 .global	_casio_RestoreDisp
 .global	_casio_SaveDisp
 .global	_casio_Malloc
@@ -12,9 +12,9 @@
 .type	_casio_GetKey, @function
 .type	_casio_PrintMini, @function
 .type	_casio_Bdisp_PutDisp_DD, @function
-.type	_casio_Bdisp_AllClr_DDVRAM, @function
+.type	_casio_Bdisp_AllClr_VRAM, @function
 .type	_casio_Bdisp_DrawLine_VRAM, @function
-.type	_casio_Bdisp_AreaClr_DDVRAM, @function
+.type	_casio_Bdisp_AreaClr_VRAM, @function
 .type	_casio_RestoreDisp, @function
 .type	_casio_SaveDisp, @function
 .type	_casio_Malloc, @function
@@ -33,7 +33,7 @@ _casio_PrintMini:
 	jmp @r1
 	nop
 
-_casio_Bdisp_AllClr_DDVRAM:
+_casio_Bdisp_AllClr_VRAM:
 	mov.l	.syscall_tab, r1
 	mov.l	.sys_clear, r0
 	jmp @r1
@@ -51,7 +51,7 @@ _casio_Bdisp_DrawLine_VRAM:
 	jmp @r1
 	nop
 
-_casio_Bdisp_AreaClr_DDVRAM:
+_casio_Bdisp_AreaClr_VRAM:
 	mov.l	.syscall_tab, r1
 	mov.l	.sys_clear_area, r0
 	jmp @r1
@@ -89,7 +89,7 @@ _casio_Free:
 .sys_getkey:		.long 0x0000090f
 .sys_display:		.long 0x00000028
 .sys_printMini:		.long 0x00000c4f
-.sys_clear_area:	.long 0x0000014c
+.sys_clear_area:	.long 0x0000014b
 .sys_restore_disp:	.long 0x00000814
 .sys_save_disp:		.long 0x00000813
 .sys_malloc:		.long 0x00000acd

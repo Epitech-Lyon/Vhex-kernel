@@ -1,61 +1,76 @@
-#include <commands.h>
+#include <command.h>
 #include <string.h>
 #include <errno.h>
 
-CMDBLOCK(rom,		"rom",		0x00300200,	0xffffffff,	NULL);
-CMDBLOCK(systab,	"systab",	0x80010070,	0xffffffff,	NULL);
-CMDBLOCK(ram, 		"ram",		NULL,		0xffffffff,	&ram_jump);
-CMDBLOCK(vbrjmp,	"vbrjmp",	NULL,		0xffffffff,	&vbr_jump);
-CMDBLOCK(addr_jump,	"jmp",		NULL,		0xffffffff,	&address_jump);
-CMDBLOCK(sysc_jump,	"syscall",	NULL,		0xffffffff,	&syscall_jump);
+//---
+// Define all "command block". One block is composed by:
+//	* id: used uniquely for the "command_find()" internal cache.
+//	* name: string which contains the user's command.
+//	* anchor: used if the constructor are not set, it is the new "location" of the anchor.
+//	* constructor: the command constructor (and the new anchor location will be ignored).
+//---
+//TODO: generate automatically anonymous name, and remove "command_find()" cache.
+/*CMDBLOCK(rom,		"rom",		0x00300200,	NULL);
+CMDBLOCK(systab,	"systab",	0x80010070,	NULL);
+CMDBLOCK(ram, 		"ram",		NULL,		&ram_jump);
+CMDBLOCK(vbrjmp,	"vbrjmp",	NULL,		&vbr_jump);
+CMDBLOCK(addr_jump,	"jmp",		NULL,		&address_jump);
+CMDBLOCK(sysc_jump,	"syscall",	NULL,		&syscall_jump);
+
+CMDBLOCK(exit,		"quit",		NULL,		&quit_command);
+CMDBLOCK(locate,	"where",	NULL,		&where_command);
+*/
 
 
-//TODO:
-//	- dynamique allocation cache.
-//	- rename function.
-static int find_command(int argc, char **argv, struct session_s *session,
-struct dump_s *dump)
+//
+// command_find
+// Try to find the user command in the internal cache and execute constructor.
+//
+static int command_find(int argc, char **argv, struct session_s *session,
+struct vhex_s *vhex)
 {
-	static const struct cmd_info *cache[] = {
-		&addr_jump, &vbrjmp, &systab, &sysc_jump, &ram, &rom, NULL
-	};
-	size_t i;
+	const struct cmd_info *command;
+	int tmp;
 
-	i = -1;
-	while (cache[++i] != NULL && strcmp(cache[i]->name, *argv));
-	if (cache[i] == NULL)
-		return (EBADMSG);
-	if (cache[i]->init == NULL){
-		session->cursor = 0;
-		session->anchor = cache[i]->update.anchor;
-		session->size = cache[i]->update.size;
-		sprintf(dump->info, "%#x", session->anchor);
-		return (0);
+	command = cmd_cache_find(*argv);
+	if (command == NULL)
+		return (EINVAL);
+	if (command->constructor == NULL){
+		strcpy(vhex->info, "constructor error");
+		return (ENOSYS);
 	}
-	cache[i]->init(argc, argv, session, dump->info);
-	sprintf(dump->info, "%#x", session->anchor);
+	tmp = session->anchor;
+	memset(vhex->info, '\0', CMD_LENGHT_MAX);
+	command->constructor(argc, argv, session, vhex->info);
+	if (*vhex->info == '\0')
+		sprintf(vhex->info, "%#x", session->anchor);
+	if (tmp != session->anchor)
+		session->cursor = 0;
 	return (0);
 }
 
-void command_entry(struct session_s *session, struct dump_s *dump)
+//
+// command_entry()
+// The goal of this part is to parse and execute user's command.
+//
+void command_entry(struct session_s *session, struct vhex_s *vhex)
 {
 	char **argv;
 	int argc;
 	int ret;
 
-	if (history_update(&dump->history.list, dump->insert.cmd) == 0){
-		dump->history.offset = 0;
-		dump->history.deep += 1;
+	if (history_update(&vhex->history.list, vhex->insert.cmd) == 0){
+		vhex->history.offset = 0;
+		vhex->history.deep += 1;
 	}
-	ret = strtotab(&argc, &argv, dump->insert.cmd);
-	memset(dump->insert.cmd, '\0', CMD_LENGHT_MAX);
+	ret = strtotab(&argc, &argv, vhex->insert.cmd);
+	memset(vhex->insert.cmd, '\0', CMD_LENGHT_MAX);
 	if (ret != 0){
-		sprintf(dump->info, "error (%d)", ret);
+		sprintf(vhex->info, "error (%d)", ret);
 		return;
 	}
-	if (find_command(argc, argv, session, dump) != 0)
-		strcat(dump->info, "command error");
+	if (command_find(argc, argv, session, vhex) != 0)
+		strcat(vhex->info, "command error");
 	session->mode = (session->anchor == 0x00000000) ? UNUSED : NORMAL;
-	session->cursor = 0;
 	strtotab_quit(&argc, &argv);
 }

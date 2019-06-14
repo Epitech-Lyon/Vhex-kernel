@@ -3,9 +3,7 @@
 #include <opcode.h>
 #include <string.h>
 
-//TODO:
-//	- move me !
-//	- attribute always inline ?
+//TODO: move me ?
 static INLINE int get_shift(uint16_t mask)
 {
 	int i;
@@ -17,7 +15,8 @@ static INLINE int get_shift(uint16_t mask)
 	return (i);
 }
 
-static void get_mnemonic(char *str, uint16_t bytes_code)
+/* get_instructions() - find mnemonic and instruction argument(s) */
+static void get_instructions(char *str, uint16_t bytes_code)
 {
 	int shift[ARGUMENTS_MAX];
 	size_t i;
@@ -40,9 +39,13 @@ static void get_mnemonic(char *str, uint16_t bytes_code)
 	(bytes_code & opcode[i].arg_mask[2]) >> shift[2]);
 }
 
-//TODO:
-//	- resize buffer.
-//	- handle multiple modes.
+//
+// display_instructions()
+// Translate "on-the-fly" each binary instructions stored at
+// the anchor location.
+// Almost instructions can be translated; only FPU instructions
+// is not handled because it's not available on the SH3 based MPU.
+//
 void display_instructions(const struct session_s *session)
 {
 	char mnemonic[128];
@@ -60,9 +63,9 @@ void display_instructions(const struct session_s *session)
 		return;
 	}
 	y = -1;
-	area = (void*)(session->anchor + session->cursor);
+	area = (void*)(session->anchor + (session->cursor << 1));
 	while (++y < LINE_OFFSET){
-		get_mnemonic(mnemonic, area[y]);
+		get_instructions(mnemonic, area[y]);
 		sprintf(buf, "%4x %4x %s", &(area[y]), area[y], mnemonic);
 		print(0, y * FONT_HEIGHT, buf);
 	}

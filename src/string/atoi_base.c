@@ -8,6 +8,11 @@ static INLINE int check_base(char n, int base)
 	return ((max < n));
 }
 
+//
+// atoi_base()
+// Wrapped atoi function that takes the base which the number
+// (stored in the string) are encoded 
+//
 uint32_t atoi_base(char const *str, int base)
 {
 	uint32_t result;
