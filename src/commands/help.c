@@ -205,7 +205,7 @@ static void help_engine(char const *text, int nb_line)
 /* help() - display command manual pages. */
 static void help(int argc, char **argv, struct session_s *session, char *info)
 {
-	const struct cmd_info *command;
+	const struct cmd_block *command;
 	int nb_line;
 
 	(void)session;

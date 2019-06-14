@@ -32,6 +32,6 @@ struct cmd_block
 void command_entry(struct session_s *session, struct vhex_s *vhex);
 
 /* cmd_cache_find() - find command in the cache section. */
-const struct cmd_info *cmd_cache_find(char const *name);
+const struct cmd_block *cmd_cache_find(char const *name);
 
 #endif /*__COMMANDS_H__*/

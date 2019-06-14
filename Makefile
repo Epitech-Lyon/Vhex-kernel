@@ -75,12 +75,12 @@ clean:
 	rm -rf $(BUILD)
 	rm -f *.gc*
 	rm -f $(DEBUG)
+	rm -f $(NAME).bin
+	rm -f $(NAME).elf
 
 fclean: clean
 	@ printf "$(red)Delete binary files$(nocolor)\n"
 	rm -f $(EXEC)
-	rm -f $(NAME).bin
-	rm -f $(NAME).elf
 
 re: fclean all install
 

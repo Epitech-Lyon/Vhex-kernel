@@ -15,9 +15,9 @@ extern uint32_t ecmd_cache;
 // We use the section symbols to know where the cache end.
 // (see bootstrap.ld).
 //
-const struct cmd_info *cmd_cache_find(char const *name)
+const struct cmd_block *cmd_cache_find(char const *name)
 {
-	const struct cmd_info *cache;
+	const struct cmd_block *cache;
 	size_t i;
 	
 	i = -1;

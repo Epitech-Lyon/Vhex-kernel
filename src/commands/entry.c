@@ -10,7 +10,7 @@
 static int command_find(int argc, char **argv, struct session_s *session,
 struct vhex_s *vhex)
 {
-	const struct cmd_info *command;
+	const struct cmd_block *command;
 	int tmp;
 
 	command = cmd_cache_find(*argv);
