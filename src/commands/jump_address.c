@@ -4,7 +4,7 @@
 // Internal prototype.
 static void address_jump(int argc, char **argv, struct session_s *session, char *info);
 
-// Define the command block into the cache
+// Define the command block into the cache.
 CMDBLOCK("jmp", &address_jump,
 "JMP command help\n"
 "This command takes one\nparameter: the address (hexa)\n"

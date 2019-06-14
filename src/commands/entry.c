@@ -2,29 +2,10 @@
 #include <string.h>
 #include <errno.h>
 
-//---
-// Define all "command block". One block is composed by:
-//	* id: used uniquely for the "command_find()" internal cache.
-//	* name: string which contains the user's command.
-//	* anchor: used if the constructor are not set, it is the new "location" of the anchor.
-//	* constructor: the command constructor (and the new anchor location will be ignored).
-//---
-//TODO: generate automatically anonymous name, and remove "command_find()" cache.
-/*CMDBLOCK(rom,		"rom",		0x00300200,	NULL);
-CMDBLOCK(systab,	"systab",	0x80010070,	NULL);
-CMDBLOCK(ram, 		"ram",		NULL,		&ram_jump);
-CMDBLOCK(vbrjmp,	"vbrjmp",	NULL,		&vbr_jump);
-CMDBLOCK(addr_jump,	"jmp",		NULL,		&address_jump);
-CMDBLOCK(sysc_jump,	"syscall",	NULL,		&syscall_jump);
-
-CMDBLOCK(exit,		"quit",		NULL,		&quit_command);
-CMDBLOCK(locate,	"where",	NULL,		&where_command);
-*/
-
-
 //
 // command_find
-// Try to find the user command in the internal cache and execute constructor.
+// Try to find the user command in the internal cache and execute
+// the command's function.
 //
 static int command_find(int argc, char **argv, struct session_s *session,
 struct vhex_s *vhex)
@@ -36,7 +17,7 @@ struct vhex_s *vhex)
 	if (command == NULL)
 		return (EINVAL);
 	if (command->constructor == NULL){
-		strcpy(vhex->info, "constructor error");
+		strcpy(vhex->info, "function error");
 		return (ENOSYS);
 	}
 	tmp = session->anchor;
@@ -51,7 +32,7 @@ struct vhex_s *vhex)
 
 //
 // command_entry()
-// The goal of this part is to parse and execute user's command.
+// The goal of this part is to parse and execute the user's command.
 //
 void command_entry(struct session_s *session, struct vhex_s *vhex)
 {

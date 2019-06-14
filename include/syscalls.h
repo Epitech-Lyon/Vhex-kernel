@@ -3,6 +3,7 @@
 
 #include <types.h>
 
+// Internal Casio datat structure
 struct rect
 {
 	int left;
@@ -11,16 +12,34 @@ struct rect
 	int bottom;
 };
 
-
-// Casio prototype.
+//
+// Casio prototypes.
+//
+/* GetKey() - display Casio's VRAM and wait keyboard input. */
 void casio_GetKey(unsigned int *key);
+
+/* Bdisp_AllClr_VRAM() - clear entirely the Casio's VRAM */
 void casio_Bdisp_AllClr_VRAM(void);
+
+/* Bdisp_AreaClr_VRAM() - clear only VRAM area. */
 void casio_Bdisp_AreaClr_VRAM(const struct rect *buf);
+
+/* PrintMini() - print string in Casio's VRAM (and display on screen ?) */
 void casio_PrintMini(size_t x, size_t y, char const *str, int mode);
+
+/* Bdisp_DrawLine_VRAM() - draw line in Casio's VRAM. */
 void casio_Bdisp_DrawLine_VRAM(int x1, int y1, int x2, int y2);
+
+/* RestoreDisp() - restore saved screen. */
 void casio_RestoreDisp(unsigned char page);
+
+/* SaveDisp() - save the content of the screen. */
 void casio_SaveDisp(unsigned char page);
+
+/* Malloc() - malloc syscall */
 void *casio_Malloc(size_t size);
+
+/* Free() - free syscall */
 void *casio_Free(void *ptr);
 
 

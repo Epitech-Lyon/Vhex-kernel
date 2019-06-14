@@ -2,7 +2,7 @@
 #include <stddef.h>
 extern int main(void);
 
-//define by bootstrap.ld
+//defined by bootstrap.ld
 extern uint32_t bbss;
 extern uint32_t sbss;
 extern uint32_t bdata_rom;

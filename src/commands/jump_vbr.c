@@ -22,7 +22,7 @@ CMDBLOCK("vbrjmp", &vbrjmp,
 );
 
 //
-// vbr_jump() - jump to the exception, tlb or interrupt Casio handler.
+// vbr_jump() - jump to the exception, tlb or interrupt, Casio handler.
 // Due to the SH3 / SH4 VBR system, there are 3 vectors offset called
 // by the processor:
 // 	* vbr + 0x100 -> general exeptions.

@@ -3,13 +3,11 @@
 #include <string.h>
 #include <errno.h>
 
-/* FIXME: write doc !! */
-
 // Internal prototype.
-static void help_command(int argc, char **argv, struct session_s *session, char *info);
+static void help(int argc, char **argv, struct session_s *session, char *info);
 
 // Define help command into the cache section.
-CMDBLOCK("help", &help_command,
+CMDBLOCK("help", &help,
 "Help for Vhex version 1.0\n"
 "This chapter introduces\noperations available with vhex.\n"
 "\n"
@@ -95,6 +93,7 @@ CMDBLOCK("help", &help_command,
 "work for any purpose and\nwithout any legal restrictions, "
 "except those required by law.\n");
 
+/* get_nb_line() - Return the number of lines contain in the command's manual. */
 static int get_nb_line(char const *str)
 {
 	int nb_line;
@@ -114,6 +113,7 @@ static int get_nb_line(char const *str)
 	return (nb_line + 1);
 }
 
+/* get_line() - Return the address of a target line */
 static const char *get_line(char const *str, int line)
 {
 	int cursor;
@@ -133,6 +133,14 @@ static const char *get_line(char const *str, int line)
 	return (str);
 }
 
+//
+// display_text() - Display only lines which should be visible.
+//
+// NOTE:
+// Due to the Casio's GetKey function, the font used is a little bit weird,
+// some characters have not the same size, so we can't calculate easily
+// the line size. (TODO: fix that).
+//
 static void display_text(char *buf, char const *str, int current_line)
 {
 	char const *text;
@@ -161,6 +169,7 @@ static void display_text(char *buf, char const *str, int current_line)
 		print(0, nb_line * FONT_HEIGHT, buf);
 }
 
+/* help_engine() - Display help information and handle keyboard. */
 static void help_engine(char const *text, int nb_line)
 {
 	char buf[COLUMN_OFFSET + 1];
@@ -182,6 +191,8 @@ static void help_engine(char const *text, int nb_line)
 		sprintf(buf, "%d/%d", cursor + 1, nb_line + 1);
 		print(SCREEN_WIDTH - (strlen(buf) * FONT_WIDTH) - 1, SCREEN_HEIGHT - FONT_HEIGHT, buf);
 		getkey(&key);
+
+		// Keys hanlding.
 		if (key == KEY_UP && cursor > 0)
 			cursor -= 1;
 		if (key == KEY_DOWN && cursor < nb_line)
@@ -191,7 +202,8 @@ static void help_engine(char const *text, int nb_line)
 	}
 }
 
-static void help_command(int argc, char **argv, struct session_s *session, char *info)
+/* help() - display command manual pages. */
+static void help(int argc, char **argv, struct session_s *session, char *info)
 {
 	const struct cmd_info *command;
 	int nb_line;

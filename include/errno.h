@@ -1,5 +1,7 @@
-#ifndef __KERNEL_ERRNO_H__
-# define __KERNEL_ERRNO_H__	1
+#ifndef __ERRNO_H__
+# define __ERRNO_H__	1
+
+// Errno wrapped headers.
 
 #define	EPERM		 1	/* Operation not permitted */
 #define	ENOENT		 2	/* No such file or directory */

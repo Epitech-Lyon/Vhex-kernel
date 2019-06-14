@@ -27,7 +27,8 @@ static int check_session(unsigned int key, struct vhex_s *vhex)
 //
 // check_special()
 // As explained below, the Casio getkey function has an internal status.
-// Here we check if a "special" keys are pressed and update internal Vhex key's status.
+// Here we check if a "special" keys are pressed and update internal Vhex
+// "keyboard's status".
 //
 static int check_special(unsigned int key, struct vhex_s *vhex, struct session_s *session)
 {

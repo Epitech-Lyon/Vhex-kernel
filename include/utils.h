@@ -2,8 +2,12 @@
 # define __UTILS_H__
 
 #include <types.h>
+// Define history_s
 #include <history.h>
 
+//
+// SCREEN AND FONT PART.
+//
 #define SCREEN_WIDTH	128
 #define SCREEN_HEIGHT	64
 #define FONT_WIDTH	4
@@ -11,6 +15,9 @@
 #define LINE_OFFSET	((SCREEN_HEIGHT / FONT_HEIGHT) - 1)
 #define COLUMN_OFFSET	(SCREEN_WIDTH / FONT_WIDTH)
 
+//
+// KEYS'S ID PART.
+//
 #define KEY_UP		30018
 #define KEY_DOWN	30023
 #define KEY_LEFT	30020
@@ -72,11 +79,17 @@
 #define KEY_8	 0x38
 #define KEY_9	 0x39
 
+//TODO: move me into opcode.h
 #define ARGUMENTS_MAX		3
+//TODO: move me into opcode.h
 #define INSTRUCTION_SIZE	2
+
+
+// Define some buffer size. 
 #define SESSIONS_SLOT		6
 #define CMD_LENGHT_MAX		15
 
+// Define session modes.
 enum session_mode_e
 {
 	UNUSED,
@@ -84,6 +97,7 @@ enum session_mode_e
 	NORMAL,
 };
 
+// session_s - session data part.
 struct session_s
 {
 	enum session_mode_e mode;
@@ -91,6 +105,7 @@ struct session_s
 	int cursor;
 };
 
+// Define insert modes.
 enum insert_mode
 {
 	LETTER,
@@ -99,7 +114,7 @@ enum insert_mode
 	SHIFT
 };
 
-
+// vhex_s - vhex data part.
 struct vhex_s
 {
 	int current_session;
@@ -113,11 +128,13 @@ struct vhex_s
 	struct history_s history;
 };
 
-// screen part.
-void dclear(void);
-void dupdate(void);
-
+/* display instructions() - display binary instructions. */
 void display_instructions(const struct session_s *session);
+
+/* display_metainfos() - display status bar. */
 void display_metainfos(const struct vhex_s *vhex, const struct session_s *session);
+
+/* key_handling() - GetKey abstraction. */
 void key_handling(struct vhex_s *vhex, struct session_s *session, unsigned int key);
+
 #endif /*__UTILS_H__*/

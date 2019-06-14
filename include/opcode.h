@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <utils.h>
 
+/* opcode - instruction data part. */
 struct opcode
 {
 	const char *name;
@@ -13,7 +14,7 @@ struct opcode
 	uint16_t arg_mask[ARGUMENTS_MAX];
 };
 
-
+// Define ALL SH3 instructions.
 static const struct opcode opcode[] = {
 	{
 		.name = "add #h'%x,r%d", 

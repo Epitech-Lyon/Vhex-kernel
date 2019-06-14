@@ -101,8 +101,8 @@ static INLINE int check_address(char *str)
 //
 // syscall_jump()
 // Casio doesn't use the TRAPA instruction (software interruption), for switch from
-// user mode to privileged mode. They just jump to a content area (always at 0x80010070)
-// and use the table of syscall addresses to redirect the jump. (and the table is always
+// user mode to privileged mode. They just jump always at 0x80010070 and use the
+// table of syscall addresses to redirect the jump. (and the table address is always
 // stored at 0x8001007c).
 //
 static void syscall_jump(int argc, char **argv, struct session_s *session, char *info)

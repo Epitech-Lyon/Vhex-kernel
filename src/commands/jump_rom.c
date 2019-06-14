@@ -24,7 +24,7 @@ CMDBLOCK("rom", &rom_jump,
 "MMU is disable and the area\nis not cached.\n"
 );
 
-/* rom_jump() - jump into the start of the ROM */
+/* rom_jump() - jump into the ROM mapped in different parts of the Virtual Memory. */
 static void rom_jump(int argc, char **argv, struct session_s *session, char *info)
 {
 	if (argc != 2){

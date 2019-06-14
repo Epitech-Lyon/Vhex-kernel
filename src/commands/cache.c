@@ -5,6 +5,16 @@
 extern uint32_t bcmd_cache;
 extern uint32_t ecmd_cache;
 
+//
+// cmd_cache_find()
+// Try to find the command into the command cache.
+//
+// NOTE:
+// The cache is generated during the compilation; all command
+// blocks is stored in the ".cmd.cache" section.
+// We use the section symbols to know where the cache end.
+// (see bootstrap.ld).
+//
 const struct cmd_info *cmd_cache_find(char const *name)
 {
 	const struct cmd_info *cache;
