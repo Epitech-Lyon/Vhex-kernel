@@ -41,7 +41,7 @@ static void ram_jump(int argc, char **argv, struct session_s *session, char *inf
 		return;
 	}
 	if (!strcmp(argv[1], "p0"))
-		session->anchor = 0x08000000;
+		session->anchor = 0x08100000;
 	if (!strcmp(argv[1], "p1"))
 		session->anchor = 0x88000000;
 	if (!strcmp(argv[1], "p2"))

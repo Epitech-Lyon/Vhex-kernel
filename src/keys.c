@@ -34,8 +34,11 @@ static int check_special(unsigned int key, struct vhex_s *vhex, struct session_s
 {
 	if (!(key == KEY_OPTN || key == KEY_SHIFT || key == KEY_ALPHA))
 		return (-1);
-	if (vhex->insert.mode == LETTER)
+	if (vhex->insert.mode == LETTER){
 		vhex->insert.mode = NUMBER;
+		if (key == KEY_ALPHA)
+			return (0);
+	}
 	if (key == KEY_OPTN){
 		if (session->mode != COMMAND){
 			memset(vhex->info, '\0', CMD_LENGHT_MAX);
@@ -95,6 +98,8 @@ static int check_alphanum(unsigned int key, struct vhex_s *vhex, struct session_
 		buf = (vhex->insert.mode == NUMBER) ? '0' + i : 'a' + i;
 		strcat(vhex->insert.cmd, &buf);
 	}
+	if (vhex->insert.mode == LETTER)
+		vhex->insert.mode = NUMBER;
 	vhex->history.offset = 0;
 	return (0);
 }

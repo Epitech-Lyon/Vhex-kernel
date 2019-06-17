@@ -82,7 +82,7 @@ fclean: clean
 	@ printf "$(red)Delete binary files$(nocolor)\n"
 	rm -f $(EXEC)
 
-re: fclean all install
+re: fclean all
 
 
 
