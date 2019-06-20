@@ -2,13 +2,13 @@
 
 Vhex is a GUI, Vim based, disassembler for fx9860g.
 The Casio's OS code is not open-source, but we can read the binary for understand his working.
-There are in particular the syscalls, OS's functions that can be called as a library since the add-ins, which are a gold mine of clues about the functioning of the material.
+There are in particular the syscalls, OS's functions that can be called as a library by the add-ins, which are a gold mine of clues about the functioning of the material.
 
 ![](https://framapic.org/kMVBl2hbDXOo/PBd7D1FR0LF2.gif)
 
 ## features
 
-* All SH3 instructions traduced "on-the-fly".
+* All SH3 and SH4 instructions traduced "on-the-fly".
 * Can handle 3 modes for movements.
 * Can handle commands.
 * Commands history.
