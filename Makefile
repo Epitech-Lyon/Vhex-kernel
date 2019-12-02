@@ -1,64 +1,93 @@
 #!/usr/bin/make -f
-# ---
-#	Project: FIXME WRITE DOC !!
-#	Author: yann.magnin@epitech.eu
-# ---
-include global.mk
+## ---
+##	Project: sprite-coder
+##	Author:
+##		theo.cousinet@epitech.eu
+##		yann.magnin@epitech.eu
+## ---
 
-NAME	:= vhex
-EXEC	:= $(NAME).g1a
-HEADER	:= -Iinclude
-DEBUG	:= link_map.txt
-LDFLAG	:= -T bootstrap.ld
-ICON	:= icon.bmp
-BUILD	:= build/
+##---
+##	Static variables
+##--
+HEADER		:= include
+BUILD		:= build
+DEBUG		:= debug
+
+NAME		:= vhex
+EXEC		:= $(NAME).g1a
+LDFLAG		:= -T $(NAME).ld
+MEMORY_MAP	:= $(DEBUG)/$(NAME).map
+ICON		:= icon.bmp
 
 
+COMPILER	:= sh3eb-elf-
+CC		:= $(COMPILER)gcc
+OBJCOPY		:= $(COMPILER)objcopy
+WRAPPER		:= g1a-wrapper
+CFLAGS		:= -Werror -Wall -W -Wextra -std=c18 -m3 -mb -mrenesas \
+			-ffreestanding -nostdlib -fstrict-volatile-bitfields \
+			-Wno-unused-const-variable -Wno-unused-function \
+			-Wno-unused-variable -Wno-unused-but-set-variable \
+			-Wno-unused-parameter
+
+
+red		:= \033[1;31m
+green		:= \033[1;32m
+blue		:= \033[1;34m
+white		:= \033[1;37m
+nocolor		:= \033[1;0m
+
+
+
+
+##---
+##	Automated variables
+##---
 SRC		:=
-DIRECTORY	:= src/ $(sort $(dir $(wildcard src/*/*/)))
+DIRECTORY	:= $(shell find src -not -path "*/\.*" -type d)
+# Get all source files
 $(foreach path,$(DIRECTORY),$(eval		\
-	SRC	+= $(wildcard $(path)*.c) 	\
-			$(wildcard $(path)*.s)	\
-			$(wildcard $(path)*.S))	\
-)
-OBJ	:= $(patsubst src_%,$(BUILD)%.o,$(subst /,_,$(basename $(SRC))))
+	SRC	+= $(wildcard $(path)/*.c)	\
+			$(wildcard $(path)/*.S)	\
+			$(wildcard $(path)/*.s)	\
+))
+# Geneate all object files
+OBJ	:= $(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))))
 
-#all: ;@echo $(SRC) $(OBJ)
-all: | $(BUILD) $(EXEC)
 
-install: $(EXEC)
-	sudo p7 send $<
+
+
+##---
+##	General rules
+##---
+all: | $(BUILD) $(DEBUG) $(EXEC)
 
 $(EXEC): $(OBJ)
-	@ printf "$(green)/-------\n/  Link files\n/-------$(nocolor)\n"
-	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(BUILD)$(NAME).elf $^ $(HEADER) -lgcc > $(DEBUG)
-	$(OBJCPY) -R .comment -R .bss -O binary $(BUILD)$(NAME).elf $(BUILD)$(NAME).bin
-	$(WRAPPER) $(BUILD)$(NAME).bin -o $@ -i $(ICON)
+	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf $(OBJ) -I $(HEADER) -lgcc > $(MEMORY_MAP)
+	$(OBJCOPY) -R .comment -R .bss -O binary $(DEBUG)/$(NAME).elf $(DEBUG)/$(NAME).bin
+	$(WRAPPER) $(DEBUG)/$(NAME).bin -o $@ -i $(ICON)
 
-$(BUILD):
+$(BUILD) $(DEBUG):
 	@ printf "Create $(blue)$@$(nocolor) directory\n"
 	@ mkdir -p $@
 
+install: $(EXEC)
+	sudo p7 send --force $^
 
-#
-# TODO: find better way to do the job
-# Units tests part.
-#
-tests:
-	gcc -std=c11 -Wall -Wno-error=deprecated-declarations -Wno-deprecated-declarations \
-	-Werror -D DEBUG -o unit_tests $(HEADER) -I. src/history.c src/string/strtotab.c \
-	src/string/atoi_base.c $(wildcard tests/*.c) --coverage -lcriterion
-	./unit_tests
-	gcovr --exclude tests/ --branches
-	rm *.gc*
-	rm ./unit_tests
+check:
+	@ echo 'src: $(SRC)'
+	@ echo 'obj: $(OBJ)'
+	@ echo 'directory: $(DIRECTORY)'
 
 
 
+##---
+##	  Automated rules
+##---
 define rule-src
-$(patsubst src_%,$(BUILD)%.o,$(subst /,_,$(basename $1))): $1
+$(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1
 	@ printf "compiling $(white)$$<$(nocolor)..."
-	@ $(CC) $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
+	@ $(CC) $(CFLAGS) -o $$@ -c $$< -I $(HEADER) -lgcc
 	@ printf "$(green)[ok]$(nocolor)\n"
 endef
 
@@ -67,19 +96,16 @@ $(foreach source,$(SRC),$(eval		\
 )
 
 
-#---
-#	Clean rules
-#---
+
+
+##---
+##	Cleaning rules
+##---
 clean:
-	@ printf "$(red)Delete objects files$(nocolor)\n"
 	rm -rf $(BUILD)
-	rm -f *.gc*
-	rm -f $(DEBUG)
-	rm -f $(NAME).bin
-	rm -f $(NAME).elf
+	rm -rf $(DEBUG)
 
 fclean: clean
-	@ printf "$(red)Delete binary files$(nocolor)\n"
 	rm -f $(EXEC)
 
 re: fclean all
@@ -87,4 +113,4 @@ re: fclean all
 
 
 
-.PHONY: clean re fclean install tests
+.PHONY: re fclean clean all install
