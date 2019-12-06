@@ -1,7 +1,8 @@
 #ifndef __CASIO_H__
 # define __CASIO_H__
 
-#include <types.h>
+#include <stdint.h>
+#include <stddef.h>
 
 // Internal Casio datat structure
 struct rect
@@ -42,9 +43,11 @@ void *casio_Malloc(size_t size);
 /* Free() - free syscall */
 void *casio_Free(void *ptr);
 
+/* GetVRAM - Get the Video RAM used by Casio */
+void *casio_Bdisp_GetVRAM(void);
 
 // Internal casio abstraction.
-static INLINE void dclear_area(int x1, int y1, int x2, int y2)
+static inline void dclear_area(int x1, int y1, int x2, int y2)
 {
 	struct rect area = {.left = x1, .top = y1, .right = x2, .bottom = y2};
 	casio_Bdisp_AreaClr_VRAM(&area);

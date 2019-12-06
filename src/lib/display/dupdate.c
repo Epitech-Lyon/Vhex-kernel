@@ -4,5 +4,5 @@
 //FIXME: Check OS 3.00 !
 void dupdate(void)
 {
-	t6k11_display(VRAM);
+	t6k11_display(vram);
 }

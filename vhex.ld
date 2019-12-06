@@ -11,8 +11,9 @@ MEMORY
 	** should be overwrite (specially TLB information stored by Casio).
 	*/
 	bootram	(rwx)	: o = 0x88040000, l = 252k
-	osram	(rwx)	: o = 0x8807f000, l = 4k
+	dbrram	(rwx)	: o = 0x8807f000, l = 4k
 	rom  	(rx)	: o = 0x00300200, l = 512k
+	testram (rwx)	: o = 0x08100000, l = 8k
 }
 
 SECTIONS
@@ -50,20 +51,52 @@ SECTIONS
 	.data	: ALIGN(4) {
 		_bdata_rom = LOADADDR(.data) ;
 		_bdata_ram = . ;
+	
 		*(.data)
 
-		/* Video RAM space */
-		_VRAM = ALIGN(4);
-		. = (. + 1024);
+		. = ALIGN(4);
 	} > bootram AT> rom
 	_sdata = SIZEOF(.data);
 
 
 	/*
+	** TEST space !
+	*/
+	/*. = ORIGIN(testram);
+
+	.test : ALIGN(4) {
+		_btest_rom = LOADADDR(.test) ;
+		_btest_ram = . ;
+
+		*(.test.prgm)
+
+		. = ALIGN(4);
+	} > testram AT> rom
+	_stest = SIZEOF(.test);
+	*/
+
+	/*
+	** DBR space !
+	*/
+	/*. = ORIGIN(testram);
+
+	.vhex : ALIGN(4) {
+		_bvhex_rom = LOADADDR(.vhex) ;
+		_bvhex_ram = . ;
+		_vhex_dbr = . ;
+		
+		*(.vhex.handler)
+
+		. = ALIGN(4);
+	} > osram AT> rom
+	_svhex = SIZEOF(.vhex);
+	*/
+
+	/*
 	** VBR space !
 	*/
 	/* Interrupt / exception handlers */
-	.vhex : SUBALIGN(4) {
+	/*.vhex : SUBALIGN(4) {
 		_bvhex_rom = LOADADDR(.vhex) ;
 		_bvhex_ram = . ;
 		_vhex_vbr = . - 0x100;
@@ -74,7 +107,7 @@ SECTIONS
 		*(.vhex.interrupt) ;
 		. = ALIGN(4);
 	} > osram AT> rom
-	_svhex = SIZEOF(.vhex);
+	_svhex = SIZEOF(.vhex);*/
 
 	/* unwanted section */
 	/DISCARD/ : {

@@ -27,6 +27,6 @@ extern void dscroll(int line);
 extern void dupdate(void);
 
 // Sheared Video RAM
-extern uint32_t *VRAM;
+extern uint8_t *vram;
 
 #endif /*__LIB_DISPLAY_H__*/

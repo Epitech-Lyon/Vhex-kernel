@@ -83,11 +83,11 @@ void dascii(int x, int y, char const c)
 	// Calculate VRAM buffer starting position.
 	// @note:
 	// 	The screen width size is always 128 and we
-	// 	use 4-aligned Video RAM so 32 pixel per "slot"
-	// 	and 128 / 32 = 4
-	// 	y * 4 can be optimised by used shift operator
-	// 	this is why we use y << 2 because 2^2 = 4.
-	vram_offset_y = y << 2;
+	// 	use 1-aligned Video RAM so 8 pixels per "slot"
+	// 	and 128 / 8 = 16
+	// 	y * 4 can be optimised by used shift operator,
+	// 	this is why we use y << 4 because 2^4 = 16.
+	vram_offset_y = y << 4;
 
 	// Draw character, pixer per pixel... (x_x)
 	i = -1;
@@ -100,10 +100,10 @@ void dascii(int x, int y, char const c)
 			pixel_test = 0x80 >> (pixel_cursor & 0x07);
 			if (pixel_test & kernel_font_bitmap[pixel_cursor >> 3])
 			{
-				VRAM[((x + j) >> 5) + vram_offset_y] |= 0x80000000 >> ((x + j) & 0x1f);
+				vram[((x + j) >> 3) + vram_offset_y] |= 0x80 >> ((x + j) & 7);
 			}
 		}
 		bitmap_offset_y = bitmap_offset_y + KERNEL_FONT_BITMAP_WIDTH; 
-		vram_offset_y = vram_offset_y + 4;
+		vram_offset_y = vram_offset_y + 16;
 	}
 }

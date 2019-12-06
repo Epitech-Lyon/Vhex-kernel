@@ -6,7 +6,7 @@
 #include <stdarg.h>
 
 /* vsprintf(), sprintf() - formatted output conversion. */
-void vsprintf(char *str, char const *format, va_list ap);
+int vsprintf(char *str, char const *format, va_list ap);
 void sprintf(char *str, char const *format, ...);
 
 #endif /*__LIB_STDIO_H__*/

@@ -1,4 +1,4 @@
-#include <kernel/tty.h>
+#include <kernel/devices/tty.h>
 
 int tty_close(void)
 {

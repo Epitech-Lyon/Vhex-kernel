@@ -1,9 +1,7 @@
 #!/usr/bin/make -f
 ## ---
-##	Project: sprite-coder
-##	Author:
-##		theo.cousinet@epitech.eu
-##		yann.magnin@epitech.eu
+##	Project: Vhex - On-calc debugger
+##	Author: yann.magnin@epitech.eu
 ## ---
 
 ##---
@@ -23,6 +21,7 @@ ICON		:= icon.bmp
 COMPILER	:= sh3eb-elf-
 CC		:= $(COMPILER)gcc
 OBJCOPY		:= $(COMPILER)objcopy
+OBJDUMP		:= $(COMPILER)objdump
 WRAPPER		:= g1a-wrapper
 CFLAGS		:= -Werror -Wall -W -Wextra -std=c18 -m3 -mb -mrenesas \
 			-ffreestanding -nostdlib -fstrict-volatile-bitfields \
@@ -79,6 +78,8 @@ check:
 	@ echo 'obj: $(OBJ)'
 	@ echo 'directory: $(DIRECTORY)'
 
+map:
+	@ $(OBJDUMP) -D $(DEBUG)/$(NAME).elf | less
 
 
 ##---

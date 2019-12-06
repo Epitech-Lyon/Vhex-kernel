@@ -4,7 +4,7 @@ void dclear(void)
 {
 	int i;
 
-	i = 256;
+	i = 1024;
 	while (--i >= 0)
-		VRAM[i] = 0x00000000;
+		vram[i] = 0x00000000;
 }

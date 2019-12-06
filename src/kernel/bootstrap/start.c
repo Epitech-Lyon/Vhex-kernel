@@ -1,18 +1,14 @@
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/context.h>
-#include <kernel/atomic.h>
+#include <kernel/devices/display.h>
+#include <kernel/devices/ubc.h>
+#include <kernel/syscall.h>
 #include <kernel/types.h>
 #include <lib/display.h>
 #include <lib/string.h>
 
 // Internal symbols
-//uint32_t gcc_fix[256];
-//uint32_t *VRAM = gcc_fix;
 mpu_t current_mpu = MPU_UNKNOWN;
-const char *casio_os_version = (void*)0xa0010020;
-fx9860_context_t casio_context;
-uint32_t casio_vbr;
 
 // Symbols defined by the linker
 extern uint32_t bbss;
@@ -23,18 +19,72 @@ extern uint32_t sdata;
 extern uint32_t bvhex_ram;
 extern uint32_t bvhex_rom;
 extern uint32_t svhex;
-extern uint32_t vhex_vbr;
+extern uint32_t btest_ram;
+extern uint32_t btest_rom;
+extern uint32_t stest;
+
 
 // Internal functions.
 extern void section_wipe(uint32_t *section, size_t size);
 extern void section_load(uint32_t *dest, uint32_t *src, size_t size);
-extern uint32_t vbr_set(uint32_t new_vbr);
-extern uint32_t vbr_get(void);
-extern mpu_t mpu_get(void);
+extern void ubc_handler(void);
+extern void test(void);
 extern int main(void);
-extern void vhex_context_set(void);
+
+__attribute__((section(".pretext")))
+int start(void)
+{
+	unsigned int key;
+	void *casio_dbr;
+
+	// Wipe .bss section and dump .data / Vhex sections
+	memset(&bbss, 0x00, (size_t)&sbss);
+	memcpy(&bdata_ram, &bdata_rom, (size_t)&sdata);
+	//memcpy(&bvhex_ram, &bvhex_rom, (size_t)&svhex);
+	//memcpy(&btest_ram, &btest_rom, (size_t)&stest);
+
+	// Get Casio's VRAM address.
+	display_open();
+
+	// Open User Break Controller.
+	// @note:
+	// 	This function is hardcoded to follow syscall
+	// 	execution based on userland vitural address
+	// 	0x08100000, reserved for add-in RAM.
+	// 	The tested programe is staticaly linked by the
+	// 	linker script.
+	// 	This module is only on SH7305 - SH4 based MPU.
+	// 	THis function SHOULD not be called !
+	ubc_open();
+
+	// Jump into the tested function.
+	// @note:
+	// 	Thus USC should be start after the jump.
+	//
+	//((void(*)(void))0x08100000)();
+	//((void(*)(void))&vhex_dbr)();
+	test();
+
+	// Power OFF UBC module.
+	ubc_close();
+
+	// Vhex's job is finished, display log.
+	dclear();
+	dprint(0, 0, "Vhex end !!\nNow wait [MENU] key press !");
+	dupdate();
+
+	// Wait [MENU] key is press.
+	while (1)
+	{
+		casio_GetKey(&key);
+	}
+
+	// Unused.
+	return (0);
+}
 
 
+/* Vhex with kernel version.
 __attribute__((section(".pretext")))
 int start(void)
 {
@@ -59,9 +109,6 @@ int start(void)
 	vhex_context_set();
 	atomic_end();
 
-// VBR test.
-	__asm__ volatile ("trapa #0");
-
 	// Call high level abstraction.
 	error = main();
 
@@ -73,7 +120,7 @@ int start(void)
 
 	// Return the abstraction error.
 	return (error);
-}
+}*/
 
 //
 // initialize() - kernel entry

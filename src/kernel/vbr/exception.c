@@ -1,4 +1,4 @@
-#include <lib/display.h>
+/*#include <lib/display.h>
 
 __attribute__((section(".vhex.exception"), interrupt_handler))
 void exception_handler(void)
@@ -35,4 +35,4 @@ void exception_handler(void)
 	);
 	dupdate();
 	while (1);
-}
+}*/

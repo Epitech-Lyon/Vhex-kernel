@@ -1,4 +1,4 @@
-#include <lib/display.h>
+/*#include <lib/display.h>
 
 __attribute__((section(".glados.tlb"), interrupt_handler))
 void tlb_handler(void)
@@ -35,4 +35,4 @@ void tlb_handler(void)
 	);
 	dupdate();
 	while (1);
-}
+}*/

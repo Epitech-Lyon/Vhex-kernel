@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/union_types.h>
-#include <kernel/attributes.h>
+#include <kernel/def/union_types.h>
+#include <kernel/def/attributes.h>
 
 struct SH7305_intc_s
 {
