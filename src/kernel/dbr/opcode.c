@@ -1,21 +1,7 @@
-#ifndef __OPCODE_H__
-# define __OPCODE_H__
+#include <kernel/opcode.h>
 
-#include <stddef.h>
-#include <stdint.h>
-#include <utils.h>
-
-/* opcode - instruction data part. */
-struct opcode
-{
-	const char *name;
-	uint16_t mask;
-	uint16_t code;
-	uint16_t arg_mask[ARGUMENTS_MAX];
-};
-
-// Define ALL SH3 instructions.
-static const struct opcode opcode[] = {
+// Define ALL SH3 / SH4 instructions.
+const struct opcode_s opcode_list[] = {
 	{
 		.name = "add #h'%x,r%d", 
 		.mask =	0b1111000000000000,
@@ -24,7 +10,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "add r%d,r%d", 
@@ -34,7 +21,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "addc r%d,r%d", 
@@ -44,7 +32,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "addv r%d,r%d", 
@@ -54,7 +43,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "and #h'%x,r0", 
@@ -64,7 +54,8 @@ static const struct opcode opcode[] = {
 			0b000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "and r%d,r%d", 
@@ -74,7 +65,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "and.b #h'%x,@(r0,GBR)", 
@@ -84,7 +76,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "bf #h'%x", 
@@ -94,7 +87,8 @@ static const struct opcode opcode[] = {
 			0b000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "bs/s #h'%x", 
@@ -104,7 +98,8 @@ static const struct opcode opcode[] = {
 			0b000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "bra #h'%x", 
@@ -114,7 +109,8 @@ static const struct opcode opcode[] = {
 			0b0000111111111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "braf r%d", 
@@ -124,7 +120,8 @@ static const struct opcode opcode[] = {
 			0b000011110000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "bsr #h'%x", 
@@ -134,7 +131,8 @@ static const struct opcode opcode[] = {
 			0b0000111111111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "bsrf r%d", 
@@ -144,7 +142,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "bt #h'%x", 
@@ -154,7 +153,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "bt/s #h'%x", 
@@ -164,7 +164,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "clrmac", 
@@ -174,7 +175,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "clrs", 
@@ -184,7 +186,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "clrt", 
@@ -194,7 +197,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "cmp/eq #h'%x,r0", 
@@ -204,7 +208,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "cmp/eq r%d,r%d", 
@@ -214,7 +219,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "cmp/ge r%d,r%d", 
@@ -224,7 +230,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "cmp/gt r%d,r%d", 
@@ -234,7 +241,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "cmp/hi r%d,r%d", 
@@ -244,7 +252,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "cmp/hs r%d,r%d", 
@@ -254,7 +263,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "cmp/pl r%d", 
@@ -264,7 +274,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "cmp/pz r%d", 
@@ -274,7 +285,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "cmp/str r%d,r%d", 
@@ -284,7 +296,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "div0s r%d,r%d", 
@@ -294,7 +307,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "div0u", 
@@ -304,7 +318,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "div1 r%d,r%d", 
@@ -314,7 +329,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "dmuls.l r%d,r%d", 
@@ -324,7 +340,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "dmulu.l r%d,r%d", 
@@ -334,7 +351,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "dt r%d", 
@@ -344,7 +362,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "exts.b r%d,r%d", 
@@ -354,7 +373,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "exts.w r%d,r%d", 
@@ -364,7 +384,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "extu.b r%d,r%d", 
@@ -374,7 +395,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "extu.w r%d,r%d", 
@@ -384,7 +406,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fabs fr%d", 
@@ -394,7 +417,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fadd fr%d,fr%d", 
@@ -404,7 +428,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fcmp/eq fr%d,fr%d", 
@@ -414,7 +439,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fcmp/gt fr%d,fr%d", 
@@ -424,7 +450,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fdiv fr%d,fr%d", 
@@ -434,7 +461,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fldi0 fr%d", 
@@ -444,7 +472,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fldi1 fr%d", 
@@ -454,7 +483,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "flds fr%d,FPUL", 
@@ -464,7 +494,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "float FPUL,fr%d", 
@@ -474,7 +505,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fmac FR0,fr%d,fr%d", 
@@ -484,7 +516,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fmov fr%d,fr%d", 
@@ -494,7 +527,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fmov.s @(r0,r%d),fr%d", 
@@ -504,7 +538,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fmov.s @r%d+,fr%d", 
@@ -514,7 +549,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fmov.s @r%d,fr%d", 
@@ -524,7 +560,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fmov.s fr%d,@(r0,r%d)", 
@@ -534,7 +571,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fmov.s fr%d,@-r%d", 
@@ -544,7 +582,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fmov.s fr%d,@r%d", 
@@ -554,7 +593,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fmul fr%d,fr%d", 
@@ -564,7 +604,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fneg fr%d", 
@@ -574,7 +615,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fsqrt fr%d", 
@@ -584,7 +626,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fsts FPUL,fr%d", 
@@ -594,7 +637,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "fsub fr%d,fr%d", 
@@ -604,7 +648,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ftrc fr%d,FPUL", 
@@ -614,7 +659,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "jmp @r%d", 
@@ -624,7 +670,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "jsr @r%d", 
@@ -634,7 +681,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,GBR", 
@@ -644,7 +692,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,SR", 
@@ -654,7 +703,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,VBR", 
@@ -664,7 +714,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,SSR", 
@@ -674,7 +725,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,SPC", 
@@ -684,7 +736,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,MOD", 
@@ -694,7 +747,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	//FIXME: find difference between "ldc rm,RE" and "ldc rm,RS"
 	{
@@ -705,7 +759,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,R0_BANK", 
@@ -715,7 +770,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,R1_BANK", 
@@ -725,7 +781,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,R2_BANK", 
@@ -735,7 +792,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,R3_BANK", 
@@ -745,7 +803,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,R4_BANK", 
@@ -755,7 +814,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,R5_BANK", 
@@ -765,7 +825,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,R6_BANK", 
@@ -775,7 +836,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc r%d,R7_BANK", 
@@ -785,7 +847,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,GBR", 
@@ -795,7 +858,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,SR", 
@@ -805,7 +869,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,VBR", 
@@ -815,7 +880,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,SSR", 
@@ -825,7 +891,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,SPC", 
@@ -835,7 +902,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,MOD", 
@@ -845,7 +913,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,RE", 
@@ -855,7 +924,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,RS", 
@@ -865,7 +935,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,R0_BANK", 
@@ -875,7 +946,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,R1_BANK", 
@@ -885,7 +957,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,R2_BANK", 
@@ -895,7 +968,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @%d+,R3_BANK", 
@@ -905,7 +979,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,R4_BANK", 
@@ -915,7 +990,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,R5_BANK", 
@@ -925,7 +1001,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,R7_BANK", 
@@ -935,7 +1012,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldc.l @r%d+,R7_BANK", 
@@ -945,7 +1023,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldre @(#h'%x,PC)", 
@@ -955,7 +1034,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldrs @(#h'%x,PC)", 
@@ -965,7 +1045,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,FPSCR", 
@@ -975,7 +1056,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,FPUL", 
@@ -985,7 +1067,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,MACH", 
@@ -995,7 +1078,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,MACL", 
@@ -1005,7 +1089,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,PR", 
@@ -1015,7 +1100,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,A0", 
@@ -1025,7 +1111,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,DSR", 
@@ -1035,7 +1122,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,X0", 
@@ -1045,7 +1133,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,X1", 
@@ -1055,7 +1144,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,Y0", 
@@ -1065,7 +1155,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds r%d,Y1", 
@@ -1075,7 +1166,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,FPSCR", 
@@ -1085,7 +1177,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,FPUL", 
@@ -1095,7 +1188,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,MACH", 
@@ -1105,7 +1199,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,MACL", 
@@ -1115,7 +1210,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,PR", 
@@ -1125,7 +1221,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,DSR", 
@@ -1135,7 +1232,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,A0", 
@@ -1145,7 +1243,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,X0", 
@@ -1155,7 +1254,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,X1", 
@@ -1165,7 +1265,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,Y0", 
@@ -1175,7 +1276,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "lds.l @r%d+,Y1", 
@@ -1185,7 +1287,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "ldtlb", 
@@ -1195,7 +1298,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mac.l @r%d+,@r%d+", 
@@ -1205,7 +1309,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mac.w @r%d+,@r%d+", 
@@ -1215,7 +1320,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov #h'%x,r%d", 
@@ -1225,7 +1331,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov r%d,r%d", 
@@ -1235,7 +1342,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b @(#h'%x,GBR),r0", 
@@ -1245,7 +1353,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b @(#h'%x,r%d),r0", 
@@ -1255,7 +1364,8 @@ static const struct opcode opcode[] = {
 			0b0000000000001111,
 			0b0000000011110000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b @(r0,r%d),r%d", 
@@ -1265,7 +1375,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b @r%d+,r%d", 
@@ -1275,7 +1386,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b @r%d,r%d", 
@@ -1285,7 +1397,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b r0,@(#h'%x,GBR)", 
@@ -1295,7 +1408,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b r0,@(#h'%x,r%d)", 
@@ -1305,7 +1419,8 @@ static const struct opcode opcode[] = {
 			0b0000000000001111,
 			0b0000000011110000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b r%d,@(r0,r%d)", 
@@ -1315,7 +1430,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b r%d,@-r%d", 
@@ -1325,7 +1441,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.b r%d,@r%d", 
@@ -1335,7 +1452,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l @(#h'%x,GBR),r0", 
@@ -1345,7 +1463,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l @(#h'%x,PC),r%d", 
@@ -1355,7 +1474,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l @(#h'%x,r%d),r%d", 
@@ -1365,7 +1485,8 @@ static const struct opcode opcode[] = {
 			0b0000000000001111,
 			0b0000000011110000,
 			0b0000111100000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l @(r0,r%d),r%d", 
@@ -1375,7 +1496,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l @r%d+,r%d", 
@@ -1385,7 +1507,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l @r%d,r%d", 
@@ -1395,7 +1518,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l r0,@(#h'%x,GBR)", 
@@ -1405,7 +1529,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l r%d,@(#h'%x,r%d)", 
@@ -1415,7 +1540,8 @@ static const struct opcode opcode[] = {
 			0b0000000000001111,
 			0b0000000011110000,
 			0b0000111100000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l r%d,@(r0,r%d)", 
@@ -1425,7 +1551,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l r%d,@-r%d", 
@@ -1435,7 +1562,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.l r%d,@r%d", 
@@ -1445,7 +1573,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w @(#h'%x,GBR),r0", 
@@ -1455,7 +1584,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w @(#h'%x,PC),r%d", 
@@ -1465,7 +1595,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w @(r0,r%d),r%d", 
@@ -1475,7 +1606,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w @r%d+,r%d", 
@@ -1485,7 +1617,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w @r%d,r%d", 
@@ -1495,7 +1628,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w r0,@(#h'%x,GBR)", 
@@ -1505,7 +1639,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w r0,@(#h'%x,,r%d)", 
@@ -1515,7 +1650,8 @@ static const struct opcode opcode[] = {
 			0b0000000000001111,
 			0b0000000011110000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w r%d,@(r0,r%d)", 
@@ -1525,7 +1661,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w r%d,@-r%d", 
@@ -1535,7 +1672,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mov.w r%d,@r%d", 
@@ -1545,7 +1683,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mova @(#h'%x,PC),r0", 
@@ -1555,7 +1694,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "movt r%d", 
@@ -1565,7 +1705,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mul.l r%d,r%d", 
@@ -1575,7 +1716,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "muls.w r%d,r%d", 
@@ -1585,7 +1727,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "mulu.w r%d,r%d", 
@@ -1595,7 +1738,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "neg r%d,@-r%d", 
@@ -1605,7 +1749,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "negc r%d,r%d", 
@@ -1615,7 +1760,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "nop", 
@@ -1625,7 +1771,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "not r%d,r%d", 
@@ -1635,7 +1782,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "or #h'%x,r0", 
@@ -1645,7 +1793,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "or r%d,r%d", 
@@ -1655,7 +1804,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "or.b #h'%x,@(r0,GBR)", 
@@ -1665,7 +1815,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "pref @r%d", 
@@ -1675,7 +1826,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "rotcl r%d", 
@@ -1685,7 +1837,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "rotcr r%d", 
@@ -1695,7 +1848,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "rotl r%d", 
@@ -1705,7 +1859,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "rotr r%d", 
@@ -1715,7 +1870,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "rte", 
@@ -1725,7 +1881,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "rts", 
@@ -1735,7 +1892,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "setrc r%d", 
@@ -1745,7 +1903,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "setrc #h'%x", 
@@ -1755,7 +1914,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sets", 
@@ -1765,7 +1925,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sett", 
@@ -1775,7 +1936,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shad r%d,r%d", 
@@ -1785,7 +1947,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shal r%d", 
@@ -1795,7 +1958,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shar r%d", 
@@ -1805,7 +1969,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shld r%d,r%d", 
@@ -1815,7 +1980,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shll r%d", 
@@ -1825,7 +1991,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shll2 r%d", 
@@ -1835,7 +2002,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shll8 r%d", 
@@ -1845,7 +2013,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shll16 r%d", 
@@ -1855,7 +2024,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shlr r%d", 
@@ -1865,7 +2035,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shlr2 r%d", 
@@ -1875,7 +2046,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shlr8 r%d", 
@@ -1885,7 +2057,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "shlr16 r%d", 
@@ -1895,7 +2068,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sleep", 
@@ -1905,7 +2079,8 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc GBR,r%d", 
@@ -1915,7 +2090,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc SR,r%d", 
@@ -1925,7 +2101,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc VBR,r%d", 
@@ -1935,7 +2112,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc SSR,r%d", 
@@ -1945,7 +2123,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc SPC,r%d", 
@@ -1955,7 +2134,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc MOD,r%d", 
@@ -1965,7 +2145,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc RE,r%d", 
@@ -1975,7 +2156,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc RS,r%d", 
@@ -1985,7 +2167,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc R0_BANK,r%d", 
@@ -1995,7 +2178,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc R1_BANK,r%d", 
@@ -2005,7 +2189,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc R2_BANK,r%d", 
@@ -2015,7 +2200,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc R3_BANK,r%d", 
@@ -2025,7 +2211,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc R4_BANK,r%d", 
@@ -2035,7 +2222,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc R5_BANK,r%d", 
@@ -2045,7 +2233,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc R6_BANK,r%d", 
@@ -2055,7 +2244,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc R7_BANK,r%d", 
@@ -2065,7 +2255,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l GBR,@r-%d", 
@@ -2075,7 +2266,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l SR,@r-%d", 
@@ -2085,7 +2277,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l VBR,@r-%d", 
@@ -2095,7 +2288,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l SSR,@r-%d", 
@@ -2105,7 +2299,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l SPC,@r-%d", 
@@ -2115,7 +2310,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l MOD,@r-%d", 
@@ -2125,7 +2321,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l RE,@r-%d", 
@@ -2135,7 +2332,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l RS,@r-%d", 
@@ -2145,7 +2343,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l R0_BANK,@r-%d", 
@@ -2155,7 +2354,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l R1_BANK,@r-%d", 
@@ -2165,7 +2365,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l R2_BANK,@r-%d", 
@@ -2175,7 +2376,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l R3_BANK,@r-%d", 
@@ -2185,7 +2387,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l R4_BANK,@r-%d", 
@@ -2195,7 +2398,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l R5_BANK,@r-%d", 
@@ -2205,7 +2409,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l R6_BANK,@r-%d", 
@@ -2215,7 +2420,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "stc.l R7_BANK,@r-%d", 
@@ -2225,7 +2431,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts FPSCR,r%d", 
@@ -2235,7 +2442,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts FPUL,r%d", 
@@ -2245,7 +2453,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts MACH,r%d", 
@@ -2255,7 +2464,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts MACL,r%d", 
@@ -2265,7 +2475,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts PR,r%d", 
@@ -2275,7 +2486,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts DSR,r%d", 
@@ -2285,7 +2497,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts A0,r%d", 
@@ -2295,7 +2508,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts X0,r%d", 
@@ -2305,7 +2519,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts X1,r%d", 
@@ -2315,7 +2530,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts Y0,r%d", 
@@ -2325,7 +2541,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts Y1,r%d", 
@@ -2335,7 +2552,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l FPSCR,@-r%d", 
@@ -2345,7 +2563,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l FPUL,@-r%d", 
@@ -2355,7 +2574,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l MACH,@-r%d", 
@@ -2365,7 +2585,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l MACL,@-r%d", 
@@ -2375,7 +2596,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l PR,@-r%d", 
@@ -2385,7 +2607,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l DSR,@-r%d", 
@@ -2395,7 +2618,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l A0,@-r%d", 
@@ -2405,7 +2629,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l X0,@-r%d", 
@@ -2415,7 +2640,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l X1,@-r%d", 
@@ -2425,7 +2651,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l Y0,@-r%d", 
@@ -2435,7 +2662,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sts.l Y1,@-r%d", 
@@ -2445,7 +2673,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "sub r%d,r%d", 
@@ -2455,7 +2684,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "subc r%d,r%d", 
@@ -2465,7 +2695,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "subv r%d,r%d", 
@@ -2475,7 +2706,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "swap.b r%d,r%d", 
@@ -2485,7 +2717,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "swap.w r%d,r%d", 
@@ -2495,7 +2728,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "tas.b @r%d", 
@@ -2505,7 +2739,8 @@ static const struct opcode opcode[] = {
 			0b0000111100000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "trapa #h'%x", 
@@ -2515,7 +2750,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "tst #h'%x,r0", 
@@ -2525,7 +2761,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "tst r%d,r%d", 
@@ -2535,7 +2772,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "tst.b #h'%x,@(r0,GBR)", 
@@ -2545,7 +2783,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "xor #h'%x,r0", 
@@ -2555,7 +2794,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "xor r%d,r%d", 
@@ -2565,7 +2805,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "wor.b #h'%x,@(r0,GBR)", 
@@ -2575,7 +2816,8 @@ static const struct opcode opcode[] = {
 			0b0000000011111111,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = "xtrct r%d,r%d", 
@@ -2585,7 +2827,8 @@ static const struct opcode opcode[] = {
 			0b0000000011110000,
 			0b0000111100000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 	{
 		.name = NULL, 
@@ -2595,9 +2838,10 @@ static const struct opcode opcode[] = {
 			0b0000000000000000,
 			0b0000000000000000,
 			0b0000000000000000
-		}
+		},
+		.special = NULL
 	},
 
 };
 
-#endif /*__OPCODE_H__*/
+

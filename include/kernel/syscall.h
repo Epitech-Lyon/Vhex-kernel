@@ -19,6 +19,9 @@ struct rect
 /* GetKey() - display Casio's VRAM and wait keyboard input. */
 void casio_GetKey(unsigned int *key);
 
+/* Bdisp_PutDisp_DD - display Casio's VRAM on screen */
+void casio_Bdisp_PutDisp_DD(void);
+
 /* Bdisp_AllClr_VRAM() - clear entirely the Casio's VRAM */
 void casio_Bdisp_AllClr_VRAM(void);
 
@@ -26,7 +29,7 @@ void casio_Bdisp_AllClr_VRAM(void);
 void casio_Bdisp_AreaClr_VRAM(const struct rect *buf);
 
 /* PrintMini() - print string in Casio's VRAM (and display on screen ?) */
-void casio_PrintMini(size_t x, size_t y, char const *str, int mode);
+void casio_Bdisp_PrintMini(size_t x, size_t y, char const *str, int mode);
 
 /* Bdisp_DrawLine_VRAM() - draw line in Casio's VRAM. */
 void casio_Bdisp_DrawLine_VRAM(int x1, int y1, int x2, int y2);
@@ -52,13 +55,5 @@ static inline void dclear_area(int x1, int y1, int x2, int y2)
 	struct rect area = {.left = x1, .top = y1, .right = x2, .bottom = y2};
 	casio_Bdisp_AreaClr_VRAM(&area);
 }
-#define print(x, y, str)		casio_PrintMini(x, y, str, 0)
-#define getkey				casio_GetKey
-#define dline_horizontal(y, x1, x2)	casio_Bdisp_DrawLine_VRAM(x1, y, x2, y)
-#define dclear				casio_Bdisp_AllClr_VRAM
-#define save_window			casio_SaveDisp
-#define restore_window			casio_RestoreDisp
-#define malloc				casio_Malloc
-#define free				casio_Free
 
 #endif /*__CASIO_H__*/

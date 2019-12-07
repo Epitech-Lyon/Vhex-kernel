@@ -19,6 +19,9 @@
 #define DISPLAY_SCREEN_WIDTH	128
 #define DISPLAY_SCREEN_HEIGHT	64
 
+#define DISPLAY_VLINES_MAX	(DISPLAY_SCREEN_HEIGHT / (KERNEL_FONT_REAL_HEIGHT + 1))
+#define DISPLAY_HLINES_MAX	(DISPLAY_SCREEN_WIDTH / (KERNEL_FONT_REAL_WIDTH + 1))
+
 // Primtives
 extern void dclear(void);
 extern void dprint(int x, int y, char const *str, ...);

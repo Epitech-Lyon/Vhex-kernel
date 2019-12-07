@@ -8,20 +8,21 @@
 .align 2
 _ubc_handler_pre:
 	! Stack management.
+	stc.l	spc, @-r15		! Save SPC regsiter.
+	stc.l	ssr, @-r15		! Save SSR regsiter.
+	.word	0b0100111100110010	! Save SGR register (save r15 address befor break) "stc.l sgr, @-r15"
 	mov.l	r8, @-r15		! Save r8 register.
 	mov.l	r9, @-r15		! Save r9 register.
 	sts.l	pr, @-r15		! Save pr regsiter.
 	mov	r15, r0			! Save stack address. (used for UBC context)
 
 	! Generate UBC context
-	mov	r15, r1			! Get current stack address.
-	add	#12, r1			! Get stack addres "before" UBC interrupt.
 	stc.l	spc, @-r15		! Get SPC register.
 	stc.l	ssr, @-r15		! Get SSR register.
 	sts.l	mach, @-r15		! Get MACH register.
 	sts.l	macl, @-r15		! Get MACL register.
 	stc.l	gbr, @-r15		! Get GBR register.
-	mov.l	r1, @-r15		! Get "program" stack before UBC interrupt.
+	.word	0b0100111100110010	! Get SGR register (save r15 address befor break) "stc.l sgr, @-r15"
 	mov.l	r14, @-r15		! Get r14 register.
 	mov.l	r13, @-r15		! Get r13 register.
 	mov.l	r12, @-r15		! Get r12 register.
@@ -67,10 +68,15 @@ _ubc_handler_pre:
 	ldc	r9, sr			! Restore SR register (with SR.BL = 1 and SR.IMASK = 0b1111)
 
 	! Clean exit.
-	add	r8, r15			! Restore stack space.
+	mov	r8, r15			! Restore stack space.
+	lds.l	@r15+, pr		! Restor PR register.
 	mov.l	@r15+, r9		! Restore r9 register.
+	mov.l	@r15+, r8		! Restore r8 register.
+	.word	0b0100111100110110	! Restore SGR regsiter. "ldc.l @r15+, sgr"
+	ldc.l	@r15+, ssr		! Restore SSR regsiter.
+	ldc.l	@r15+, spc		! Restore SPC regsiter.
 	rte				! Interrupt Exit.
-	mov.l	@r15+, r8		! (db) Restore r8 register.
+	nop				! (db) Safety first.
 
 
 .align 4

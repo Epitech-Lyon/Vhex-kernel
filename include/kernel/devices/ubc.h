@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-typedef struct ubc_context_s
+struct ubc_context_s
 {
 	uint32_t reg[16];
 	uint32_t gbr;
@@ -12,7 +12,22 @@ typedef struct ubc_context_s
 	uint32_t mach;
 	uint32_t ssr;
 	uint32_t spc;
-} ubc_context_t;
+};
+
+typedef struct ubc_session_s
+{
+	struct {
+		struct {
+			uint32_t cursor;
+		} context;
+		struct {
+			uint32_t cursor;
+		} disassembly;
+	} menu;
+	struct ubc_context_s *context;
+	unsigned int key;
+	int channel;
+} ubc_session_t;
 
 // Primitives.
 extern int ubc_open(void);

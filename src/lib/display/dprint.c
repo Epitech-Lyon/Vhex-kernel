@@ -16,6 +16,8 @@ void dprint(int x, int y, char const *str, ...)
 	va_end(ap);
 
 	i = -1;
+	x = x * (KERNEL_FONT_REAL_WIDTH + 1);
+	y = y * (KERNEL_FONT_REAL_HEIGHT + 1);
 	default_pos_x = x;
 	while (buffer[++i] != '\0')
 	{
