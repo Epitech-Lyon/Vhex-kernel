@@ -3,7 +3,7 @@
 // Define ALL SH3 / SH4 instructions.
 const struct opcode_s opcode_list[] = {
 	{
-		.name = "add #h'%x,r%d", 
+		.name = "add\t#h'%x,r%d", 
 		.mask =	0b1111000000000000,
 		.code = 0b0111000000000000,
 		.arg_mask = {
@@ -14,7 +14,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "add r%d,r%d", 
+		.name = "add\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000001100,
 		.arg_mask = {
@@ -25,7 +25,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "addc r%d,r%d", 
+		.name = "addc\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000001110,
 		.arg_mask = {
@@ -36,7 +36,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "addv r%d,r%d", 
+		.name = "addv\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000001111,
 		.arg_mask = {
@@ -47,7 +47,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "and #h'%x,r0", 
+		.name = "and\t#h'%x,r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100100100000000,
 		.arg_mask = {
@@ -58,7 +58,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "and r%d,r%d", 
+		.name = "and\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000001001,
 		.arg_mask = {
@@ -69,7 +69,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "and.b #h'%x,@(r0,GBR)", 
+		.name = "and.b\t#h'%x,@(r0,GBR)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100110100000000,
 		.arg_mask = {
@@ -80,7 +80,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "bf #h'%x", 
+		.name = "bf\t#h'%x", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000101100000000,
 		.arg_mask = {
@@ -91,7 +91,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "bs/s #h'%x", 
+		.name = "bs/s\t#h'%x", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000111100000000,
 		.arg_mask = {
@@ -102,7 +102,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "bra #h'%x", 
+		.name = "bra\t#h'%x", 
 		.mask =	0b1111000000000000,
 		.code = 0b1010000000000000,
 		.arg_mask = {
@@ -113,7 +113,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "braf r%d", 
+		.name = "braf\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000100011,
 		.arg_mask = {
@@ -124,7 +124,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "bsr #h'%x", 
+		.name = "bsr\t#h'%x", 
 		.mask =	0b1111000000000000,
 		.code = 0b1011000000000000,
 		.arg_mask = {
@@ -135,7 +135,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "bsrf r%d", 
+		.name = "bsrf\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000000011,
 		.arg_mask = {
@@ -146,7 +146,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "bt #h'%x", 
+		.name = "bt\t#h'%x", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000100100000000,
 		.arg_mask = {
@@ -157,7 +157,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "bt/s #h'%x", 
+		.name = "bt/s\t#h'%x", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000110100000000,
 		.arg_mask = {
@@ -201,7 +201,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "cmp/eq #h'%x,r0", 
+		.name = "cmp/eq\t#h'%x,r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000100000000000,
 		.arg_mask = {
@@ -212,7 +212,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "cmp/eq r%d,r%d", 
+		.name = "cmp/eq\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000000000,
 		.arg_mask = {
@@ -223,7 +223,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "cmp/ge r%d,r%d", 
+		.name = "cmp/ge\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000000011,
 		.arg_mask = {
@@ -234,7 +234,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "cmp/gt r%d,r%d", 
+		.name = "cmp/gt\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000000111,
 		.arg_mask = {
@@ -245,7 +245,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "cmp/hi r%d,r%d", 
+		.name = "cmp/hi\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000000110,
 		.arg_mask = {
@@ -256,7 +256,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "cmp/hs r%d,r%d", 
+		.name = "cmp/hs\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000000010,
 		.arg_mask = {
@@ -267,7 +267,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "cmp/pl r%d", 
+		.name = "cmp/pl\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000010101,
 		.arg_mask = {
@@ -278,7 +278,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "cmp/pz r%d", 
+		.name = "cmp/pz\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000010001,
 		.arg_mask = {
@@ -289,7 +289,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "cmp/str r%d,r%d", 
+		.name = "cmp/str\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000001100,
 		.arg_mask = {
@@ -300,7 +300,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "div0s r%d,r%d", 
+		.name = "div0s\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000000111,
 		.arg_mask = {
@@ -322,7 +322,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "div1 r%d,r%d", 
+		.name = "div1\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000000100,
 		.arg_mask = {
@@ -333,7 +333,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "dmuls.l r%d,r%d", 
+		.name = "dmuls.l\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000001101,
 		.arg_mask = {
@@ -344,7 +344,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "dmulu.l r%d,r%d", 
+		.name = "dmulu.l\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000000101,
 		.arg_mask = {
@@ -355,7 +355,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "dt r%d", 
+		.name = "dt\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000010000,
 		.arg_mask = {
@@ -366,7 +366,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "exts.b r%d,r%d", 
+		.name = "exts.b\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000001110,
 		.arg_mask = {
@@ -377,7 +377,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "exts.w r%d,r%d", 
+		.name = "exts.w\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000001111,
 		.arg_mask = {
@@ -388,7 +388,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "extu.b r%d,r%d", 
+		.name = "extu.b\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000001100,
 		.arg_mask = {
@@ -399,7 +399,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "extu.w r%d,r%d", 
+		.name = "extu.w\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000001101,
 		.arg_mask = {
@@ -410,7 +410,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fabs fr%d", 
+		.name = "fabs\tfr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b1111000001011101,
 		.arg_mask = {
@@ -421,7 +421,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fadd fr%d,fr%d", 
+		.name = "fadd\tfr%d,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000000000,
 		.arg_mask = {
@@ -432,7 +432,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fcmp/eq fr%d,fr%d", 
+		.name = "fcmp/eq\tfr%d,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000000100,
 		.arg_mask = {
@@ -443,7 +443,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fcmp/gt fr%d,fr%d", 
+		.name = "fcmp/gt\tfr%d,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000000101,
 		.arg_mask = {
@@ -454,7 +454,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fdiv fr%d,fr%d", 
+		.name = "fdiv\tfr%d,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000000011,
 		.arg_mask = {
@@ -465,7 +465,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fldi0 fr%d", 
+		.name = "fldi0\tfr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b1111000010001101,
 		.arg_mask = {
@@ -476,7 +476,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fldi1 fr%d", 
+		.name = "fldi1\tfr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b1111000010011101,
 		.arg_mask = {
@@ -487,7 +487,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "flds fr%d,FPUL", 
+		.name = "flds\tfr%d,FPUL", 
 		.mask =	0b1111000011111111,
 		.code = 0b1111000000011101,
 		.arg_mask = {
@@ -498,7 +498,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "float FPUL,fr%d", 
+		.name = "float\tFPUL,fr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b1111000000101101,
 		.arg_mask = {
@@ -509,7 +509,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fmac FR0,fr%d,fr%d", 
+		.name = "fmac\tFR0,fr%d,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000001110,
 		.arg_mask = {
@@ -520,7 +520,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fmov fr%d,fr%d", 
+		.name = "fmov\tfr%d,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000001100,
 		.arg_mask = {
@@ -531,7 +531,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fmov.s @(r0,r%d),fr%d", 
+		.name = "fmov.s\t@(r0,r%d),fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000000110,
 		.arg_mask = {
@@ -542,7 +542,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fmov.s @r%d+,fr%d", 
+		.name = "fmov.s\t@r%d+,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000001001,
 		.arg_mask = {
@@ -553,7 +553,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fmov.s @r%d,fr%d", 
+		.name = "fmov.s\t@r%d,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000001000,
 		.arg_mask = {
@@ -564,7 +564,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fmov.s fr%d,@(r0,r%d)", 
+		.name = "fmov.s\tfr%d,@(r0,r%d)", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000000111,
 		.arg_mask = {
@@ -575,7 +575,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fmov.s fr%d,@-r%d", 
+		.name = "fmov.s\tfr%d,@-r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000001011,
 		.arg_mask = {
@@ -586,7 +586,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fmov.s fr%d,@r%d", 
+		.name = "fmov.s\tfr%d,@r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000001010,
 		.arg_mask = {
@@ -597,7 +597,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fmul fr%d,fr%d", 
+		.name = "fmul\tfr%d,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000000010,
 		.arg_mask = {
@@ -608,7 +608,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fneg fr%d", 
+		.name = "fneg\tfr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b1111000001001101,
 		.arg_mask = {
@@ -619,7 +619,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fsqrt fr%d", 
+		.name = "fsqrt\tfr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b1111000001101101,
 		.arg_mask = {
@@ -630,7 +630,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fsts FPUL,fr%d", 
+		.name = "fsts\tFPUL,fr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b1111000000001101,
 		.arg_mask = {
@@ -641,7 +641,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "fsub fr%d,fr%d", 
+		.name = "fsub\tfr%d,fr%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b1111000000000001,
 		.arg_mask = {
@@ -652,7 +652,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ftrc fr%d,FPUL", 
+		.name = "ftrc\tfr%d,FPUL", 
 		.mask =	0b1111000011111111,
 		.code = 0b1111000000111101,
 		.arg_mask = {
@@ -663,7 +663,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "jmp @r%d", 
+		.name = "jmp\t@r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000101011,
 		.arg_mask = {
@@ -674,7 +674,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "jsr @r%d", 
+		.name = "jsr\t@r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000001011,
 		.arg_mask = {
@@ -685,7 +685,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,GBR", 
+		.name = "ldc\tr%d,GBR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000011110,
 		.arg_mask = {
@@ -696,7 +696,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,SR", 
+		.name = "ldc\tr%d,SR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000001110,
 		.arg_mask = {
@@ -707,7 +707,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,VBR", 
+		.name = "ldc\tr%d,VBR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000101110,
 		.arg_mask = {
@@ -718,7 +718,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,SSR", 
+		.name = "ldc\tr%d,SSR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000111110,
 		.arg_mask = {
@@ -729,7 +729,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,SPC", 
+		.name = "ldc\tr%d,SPC", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001001110,
 		.arg_mask = {
@@ -740,7 +740,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,MOD", 
+		.name = "ldc\tr%d,MOD", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001011110,
 		.arg_mask = {
@@ -752,7 +752,7 @@ const struct opcode_s opcode_list[] = {
 	},
 	//FIXME: find difference between "ldc rm,RE" and "ldc rm,RS"
 	{
-		.name = "ldc r%d,RE/RS", 
+		.name = "ldc\tr%d,RE/RS", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001101110,
 		.arg_mask = {
@@ -763,7 +763,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,R0_BANK", 
+		.name = "ldc\tr%d,R0_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010001110,
 		.arg_mask = {
@@ -774,7 +774,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,R1_BANK", 
+		.name = "ldc\tr%d,R1_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010011110,
 		.arg_mask = {
@@ -785,7 +785,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,R2_BANK", 
+		.name = "ldc\tr%d,R2_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010101110,
 		.arg_mask ={
@@ -796,7 +796,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,R3_BANK", 
+		.name = "ldc\tr%d,R3_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010111110,
 		.arg_mask ={
@@ -807,7 +807,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,R4_BANK", 
+		.name = "ldc\tr%d,R4_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011001110,
 		.arg_mask ={
@@ -818,7 +818,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,R5_BANK", 
+		.name = "ldc\tr%d,R5_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011011110,
 		.arg_mask ={
@@ -829,7 +829,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,R6_BANK", 
+		.name = "ldc\tr%d,R6_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011101110,
 		.arg_mask ={
@@ -840,7 +840,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc r%d,R7_BANK", 
+		.name = "ldc\tr%d,R7_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011111110,
 		.arg_mask ={
@@ -851,7 +851,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,GBR", 
+		.name = "ldc.l\t@r%d+,GBR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000010111,
 		.arg_mask ={
@@ -862,7 +862,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,SR", 
+		.name = "ldc.l\t@r%d+,SR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000000111,
 		.arg_mask ={
@@ -873,7 +873,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,VBR", 
+		.name = "ldc.l\t@r%d+,VBR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000100111,
 		.arg_mask ={
@@ -884,7 +884,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,SSR", 
+		.name = "ldc.l\t@r%d+,SSR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000110111,
 		.arg_mask ={
@@ -895,7 +895,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,SPC", 
+		.name = "ldc.l\t@r%d+,SPC", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001000111,
 		.arg_mask ={
@@ -906,7 +906,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,MOD", 
+		.name = "ldc.l\t@r%d+,MOD", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001010111,
 		.arg_mask ={
@@ -917,7 +917,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,RE", 
+		.name = "ldc.l\t@r%d+,RE", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001110111,
 		.arg_mask ={
@@ -928,7 +928,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,RS", 
+		.name = "ldc.l\t@r%d+,RS", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001100111,
 		.arg_mask ={
@@ -939,7 +939,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,R0_BANK", 
+		.name = "ldc.l\t@r%d+,R0_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010000111,
 		.arg_mask ={
@@ -950,7 +950,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,R1_BANK", 
+		.name = "ldc.l\t@r%d+,R1_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010010111,
 		.arg_mask ={
@@ -961,7 +961,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,R2_BANK", 
+		.name = "ldc.l\t@r%d+,R2_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010100111,
 		.arg_mask ={
@@ -972,7 +972,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @%d+,R3_BANK", 
+		.name = "ldc.l\t@%d+,R3_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010110111,
 		.arg_mask ={
@@ -983,7 +983,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,R4_BANK", 
+		.name = "ldc.l\t@r%d+,R4_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011000111,
 		.arg_mask ={
@@ -994,7 +994,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,R5_BANK", 
+		.name = "ldc.l\t@r%d+,R5_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011010111,
 		.arg_mask ={
@@ -1005,7 +1005,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,R7_BANK", 
+		.name = "ldc.l\t@r%d+,R7_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011100111,
 		.arg_mask ={
@@ -1016,7 +1016,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldc.l @r%d+,R7_BANK", 
+		.name = "ldc.l\t@r%d+,R7_BANK", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011110111,
 		.arg_mask ={
@@ -1027,7 +1027,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldre @(#h'%x,PC)", 
+		.name = "ldre\t@(#h'%x,PC)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000111000000000,
 		.arg_mask ={
@@ -1038,7 +1038,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "ldrs @(#h'%x,PC)", 
+		.name = "ldrs\t@(#h'%x,PC)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000110000000000,
 		.arg_mask ={
@@ -1049,7 +1049,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,FPSCR", 
+		.name = "lds\tr%d,FPSCR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001101010,
 		.arg_mask ={
@@ -1060,7 +1060,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,FPUL", 
+		.name = "lds\tr%d,FPUL", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001011010,
 		.arg_mask ={
@@ -1071,7 +1071,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,MACH", 
+		.name = "lds\tr%d,MACH", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000001010,
 		.arg_mask ={
@@ -1082,7 +1082,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,MACL", 
+		.name = "lds\tr%d,MACL", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000011010,
 		.arg_mask ={
@@ -1093,7 +1093,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,PR", 
+		.name = "lds\tr%d,PR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000101010,
 		.arg_mask ={
@@ -1104,7 +1104,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,A0", 
+		.name = "lds\tr%d,A0", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001101010,
 		.arg_mask ={
@@ -1115,7 +1115,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,DSR", 
+		.name = "lds\tr%d,DSR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001111010,
 		.arg_mask ={
@@ -1126,7 +1126,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,X0", 
+		.name = "lds\tr%d,X0", 
 		.mask =	0b1111000011111111,
 		.code = 0b01000000010001010,
 		.arg_mask ={
@@ -1137,7 +1137,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,X1", 
+		.name = "lds\tr%d,X1", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010011010,
 		.arg_mask ={
@@ -1148,7 +1148,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,Y0", 
+		.name = "lds\tr%d,Y0", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010101010,
 		.arg_mask ={
@@ -1159,7 +1159,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds r%d,Y1", 
+		.name = "lds\tr%d,Y1", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010111010,
 		.arg_mask ={
@@ -1170,7 +1170,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,FPSCR", 
+		.name = "lds.l\t@r%d+,FPSCR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001100110,
 		.arg_mask ={
@@ -1181,7 +1181,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,FPUL", 
+		.name = "lds.l\t@r%d+,FPUL", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001010110,
 		.arg_mask ={
@@ -1192,7 +1192,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,MACH", 
+		.name = "lds.l\t@r%d+,MACH", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000000110,
 		.arg_mask ={
@@ -1203,7 +1203,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,MACL", 
+		.name = "lds.l\t@r%d+,MACL", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000010110,
 		.arg_mask ={
@@ -1214,7 +1214,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,PR", 
+		.name = "lds.l\t@r%d+,PR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000100110,
 		.arg_mask ={
@@ -1225,7 +1225,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,DSR", 
+		.name = "lds.l\t@r%d+,DSR", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001100110,
 		.arg_mask ={
@@ -1236,7 +1236,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,A0", 
+		.name = "lds.l\t@r%d+,A0", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001110110,
 		.arg_mask ={
@@ -1247,7 +1247,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,X0", 
+		.name = "lds.l\t@r%d+,X0", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001000110,
 		.arg_mask ={
@@ -1258,7 +1258,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,X1", 
+		.name = "lds.l\t@r%d+,X1", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010010110,
 		.arg_mask ={
@@ -1269,7 +1269,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,Y0", 
+		.name = "lds.l\t@r%d+,Y0", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010100110,
 		.arg_mask ={
@@ -1280,7 +1280,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "lds.l @r%d+,Y1", 
+		.name = "lds.l\t@r%d+,Y1", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010110110,
 		.arg_mask ={
@@ -1302,7 +1302,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mac.l @r%d+,@r%d+", 
+		.name = "mac.l\t@r%d+,@r%d+", 
 		.mask =	0b1111000000001111,
 		.code = 0b0000000000001111,
 		.arg_mask ={
@@ -1313,7 +1313,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mac.w @r%d+,@r%d+", 
+		.name = "mac.w\t@r%d+,@r%d+", 
 		.mask =	0b1111000000001111,
 		.code = 0b0100000000001111,
 		.arg_mask ={
@@ -1324,7 +1324,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov #h'%x,r%d", 
+		.name = "mov\t#h'%x,r%d", 
 		.mask =	0b1111000000000000,
 		.code = 0b1110000000000000,
 		.arg_mask ={
@@ -1335,7 +1335,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov r%d,r%d", 
+		.name = "mov\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000000011,
 		.arg_mask ={
@@ -1346,7 +1346,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b @(#h'%x,GBR),r0", 
+		.name = "mov.b\t@(#h'%x,GBR),r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100010000000000,
 		.arg_mask ={
@@ -1357,7 +1357,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b @(#h'%x,r%d),r0", 
+		.name = "mov.b\t@(#h'%x,r%d),r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000010000000000,
 		.arg_mask ={
@@ -1368,7 +1368,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b @(r0,r%d),r%d", 
+		.name = "mov.b\t@(r0,r%d),r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0000000000001100,
 		.arg_mask ={
@@ -1379,7 +1379,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b @r%d+,r%d", 
+		.name = "mov.b\t@r%d+,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000000100,
 		.arg_mask ={
@@ -1390,7 +1390,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b @r%d,r%d", 
+		.name = "mov.b\t@r%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000000000,
 		.arg_mask ={
@@ -1401,7 +1401,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b r0,@(#h'%x,GBR)", 
+		.name = "mov.b\tr0,@(#h'%x,GBR)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100000000000000,
 		.arg_mask ={
@@ -1412,7 +1412,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b r0,@(#h'%x,r%d)", 
+		.name = "mov.b\tr0,@(#h'%x,r%d)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000000000000000,
 		.arg_mask ={
@@ -1423,7 +1423,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b r%d,@(r0,r%d)", 
+		.name = "mov.b\tr%d,@(r0,r%d)", 
 		.mask =	0b1111000000000000,
 		.code = 0b0000000000000100,
 		.arg_mask ={
@@ -1434,7 +1434,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b r%d,@-r%d", 
+		.name = "mov.b\tr%d,@-r%d", 
 		.mask =	0b1111000000000000,
 		.code = 0b0010000000000100,
 		.arg_mask ={
@@ -1445,7 +1445,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.b r%d,@r%d", 
+		.name = "mov.b\tr%d,@r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000000000,
 		.arg_mask ={
@@ -1456,7 +1456,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l @(#h'%x,GBR),r0", 
+		.name = "mov.l\t@(#h'%x,GBR),r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100011000000000,
 		.arg_mask ={
@@ -1467,7 +1467,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l @(#h'%x,PC),r%d", 
+		.name = "mov.l\t@(#h'%x,PC),r%d", 
 		.mask =	0b1111000000000000,
 		.code = 0b1101000000000000,
 		.arg_mask ={
@@ -1478,7 +1478,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l @(#h'%x,r%d),r%d", 
+		.name = "mov.l\t@(#h'%x,r%d),r%d", 
 		.mask =	0b1111000000000000,
 		.code = 0b0101000000000000,
 		.arg_mask ={
@@ -1489,7 +1489,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l @(r0,r%d),r%d", 
+		.name = "mov.l\t@(r0,r%d),r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0000000000001110,
 		.arg_mask ={
@@ -1500,7 +1500,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l @r%d+,r%d", 
+		.name = "mov.l\t@r%d+,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000000110,
 		.arg_mask ={
@@ -1511,7 +1511,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l @r%d,r%d", 
+		.name = "mov.l\t@r%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000000010,
 		.arg_mask ={
@@ -1522,7 +1522,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l r0,@(#h'%x,GBR)", 
+		.name = "mov.l\tr0,@(#h'%x,GBR)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100001000000000,
 		.arg_mask ={
@@ -1533,7 +1533,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l r%d,@(#h'%x,r%d)", 
+		.name = "mov.l\tr%d,@(#h'%x,r%d)", 
 		.mask =	0b1111000000000000,
 		.code = 0b0001000000000000,
 		.arg_mask ={
@@ -1544,7 +1544,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l r%d,@(r0,r%d)", 
+		.name = "mov.l\tr%d,@(r0,r%d)", 
 		.mask =	0b1111000000001111,
 		.code = 0b0000000000000110,
 		.arg_mask ={
@@ -1555,7 +1555,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l r%d,@-r%d", 
+		.name = "mov.l\tr%d,@-r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000000110,
 		.arg_mask ={
@@ -1566,7 +1566,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.l r%d,@r%d", 
+		.name = "mov.l\tr%d,@r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000000010,
 		.arg_mask ={
@@ -1577,7 +1577,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w @(#h'%x,GBR),r0", 
+		.name = "mov.w\t@(#h'%x,GBR),r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100010100000000,
 		.arg_mask ={
@@ -1588,7 +1588,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w @(#h'%x,PC),r%d", 
+		.name = "mov.w\t@(#h'%x,PC),r%d", 
 		.mask =	0b1111000000000000,
 		.code = 0b1001000000000000,
 		.arg_mask ={
@@ -1599,7 +1599,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w @(r0,r%d),r%d", 
+		.name = "mov.w\t@(r0,r%d),r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0000000000001101,
 		.arg_mask ={
@@ -1610,7 +1610,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w @r%d+,r%d", 
+		.name = "mov.w\t@r%d+,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000000101,
 		.arg_mask ={
@@ -1621,7 +1621,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w @r%d,r%d", 
+		.name = "mov.w\t@r%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000000001,
 		.arg_mask ={
@@ -1632,7 +1632,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w r0,@(#h'%x,GBR)", 
+		.name = "mov.w\tr0,@(#h'%x,GBR)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100000100000000,
 		.arg_mask ={
@@ -1643,7 +1643,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w r0,@(#h'%x,,r%d)", 
+		.name = "mov.w\tr0,@(#h'%x,,r%d)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000000100000000,
 		.arg_mask ={
@@ -1654,7 +1654,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w r%d,@(r0,r%d)", 
+		.name = "mov.w\tr%d,@(r0,r%d)", 
 		.mask =	0b1111000000001111,
 		.code = 0b0000000000000101,
 		.arg_mask ={
@@ -1665,7 +1665,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w r%d,@-r%d", 
+		.name = "mov.w\tr%d,@-r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000000101,
 		.arg_mask ={
@@ -1676,7 +1676,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mov.w r%d,@r%d", 
+		.name = "mov.w\tr%d,@r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000000001,
 		.arg_mask ={
@@ -1687,7 +1687,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mova @(#h'%x,PC),r0", 
+		.name = "mova\t@(#h'%x,PC),r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100011100000000,
 		.arg_mask ={
@@ -1698,7 +1698,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "movt r%d", 
+		.name = "movt\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000101001,
 		.arg_mask ={
@@ -1709,7 +1709,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mul.l r%d,r%d", 
+		.name = "mul.l\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0000000000000111,
 		.arg_mask ={
@@ -1720,7 +1720,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "muls.w r%d,r%d", 
+		.name = "muls.w\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000001111,
 		.arg_mask ={
@@ -1731,7 +1731,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "mulu.w r%d,r%d", 
+		.name = "mulu.w\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000001110,
 		.arg_mask ={
@@ -1742,7 +1742,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "neg r%d,@-r%d", 
+		.name = "neg\tr%d,@-r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000001011,
 		.arg_mask ={
@@ -1753,7 +1753,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "negc r%d,r%d", 
+		.name = "negc\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000001010,
 		.arg_mask ={
@@ -1775,7 +1775,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "not r%d,r%d", 
+		.name = "not\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000000111,
 		.arg_mask ={
@@ -1786,7 +1786,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "or #h'%x,r0", 
+		.name = "or\t#h'%x,r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100101100000000,
 		.arg_mask ={
@@ -1797,7 +1797,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "or r%d,r%d", 
+		.name = "or\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000001011,
 		.arg_mask ={
@@ -1808,7 +1808,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "or.b #h'%x,@(r0,GBR)", 
+		.name = "or.b\t#h'%x,@(r0,GBR)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100111100000000,
 		.arg_mask ={
@@ -1819,7 +1819,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "pref @r%d", 
+		.name = "pref\t@r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000010000011,
 		.arg_mask ={
@@ -1830,7 +1830,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "rotcl r%d", 
+		.name = "rotcl\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000100100,
 		.arg_mask ={
@@ -1841,7 +1841,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "rotcr r%d", 
+		.name = "rotcr\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000100101,
 		.arg_mask ={
@@ -1852,7 +1852,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "rotl r%d", 
+		.name = "rotl\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000000100,
 		.arg_mask ={
@@ -1863,7 +1863,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "rotr r%d", 
+		.name = "rotr\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000000101,
 		.arg_mask ={
@@ -1896,7 +1896,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "setrc r%d", 
+		.name = "setrc\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000010100,
 		.arg_mask ={
@@ -1907,7 +1907,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "setrc #h'%x", 
+		.name = "setrc\t#h'%x", 
 		.mask =	0b1111111100000000,
 		.code = 0b1000001000000000,
 		.arg_mask ={
@@ -1940,7 +1940,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shad r%d,r%d", 
+		.name = "shad\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0100000000001100,
 		.arg_mask ={
@@ -1951,7 +1951,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shal r%d", 
+		.name = "shal\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000100000,
 		.arg_mask ={
@@ -1962,7 +1962,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shar r%d", 
+		.name = "shar\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000100001,
 		.arg_mask ={
@@ -1973,7 +1973,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shld r%d,r%d", 
+		.name = "shld\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0100000000001101,
 		.arg_mask ={
@@ -1984,7 +1984,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shll r%d", 
+		.name = "shll\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000000000,
 		.arg_mask ={
@@ -1995,7 +1995,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shll2 r%d", 
+		.name = "shll2\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000001000,
 		.arg_mask ={
@@ -2006,7 +2006,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shll8 r%d", 
+		.name = "shll8\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000011000,
 		.arg_mask ={
@@ -2017,7 +2017,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shll16 r%d", 
+		.name = "shll16\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000101000,
 		.arg_mask ={
@@ -2028,7 +2028,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shlr r%d", 
+		.name = "shlr\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000000001,
 		.arg_mask ={
@@ -2039,7 +2039,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shlr2 r%d", 
+		.name = "shlr2\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000001001,
 		.arg_mask ={
@@ -2050,7 +2050,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shlr8 r%d", 
+		.name = "shlr8\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000011001,
 		.arg_mask ={
@@ -2061,7 +2061,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "shlr16 r%d", 
+		.name = "shlr16\tr%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000101001,
 		.arg_mask ={
@@ -2083,7 +2083,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc GBR,r%d", 
+		.name = "stc\tGBR,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000010010,
 		.arg_mask ={
@@ -2094,7 +2094,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc SR,r%d", 
+		.name = "stc\tSR,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000000010,
 		.arg_mask ={
@@ -2105,7 +2105,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc VBR,r%d", 
+		.name = "stc\tVBR,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000100010,
 		.arg_mask ={
@@ -2116,7 +2116,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc SSR,r%d", 
+		.name = "stc\tSSR,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000110010,
 		.arg_mask ={
@@ -2127,7 +2127,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc SPC,r%d", 
+		.name = "stc\tSPC,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000001000010,
 		.arg_mask ={
@@ -2138,7 +2138,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc MOD,r%d", 
+		.name = "stc\tMOD,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000001010010,
 		.arg_mask ={
@@ -2149,7 +2149,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc RE,r%d", 
+		.name = "stc\tRE,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000001110010,
 		.arg_mask ={
@@ -2160,7 +2160,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc RS,r%d", 
+		.name = "stc\tRS,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000001100010,
 		.arg_mask ={
@@ -2171,7 +2171,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc R0_BANK,r%d", 
+		.name = "stc\tR0_BANK,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000010000010,
 		.arg_mask ={
@@ -2182,7 +2182,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc R1_BANK,r%d", 
+		.name = "stc\tR1_BANK,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000010010010,
 		.arg_mask ={
@@ -2193,7 +2193,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc R2_BANK,r%d", 
+		.name = "stc\tR2_BANK,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000010100010,
 		.arg_mask ={
@@ -2204,7 +2204,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc R3_BANK,r%d", 
+		.name = "stc\tR3_BANK,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000010110010,
 		.arg_mask ={
@@ -2215,7 +2215,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc R4_BANK,r%d", 
+		.name = "stc\tR4_BANK,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000011000010,
 		.arg_mask ={
@@ -2226,7 +2226,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc R5_BANK,r%d", 
+		.name = "stc\tR5_BANK,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000011010010,
 		.arg_mask ={
@@ -2237,7 +2237,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc R6_BANK,r%d", 
+		.name = "stc\tR6_BANK,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000011100010,
 		.arg_mask ={
@@ -2248,7 +2248,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc R7_BANK,r%d", 
+		.name = "stc\tR7_BANK,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000011110010,
 		.arg_mask ={
@@ -2259,7 +2259,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l GBR,@r-%d", 
+		.name = "stc.l\tGBR,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000010011,
 		.arg_mask ={
@@ -2270,7 +2270,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l SR,@r-%d", 
+		.name = "stc.l\tSR,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000000011,
 		.arg_mask ={
@@ -2281,7 +2281,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l VBR,@r-%d", 
+		.name = "stc.l\tVBR,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000100011,
 		.arg_mask ={
@@ -2292,7 +2292,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l SSR,@r-%d", 
+		.name = "stc.l\tSSR,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000110011,
 		.arg_mask ={
@@ -2303,7 +2303,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l SPC,@r-%d", 
+		.name = "stc.l\tSPC,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001000011,
 		.arg_mask ={
@@ -2314,7 +2314,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l MOD,@r-%d", 
+		.name = "stc.l\tMOD,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001010011,
 		.arg_mask ={
@@ -2325,7 +2325,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l RE,@r-%d", 
+		.name = "stc.l\tRE,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001110011,
 		.arg_mask ={
@@ -2336,7 +2336,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l RS,@r-%d", 
+		.name = "stc.l\tRS,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001100011,
 		.arg_mask ={
@@ -2347,7 +2347,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l R0_BANK,@r-%d", 
+		.name = "stc.l\tR0_BANK,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010000011,
 		.arg_mask ={
@@ -2358,7 +2358,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l R1_BANK,@r-%d", 
+		.name = "stc.l\tR1_BANK,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010010011,
 		.arg_mask ={
@@ -2369,7 +2369,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l R2_BANK,@r-%d", 
+		.name = "stc.l\tR2_BANK,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010100011,
 		.arg_mask ={
@@ -2380,7 +2380,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l R3_BANK,@r-%d", 
+		.name = "stc.l\tR3_BANK,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010110011,
 		.arg_mask ={
@@ -2391,7 +2391,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l R4_BANK,@r-%d", 
+		.name = "stc.l\tR4_BANK,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011000011,
 		.arg_mask ={
@@ -2402,7 +2402,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l R5_BANK,@r-%d", 
+		.name = "stc.l\tR5_BANK,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011010011,
 		.arg_mask ={
@@ -2413,7 +2413,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l R6_BANK,@r-%d", 
+		.name = "stc.l\tR6_BANK,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011100011,
 		.arg_mask ={
@@ -2424,7 +2424,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "stc.l R7_BANK,@r-%d", 
+		.name = "stc.l\tR7_BANK,@r-%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000011110011,
 		.arg_mask ={
@@ -2435,7 +2435,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts FPSCR,r%d", 
+		.name = "sts\tFPSCR,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000001101010,
 		.arg_mask ={
@@ -2446,7 +2446,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts FPUL,r%d", 
+		.name = "sts\tFPUL,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000001011010,
 		.arg_mask ={
@@ -2457,7 +2457,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts MACH,r%d", 
+		.name = "sts\tMACH,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000001010,
 		.arg_mask ={
@@ -2468,7 +2468,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts MACL,r%d", 
+		.name = "sts\tMACL,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000011010,
 		.arg_mask ={
@@ -2479,7 +2479,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts PR,r%d", 
+		.name = "sts\tPR,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000000101010,
 		.arg_mask ={
@@ -2490,7 +2490,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts DSR,r%d", 
+		.name = "sts\tDSR,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000001101010,
 		.arg_mask ={
@@ -2501,7 +2501,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts A0,r%d", 
+		.name = "sts\tA0,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000001111010,
 		.arg_mask ={
@@ -2512,7 +2512,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts X0,r%d", 
+		.name = "sts\tX0,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000010001010,
 		.arg_mask ={
@@ -2523,7 +2523,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts X1,r%d", 
+		.name = "sts\tX1,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000010011010,
 		.arg_mask ={
@@ -2534,7 +2534,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts Y0,r%d", 
+		.name = "sts\tY0,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000010101010,
 		.arg_mask ={
@@ -2545,7 +2545,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts Y1,r%d", 
+		.name = "sts\tY1,r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0000000010111010,
 		.arg_mask ={
@@ -2556,7 +2556,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l FPSCR,@-r%d", 
+		.name = "sts.l\tFPSCR,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001100010,
 		.arg_mask ={
@@ -2567,7 +2567,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l FPUL,@-r%d", 
+		.name = "sts.l\tFPUL,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001010010,
 		.arg_mask ={
@@ -2578,7 +2578,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l MACH,@-r%d", 
+		.name = "sts.l\tMACH,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000000010,
 		.arg_mask ={
@@ -2589,7 +2589,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l MACL,@-r%d", 
+		.name = "sts.l\tMACL,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000010010,
 		.arg_mask ={
@@ -2600,7 +2600,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l PR,@-r%d", 
+		.name = "sts.l\tPR,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000100010,
 		.arg_mask ={
@@ -2611,7 +2611,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l DSR,@-r%d", 
+		.name = "sts.l\tDSR,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001100010,
 		.arg_mask ={
@@ -2622,7 +2622,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l A0,@-r%d", 
+		.name = "sts.l\tA0,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000001110010,
 		.arg_mask ={
@@ -2633,7 +2633,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l X0,@-r%d", 
+		.name = "sts.l\tX0,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010000010,
 		.arg_mask ={
@@ -2644,7 +2644,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l X1,@-r%d", 
+		.name = "sts.l\tX1,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010010010,
 		.arg_mask ={
@@ -2655,7 +2655,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l Y0,@-r%d", 
+		.name = "sts.l\tY0,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010100010,
 		.arg_mask ={
@@ -2666,7 +2666,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sts.l Y1,@-r%d", 
+		.name = "sts.l\tY1,@-r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000010110010,
 		.arg_mask ={
@@ -2677,7 +2677,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "sub r%d,r%d", 
+		.name = "sub\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000001000,
 		.arg_mask ={
@@ -2688,7 +2688,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "subc r%d,r%d", 
+		.name = "subc\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000001010,
 		.arg_mask ={
@@ -2699,7 +2699,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "subv r%d,r%d", 
+		.name = "subv\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0011000000001011,
 		.arg_mask ={
@@ -2710,7 +2710,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "swap.b r%d,r%d", 
+		.name = "swap.b\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000001000,
 		.arg_mask ={
@@ -2721,7 +2721,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "swap.w r%d,r%d", 
+		.name = "swap.w\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0110000000001001,
 		.arg_mask ={
@@ -2732,7 +2732,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "tas.b @r%d", 
+		.name = "tas.b\t@r%d", 
 		.mask =	0b1111000011111111,
 		.code = 0b0100000000011011,
 		.arg_mask ={
@@ -2743,7 +2743,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "trapa #h'%x", 
+		.name = "trapa\t#h'%x", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100001100000000,
 		.arg_mask ={
@@ -2754,7 +2754,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "tst #h'%x,r0", 
+		.name = "tst\t#h'%x,r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100100000000000,
 		.arg_mask ={
@@ -2765,7 +2765,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "tst r%d,r%d", 
+		.name = "tst\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000001000,
 		.arg_mask ={
@@ -2776,7 +2776,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "tst.b #h'%x,@(r0,GBR)", 
+		.name = "tst.b\t#h'%x,@(r0,GBR)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100110000000000,
 		.arg_mask ={
@@ -2787,7 +2787,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "xor #h'%x,r0", 
+		.name = "xor\t#h'%x,r0", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100101000000000,
 		.arg_mask ={
@@ -2798,7 +2798,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "xor r%d,r%d", 
+		.name = "xor\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000001010,
 		.arg_mask ={
@@ -2809,7 +2809,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "wor.b #h'%x,@(r0,GBR)", 
+		.name = "wor.b\t#h'%x,@(r0,GBR)", 
 		.mask =	0b1111111100000000,
 		.code = 0b1100111000000000,
 		.arg_mask ={
@@ -2820,7 +2820,7 @@ const struct opcode_s opcode_list[] = {
 		.special = NULL
 	},
 	{
-		.name = "xtrct r%d,r%d", 
+		.name = "xtrct\tr%d,r%d", 
 		.mask =	0b1111000000001111,
 		.code = 0b0010000000001101,
 		.arg_mask ={
@@ -2843,5 +2843,3 @@ const struct opcode_s opcode_list[] = {
 	},
 
 };
-
-

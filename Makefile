@@ -81,6 +81,9 @@ check:
 map:
 	@ $(OBJDUMP) -D $(DEBUG)/$(NAME).elf | less
 
+bin:
+	@ cat $(MEMORY_MAP) | less
+
 
 ##---
 ##	  Automated rules

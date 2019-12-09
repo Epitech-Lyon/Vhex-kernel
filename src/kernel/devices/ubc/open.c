@@ -23,7 +23,7 @@ int ubc_open(void)
 	casio_dbr = dbr_set(&ubc_handler_pre);
 
 	// Setup Channel 0.
-	SH7305_UBC.CRR0.PCB	= 0;			// Set PC break before instruction break.
+	SH7305_UBC.CRR0.PCB	= 1;			// Set PC break adter instruction break.
 	SH7305_UBC.CRR0.BIE	= 1;			// Request a Break.
 	
 	SH7305_UBC.CBR0.MFE	= 0;			// Enable Match Flag.

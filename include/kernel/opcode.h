@@ -15,7 +15,10 @@ struct opcode_s
 	uint16_t mask;
 	uint16_t code;
 	uint16_t arg_mask[ARGUMENTS_MAX];
-	void (*special)(char *buffer, struct opcode_s);
+	void (*special)(char *buffer, uint16_t *area);
 };
+
+// Opcode list.
+extern const struct opcode_s opcode_list[];
 
 #endif /*__OPCODE_H__*/

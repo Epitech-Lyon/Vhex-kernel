@@ -1,38 +1,36 @@
-//#include <lib/stdio.h>
-//#include <lib/display.h>
-//#include <kernel/tty.h>
+/*#include <lib/stdio.h>
+#include <lib/display.h>
 
-/*int main(void)
+// TODO: remove me !!
+extern void test(void);
+
+int main(void)
 {
-	char *line;
+	dclear();
+	dprint(0, 0, "Boot complete !");
+	dupdate();
+	while (1);
 
-	// Open TTY and display entry message
-	tty_open();
-	tty_write("Welcome to Vhex !\n");
 
+	// Open User Break Controller.
+	// @note:
+	// 	This function is hardcoded to follow syscall
+	// 	execution based on userland vitural address
+	// 	0x08100000, reserved for add-in RAM.
+	// 	The tested programe is staticaly linked by the
+	// 	linker script.
+	// 	This module is only on SH7305 - SH4 based MPU.
+	// 	THis function SHOULD not be called !
+	ubc_open();
 
-	// UBC test !
-	
+	// Jump into the tested function.
+	// @note:
+	// 	Thus USC should be start after the jump.
+	//
+	//((void(*)(void))0x08100000)();
+	//((void(*)(void))&vhex_dbr)();
+	test();
 
-	// Main loop
-	while (1)
-	{
-		// Write input indications.
-		// TODO: write current working directory ?
-		tty_write(">");
-
-		// Get each line writen by the user.
-		nbread = getline(&line, &size, 0);
-		if (nbread == EOF)
-		{
-			// TODO: check jobs ?
-			break;
-		}
-
-		// TODO: do some job.
-	}
-
-	// Close TTY and return.
-	tty_close();
-	return (0);
+	// Power OFF UBC module.
+	ubc_close();
 }*/

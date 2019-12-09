@@ -10,10 +10,18 @@ MEMORY
 	** This location is realy important because no Casio's OS data
 	** should be overwrite (specially TLB information stored by Casio).
 	*/
-	bootram	(rwx)	: o = 0x88040000, l = 252k
-	dbrram	(rwx)	: o = 0x8807f000, l = 4k
-	rom  	(rx)	: o = 0x00300200, l = 512k
-	testram (rwx)	: o = 0x08100000, l = 8k
+	ram	(WX)	: o = 0x88040000, l = 252k
+	rom	(RX)	: o = 0x00300200, l = 512k
+	ilram	(WX)	: o = 0xe5200000, l = 4k
+}
+
+PHDRS
+{
+	text	PT_LOAD ;
+	data	PT_LOAD ;
+	bss	PT_NULL ;
+	ubc	PT_LOAD ;
+	vbr	PT_LOAD ;
 }
 
 SECTIONS
@@ -29,13 +37,15 @@ SECTIONS
 		. = ALIGN(4);
 		*(.rodata)
 		*(.rodata.*)
-	} > rom
+	} > rom : text
+
+
 
 
 	/*
 	** RAM sctions
 	*/
-	. = ORIGIN(bootram);
+	. = ORIGIN(ram);
 
 	/* BootStrap Stack: should be wiped later ! */
 	/* (we force the section to be non loadable when the program is run) */
@@ -44,59 +54,25 @@ SECTIONS
 		*(.bss)
 		*(COMMON)
 		. = ALIGN(4);
-	} > bootram :NONE
+	} > ram : bss
 	_sbss = SIZEOF(.bss);
 
 	/* Read-write data going to RAM */
-	.data	: ALIGN(4) {
+	.data ALIGN(4) : ALIGN(4) {
 		_bdata_rom = LOADADDR(.data) ;
 		_bdata_ram = . ;
 	
 		*(.data)
 
 		. = ALIGN(4);
-	} > bootram AT> rom
+	} > ram AT> rom : data
 	_sdata = SIZEOF(.data);
-
-
-	/*
-	** TEST space !
-	*/
-	/*. = ORIGIN(testram);
-
-	.test : ALIGN(4) {
-		_btest_rom = LOADADDR(.test) ;
-		_btest_ram = . ;
-
-		*(.test.prgm)
-
-		. = ALIGN(4);
-	} > testram AT> rom
-	_stest = SIZEOF(.test);
-	*/
-
-	/*
-	** DBR space !
-	*/
-	/*. = ORIGIN(testram);
-
-	.vhex : ALIGN(4) {
-		_bvhex_rom = LOADADDR(.vhex) ;
-		_bvhex_ram = . ;
-		_vhex_dbr = . ;
-		
-		*(.vhex.handler)
-
-		. = ALIGN(4);
-	} > osram AT> rom
-	_svhex = SIZEOF(.vhex);
-	*/
 
 	/*
 	** VBR space !
 	*/
 	/* Interrupt / exception handlers */
-	/*.vhex : SUBALIGN(4) {
+	.vhex ALIGN(4) : SUBALIGN(4) {
 		_bvhex_rom = LOADADDR(.vhex) ;
 		_bvhex_ram = . ;
 		_vhex_vbr = . - 0x100;
@@ -106,8 +82,29 @@ SECTIONS
 		. = _vhex_vbr + 0x600 ;
 		*(.vhex.interrupt) ;
 		. = ALIGN(4);
-	} > osram AT> rom
-	_svhex = SIZEOF(.vhex);*/
+	} > ram AT> rom : vbr
+	_svhex = SIZEOF(.vhex);
+
+
+
+
+	/*
+	** DBR space !
+	*/
+	. = ORIGIN(ilram);
+	.ubc ALIGN(4) : ALIGN(4) {
+		_bubc_rom = LOADADDR(.ubc) ;
+		_bubc_ram = . ;
+		
+		*(.ubc.handler)
+		*(.ubc)
+
+		. = ALIGN(4);
+	} > ilram AT> rom : ubc
+	_subc = SIZEOF(.ubc);
+	
+
+
 
 	/* unwanted section */
 	/DISCARD/ : {

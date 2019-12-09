@@ -21,7 +21,8 @@ typedef struct ubc_session_s
 			uint32_t cursor;
 		} context;
 		struct {
-			uint32_t cursor;
+			int32_t vcursor;
+			int32_t hcursor;
 		} disassembly;
 	} menu;
 	struct ubc_context_s *context;

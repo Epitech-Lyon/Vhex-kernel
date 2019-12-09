@@ -4,6 +4,7 @@
 #include <kernel/devices/ubc.h>
 #include <kernel/syscall.h>
 #include <kernel/types.h>
+#include <kernel/extra.h>
 #include <lib/display.h>
 #include <lib/string.h>
 
@@ -19,17 +20,17 @@ extern uint32_t sdata;
 extern uint32_t bvhex_ram;
 extern uint32_t bvhex_rom;
 extern uint32_t svhex;
-extern uint32_t btest_ram;
-extern uint32_t btest_rom;
-extern uint32_t stest;
+extern uint32_t bubc_ram;
+extern uint32_t bubc_rom;
+extern uint32_t subc;
 
 
 // Internal functions.
-extern void section_wipe(uint32_t *section, size_t size);
-extern void section_load(uint32_t *dest, uint32_t *src, size_t size);
-extern void ubc_handler(void);
+extern mpu_t mpu_get(void);
+extern void ubc_handler_pre(void);
 extern void test(void);
 extern int main(void);
+
 
 __attribute__((section(".pretext")))
 int start(void)
@@ -39,12 +40,31 @@ int start(void)
 
 	// Wipe .bss section and dump .data / Vhex sections
 	memset(&bbss, 0x00, (size_t)&sbss);
+	memcpy(&bubc_ram, &bubc_rom, (size_t)&subc);
 	memcpy(&bdata_ram, &bdata_rom, (size_t)&sdata);
-	//memcpy(&bvhex_ram, &bvhex_rom, (size_t)&svhex);
-	//memcpy(&btest_ram, &btest_rom, (size_t)&stest);
+	memcpy(&bvhex_ram, &bvhex_rom, (size_t)&svhex);
 
-	// Get Casio's VRAM address.
+	// Get Casio's VRAM
 	display_open();
+
+/*	volatile uint32_t *bite = (void*)0xe5200000;
+
+	dclear();
+	dprint(0, 0, "UBC  = %p", &ubc_handler_pre);
+	dprint(0, 1, "TEST = %#x", *bite);
+	dprint(0, 2, "TEST = %#x", *(uint32_t*)&bubc_rom);
+	dprint(0, 3, "TEST = %#x", (uint32_t)&bubc_ram);
+	dprint(0, 4, "TEST = %#x", (uint32_t)&bubc_rom);
+	dprint(0, 5, "TEST = %#x", (size_t)&subc);
+	dupdate();
+	while (1);*/
+
+	// Check MPU hardware.
+	current_mpu = mpu_get();
+	if (current_mpu != MPU_SH7305)
+	{
+		return (0);
+	}
 
 	// Open User Break Controller.
 	// @note:
