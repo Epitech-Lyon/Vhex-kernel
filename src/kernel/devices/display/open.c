@@ -2,11 +2,10 @@
 #include <kernel/syscall.h>
 
 // Create VRAM global.
-uint8_t *vram = NULL;
+uint32_t vram[256];
 
 int display_open(void)
 {
 	//TODO: handle gxcg50 !!!
-	vram = casio_Bdisp_GetVRAM();
 	return (0);
 }

@@ -1,5 +1,6 @@
-#include <lib/stdio.h>
 #include <lib/display.h>
+#include <kernel/devices/display.h>
+#include <lib/stdio.h>
 #include <stdarg.h>
 
 void dprint(int x, int y, char const *str, ...)
@@ -35,7 +36,7 @@ void dprint(int x, int y, char const *str, ...)
 			x = (x + (4 - ((x - starting_x) & 3))) * (KERNEL_FONT_REAL_WIDTH + 1);
 			continue;
 		}
-		dascii(x, y, buffer[i]);
+		font_draw(x, y, buffer[i]);
 		x = x + KERNEL_FONT_REAL_WIDTH + 1;
 	}
 }

@@ -1,4 +1,5 @@
 #include <lib/display.h>
+#include <kernel/devices/display.h>
 
 void dscroll(int lines)
 {
@@ -17,10 +18,10 @@ void dscroll(int lines)
 	// Clear last n lines
 	while ((i >> 2) < 64)
 	{
-		vram[i + 0] = 0x0000;
-		vram[i + 1] = 0x0000;
-		vram[i + 2] = 0x0000;
-		vram[i + 3] = 0x0000;
+		vram[i + 0] = 0x00000000;
+		vram[i + 1] = 0x00000000;
+		vram[i + 2] = 0x00000000;
+		vram[i + 3] = 0x00000000;
 		i = i + 4;
 	}
 }

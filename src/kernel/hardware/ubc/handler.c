@@ -1,4 +1,5 @@
 #include <kernel/devices/ubc.h>
+#include <kernel/devices/display.h>
 #include <kernel/hardware/ubc.h>
 #include <kernel/keybios.h>
 #include <kernel/syscall.h>
@@ -30,7 +31,7 @@ void ubc_handler(struct ubc_context_s *context, int channel)
 	session.channel = channel;
 	session.context = context;
 	session.menu.context.cursor = 0;
-	session.menu.disassembly.vcursor = -(DISPLAY_VLINES_MAX >> 1);
+	session.menu.disassembly.vcursor = -(DISPLAY_VCHAR_MAX >> 1);
 	session.menu.disassembly.hcursor = 0;
 
 	// Initialize menu function.

@@ -22,9 +22,9 @@ struct sh7305_keysc_s
 		uint16_t UNKNOWN1	: 3;	/* ????? */
 	);
 	volatile word_union(SCAN_MODE,
-		uint16_t UNKNOWN0	: 3;	/* Scan Timing (?) */
-		uint16_t UNKNOWN1	: 3;	/* Scan mode (?) */
-		uint16_t const		: 10;	/* All 0 */
+		uint16_t const		: 4;	/* All 0 */
+		uint16_t UNKNOWN	: 3;	/* Scan mode (?) */
+		uint16_t const		: 9;	/* All 0 */
 	);
 	volatile word_union(SCAN_STATE,
 		uint16_t const		:15;	/* All 0 */

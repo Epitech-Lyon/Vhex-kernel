@@ -1,16 +1,33 @@
-/*#include <lib/stdio.h>
+#include <lib/stdio.h>
 #include <lib/display.h>
+#include <kernel/devices/ubc.h>
+#include <kernel/devices/tty.h>
+#include <kernel/hardware/power.h>
+#include <kernel/syscall.h>
 
 // TODO: remove me !!
 extern void test(void);
 
+//TODO: add shell.
 int main(void)
 {
-	dclear();
-	dprint(0, 0, "Boot complete !");
-	dupdate();
-	while (1);
+	char input[12];
 
+	// Sleep test.
+
+	// Open TTY.
+	tty_open();
+	
+
+	// Entry ! :D
+	tty_write("Boot Complete !\n", 16);
+
+	// Keyboard test.
+	while (1)
+	{
+		tty_write(">", 1);
+		tty_read(input, 12);
+	}
 
 	// Open User Break Controller.
 	// @note:
@@ -33,4 +50,6 @@ int main(void)
 
 	// Power OFF UBC module.
 	ubc_close();
-}*/
+
+	return (0);
+}

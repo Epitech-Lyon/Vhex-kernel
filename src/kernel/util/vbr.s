@@ -31,5 +31,5 @@ _vbr_set:
 	nop			! (db) nop
 
 .align 4
-.bl_mask:	.long 0x100000f0
+.bl_mask:	.long (1 << 28)
 .end

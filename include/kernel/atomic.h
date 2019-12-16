@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-extern void atomic_start(void);
-extern void atomic_end(void);
+extern uint32_t atomic_start(void);
+extern uint32_t atomic_end(void);
 
 #endif /*__KERNEL_ATOMIC_H__*/

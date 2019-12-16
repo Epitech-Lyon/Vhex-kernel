@@ -13,6 +13,7 @@ MEMORY
 	ram	(WX)	: o = 0x88040000, l = 252k
 	rom	(RX)	: o = 0x00300200, l = 512k
 	ilram	(WX)	: o = 0xe5200000, l = 4k
+	xram	(WX)	: o = 0xe5007000, l = 8k
 }
 
 PHDRS
@@ -29,14 +30,32 @@ SECTIONS
 	/*
 	** ROM sections
 	*/
+	_brom = 0x00300000;
+	_srom = 0x200 + SIZEOF(.text) +
+			SIZEOF(.data) +
+			SIZEOF(.vhex) +
+			SIZEOF(.ubc);
+
 	. = ORIGIN(rom);
 	.text	: {
+		/* Source Code */
 		*(.pretext)
 		*(.text)
 
+		/* Read-Only data */
 		. = ALIGN(4);
 		*(.rodata)
 		*(.rodata.*)
+	
+		/* Constructors, destructors */
+		_bctors = ALIGN(4) ;
+		*(SORT_BY_INIT_PRIORITY(.ctors.*))
+		*(.ctors);
+		_ectors = ALIGN(4) ;
+		_bdtors = ALIGN(4) ;
+		*(SORT_BY_INIT_PRIORITY(.dtors.*))
+		*(.dtors);
+		_edtors = ALIGN(4) ;
 	} > rom : text
 
 
@@ -68,9 +87,12 @@ SECTIONS
 	} > ram AT> rom : data
 	_sdata = SIZEOF(.data);
 
+
+
 	/*
 	** VBR space !
 	*/
+	. = ORIGIN(xram);
 	/* Interrupt / exception handlers */
 	.vhex ALIGN(4) : SUBALIGN(4) {
 		_bvhex_rom = LOADADDR(.vhex) ;
@@ -82,7 +104,7 @@ SECTIONS
 		. = _vhex_vbr + 0x600 ;
 		*(.vhex.interrupt) ;
 		. = ALIGN(4);
-	} > ram AT> rom : vbr
+	} > xram AT> rom : vbr
 	_svhex = SIZEOF(.vhex);
 
 

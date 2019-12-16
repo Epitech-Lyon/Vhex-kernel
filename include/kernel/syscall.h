@@ -18,6 +18,7 @@ struct rect
 //
 /* GetKey() - display Casio's VRAM and wait keyboard input. */
 void casio_GetKey(unsigned int *key);
+void casio_GetKeyWait(int *row, int *column, int type_waiting, int timeout, int menu, unsigned int *key);
 
 /* Bdisp_PutDisp_DD - display Casio's VRAM on screen */
 void casio_Bdisp_PutDisp_DD(void);
@@ -48,6 +49,9 @@ void *casio_Free(void *ptr);
 
 /* GetVRAM - Get the Video RAM used by Casio */
 void *casio_Bdisp_GetVRAM(void);
+
+/* Bkey_PutKeyCode - Inject keycode to key buffer */
+void casio_Bkey_PutKeymatrix(uint16_t *code);
 
 // Internal casio abstraction.
 static inline void dclear_area(int x1, int y1, int x2, int y2)

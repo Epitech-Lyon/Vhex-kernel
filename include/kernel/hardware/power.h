@@ -41,7 +41,7 @@ struct power_s
 		uint32_t const	: 1;	/* All 0 */
 		uint32_t TMU1	: 1;	/* Timer Unit 1 */
 		uint32_t SCIF0	: 1;	/* Serial Controller Interface 0 */
-		uint32_t SCIF1	: 1;	/* Serial Controller Interface 1 */
+		uint32_t SCIF1	: 1;	/* Serial Controller Interface 1 (Additionnal timer !!) */
 		uint32_t SCIF2	: 1;	/* Serial Controller Interface 2 */
 		uint32_t SCIF3	: 1;	/* Serial Controller Interface 3 */
 		uint32_t SCIF4	: 1;	/* Serial Controller Interface 4 */

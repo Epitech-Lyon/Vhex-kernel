@@ -1,4 +1,5 @@
 #include <lib/display.h>
+#include <kernel/devices/display.h>
 
 void dreverse(int x, int y, int width, int height)
 {
@@ -36,15 +37,21 @@ void dreverse(int x, int y, int width, int height)
 		return;
 
 	// Generate VRAM offset for Y axis.
-	vram_offset_y = (y + height - 1) << 4;
+	// @note:
+	// 	The screen width size is always 128 and we
+	// use 4-aligned Video RAM so 32 pixels per "slot"
+	// and 128 / 32 = 4.
+	// y * 4 can be optimised by used shift operator,
+	// this is why we use y << 2 because 2^2 = 4.
+	vram_offset_y = (y + height - 1) << 2;
 
 	while (--height >= 0)
 	{
 		j = width + x;
 		while (--j >= x)
 		{
-			vram[(j >> 3) + vram_offset_y] ^= 0x80 >> (j & 7);
+			vram[(j >> 5) + vram_offset_y] ^= 0x80000000 >> (j & 31);
 		}
-		vram_offset_y = vram_offset_y - 16;
+		vram_offset_y = vram_offset_y - 4;
 	}
 }

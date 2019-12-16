@@ -1,4 +1,5 @@
 #include <kernel/devices/ubc.h>
+#include <kernel/devices/display.h>
 #include <kernel/hardware/ubc.h>
 #include <kernel/keybios.h>
 #include <lib/display.h>
@@ -50,7 +51,7 @@ static void cursor_update(ubc_session_t *session)
 		return;
 	}
 	if (session->key == KEY_CTRL_DOWN &&
-			session->menu.context.cursor < 28 - DISPLAY_VLINES_MAX)
+			session->menu.context.cursor < 28 - DISPLAY_VCHAR_MAX)
 	{
 		session->menu.context.cursor = session->menu.context.cursor + 1;
 		return;
@@ -106,7 +107,7 @@ void menu_context(ubc_session_t *session)
 
 	// Display menu based on cursor position.
 	for (int i = 0 ; content_string[i + session->menu.context.cursor] != NULL &&
-			i < DISPLAY_VLINES_MAX ; i = i + 1)
+			i < DISPLAY_VCHAR_MAX ; i = i + 1)
 	{
 		dprint(0, i,
 			content_string[i + session->menu.context.cursor],

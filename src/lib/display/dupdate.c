@@ -1,7 +1,8 @@
 #include <lib/display.h>
-#include <kernel/syscall.h>
+#include <kernel/devices/display.h>
+#include <kernel/hardware/t6k11.h>
 
 void dupdate(void)
 {
-	casio_Bdisp_PutDisp_DD();
+	t6k11_display(vram);
 }

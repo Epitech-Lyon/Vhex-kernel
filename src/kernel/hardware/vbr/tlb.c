@@ -1,6 +1,7 @@
 #include <lib/display.h>
+#include <kernel/syscall.h>
 
-__attribute__((section(".glados.tlb"), interrupt_handler))
+__attribute__((section(".vhex.tlb"), interrupt_handler))
 void tlb_handler(void)
 {
 	uint32_t spc;
@@ -21,7 +22,7 @@ void tlb_handler(void)
 	// Write exception informations.
 	dclear();
 	dprint(0, 0,
-		"Ho crap ! Exception !\n"
+		"Ho crap ! TLB Exception !\n"
 		"tra:    %#x\n"
 		"expevt: %#x\n"
 		"spc:    %#x\n"

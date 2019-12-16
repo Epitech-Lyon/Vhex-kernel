@@ -1,3 +1,4 @@
+.text
 .global	_casio_Bdisp_PrintMini
 .global	_casio_Bdisp_PutDisp_DD
 .global	_casio_Bdisp_AllClr_VRAM
@@ -13,6 +14,8 @@
 
 .global	_casio_GetKeyWait
 .global	_casio_GetKey
+
+.global	_casio_Bkey_PutKeymatrix
 
 .global	_casio_CreateFile
 .global	_casio_OpenFile
@@ -38,6 +41,8 @@
 
 .type	_casio_GetKeyWait, @function
 .type	_casio_GetKey, @function
+
+.type	_casio_Bkey_PutKeymatrix, @function
 
 .type	_casio_CreateFile, @function
 .type	_casio_OpenFile, @function
@@ -132,6 +137,12 @@ _casio_GetKeyWait:
 	nop
 
 
+_casio_Bkey_PutKeymatrix:
+	mov.l	.syscall_entry, r1
+	mov.l	.sys_putKeycode, r0
+	jmp @r1
+	nop
+
 _casio_CreateFile:
 	mov.l	.syscall_entry, r1
 	mov.l	.sys_createFile, r0
@@ -186,4 +197,5 @@ _casio_CloseFile:
 .sys_readFile:		.long 0x00000432
 .sys_closeFile:		.long 0x0000042d
 .sys_getkeywait:	.long 0x00000247
+.sys_putKeycode:	.long 0x0000024f
 .end

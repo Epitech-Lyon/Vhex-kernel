@@ -78,11 +78,14 @@ check:
 	@ echo 'obj: $(OBJ)'
 	@ echo 'directory: $(DIRECTORY)'
 
-map:
+asm:
 	@ $(OBJDUMP) -D $(DEBUG)/$(NAME).elf | less
 
-bin:
+map:
 	@ cat $(MEMORY_MAP) | less
+
+sec:
+	@ $(OBJDUMP) -h $(DEBUG)/$(NAME).elf
 
 
 ##---

@@ -1,4 +1,5 @@
 #include <kernel/devices/ubc.h>
+#include <kernel/devices/display.h>
 #include <kernel/opcode.h>
 #include <kernel/keybios.h>
 #include <lib/display.h>
@@ -33,7 +34,7 @@ static void display_mnemonic(ubc_session_t *session)
 
 	// Main Loop.
 	i = -1;
-	while (++i < DISPLAY_VLINES_MAX)
+	while (++i < DISPLAY_VCHAR_MAX)
 	{
 		// Generate first part.
 		sprintf(line, "%8x %4x ", &area[i], area[i]);

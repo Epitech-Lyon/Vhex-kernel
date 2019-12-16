@@ -19,6 +19,7 @@ char *strncpy(char *dest, char const *str, size_t size);
 char *strcpy(char *dest, char const *src);
 
 /* strlen - calculate the lenght of a string. */
+size_t strnlen(char const *str, size_t maxlen);
 size_t strlen(char const *str);
 
 #endif /*__STRING_H__*/
