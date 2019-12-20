@@ -1,33 +1,21 @@
-#include <lib/stdio.h>
-#include <lib/display.h>
+#include "builtin.h"
 #include <kernel/devices/ubc.h>
-#include <kernel/devices/tty.h>
-#include <kernel/hardware/power.h>
-#include <kernel/syscall.h>
+#include <lib/display.h>
 
 // TODO: remove me !!
 extern void test(void);
 
-//TODO: add shell.
-int main(void)
+VHEX_BUILTIN(fxdb)
 {
-	char input[12];
+	//TODO: handle parameter.
+	(void)argc;
+	(void)argv;
 
-	// Sleep test.
-
-	// Open TTY.
-	tty_open();
-	
-
-	// Entry ! :D
-	tty_write("Boot Complete !\n", 16);
-
-	// Keyboard test.
-	while (1)
-	{
-		tty_write(">", 1);
-		tty_read(input, 12);
-	}
+	dclear();
+	dprint(0, 0, "FXDB - entry !!");
+	dupdate();
+	for (int i = 0 ; i < 9000000 ; i = i + 1);
+	return (0);
 
 	// Open User Break Controller.
 	// @note:
@@ -44,12 +32,9 @@ int main(void)
 	// @note:
 	// 	Thus USC should be start after the jump.
 	//
-	//((void(*)(void))0x08100000)();
-	//((void(*)(void))&vhex_dbr)();
 	test();
 
 	// Power OFF UBC module.
 	ubc_close();
-
 	return (0);
 }

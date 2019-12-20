@@ -7,7 +7,7 @@
 ##---
 ##	Static variables
 ##--
-HEADER		:= include
+HEADER		:= -Iinclude -Iinclude/user
 BUILD		:= build
 DEBUG		:= debug
 
@@ -62,7 +62,7 @@ OBJ	:= $(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))))
 all: | $(BUILD) $(DEBUG) $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf $(OBJ) -I $(HEADER) -lgcc > $(MEMORY_MAP)
+	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf $(OBJ) $(HEADER) -lgcc > $(MEMORY_MAP)
 	$(OBJCOPY) -R .comment -R .bss -O binary $(DEBUG)/$(NAME).elf $(DEBUG)/$(NAME).bin
 	$(WRAPPER) $(DEBUG)/$(NAME).bin -o $@ -i $(ICON)
 
@@ -94,7 +94,7 @@ sec:
 define rule-src
 $(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1
 	@ printf "compiling $(white)$$<$(nocolor)..."
-	@ $(CC) $(CFLAGS) -o $$@ -c $$< -I $(HEADER) -lgcc
+	@ $(CC) $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
 	@ printf "$(green)[ok]$(nocolor)\n"
 endef
 

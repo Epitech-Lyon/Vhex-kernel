@@ -43,8 +43,9 @@ void vhex_context_set(void)
 	SH7305_KEYSC.AUTOFIX.UNKNOWN0 = 0b100;		// Unknown, use Casio's value. (autofix)
 	SH7305_KEYSC.AUTOFIX.UNKNOWN1 = 0b10;		// Unknown, use Casio's value. (autofix)
 	SH7305_KEYSC.SCAN_MODE.UNKNOWN = 0b001;		// Unknown, use Casio's value. (scan mode)
-	SH7305_KEYSC.INTERRUPT.KYCPU_IE = 0b0000100;	// Interrupt when one key is pressed or released.
-	SH7305_KEYSC.SCAN_WAIT.TIME = 0x00;		// No time between each interrupt.
+	//SH7305_KEYSC.INTERRUPT.KYCPU_IE = 0b0000100;	// Interrupt when keys are pressed or released.
+	SH7305_KEYSC.INTERRUPT.KYCPU_IE = 0b0000010;	// Falling + pressed + rising.
+	SH7305_KEYSC.SCAN_WAIT.TIME = 0x05;		// No time between each interrupt.
 	SH7305_KEYSC.SCAN_INTERVAL = 0x98;		// Unknown, use Casio's value. (scan interval)
 	SH7305_KEYSC.KYOUTDR.KYO5DT = 0b11;		// Trigger when high-impedance state is detected.
 	SH7305_KEYSC.KYOUTDR.KYO4DT = 0b11;		// Trigger when high-impedance state is detected.
@@ -58,7 +59,7 @@ void vhex_context_set(void)
 	SH7305_KEYSC.KYINDR.KYDIR3 = 1;			// Scan [F4],[MENU],[EXIT],[sin],[)],[DEL],[x],[+],[(-)]
 	SH7305_KEYSC.KYINDR.KYDIR2 = 1;			// Scan [F5],[left],[down],[cos],[,],[%],[-],[EXE]
 	SH7305_KEYSC.KYINDR.KYDIR1 = 1;			// Scan [F6],[up],[right],[tan],[->]
-	SH7305_INTC.IPRF.KEYSC = 15;			// Set KEYSC interrupt priority (max).
+	SH7305_INTC.IPRF.KEYSC = 10;			// Set KEYSC interrupt priority (max).
 	SH7305_INTC.IMCR5.KEYI = 1;			// Clear KEYSC interrupt mask.
 
 	// Configure power / sleep mode.

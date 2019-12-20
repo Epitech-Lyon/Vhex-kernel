@@ -56,6 +56,11 @@ SECTIONS
 		*(SORT_BY_INIT_PRIORITY(.dtors.*))
 		*(.dtors);
 		_edtors = ALIGN(4) ;
+
+		/* Built-in */
+		_bbuiltin_section = ALIGN(4) ;
+		*(.builtin);
+		_ebuiltin_section = ALIGN(4) ;
 	} > rom : text
 
 

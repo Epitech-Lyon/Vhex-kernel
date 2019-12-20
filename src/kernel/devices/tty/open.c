@@ -25,6 +25,7 @@ int tty_open(void)
 
 	// Set TTY primitives
 	// TODO: Add USB primitives
+	// TODO: update this part.
 	tty.primitives.write = &display_write;
 	tty.primitives.read = &keyboard_read;
 

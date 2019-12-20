@@ -39,7 +39,15 @@ extern mpu_t mpu_get(void);
 extern int main(void);
 
 
-/* TODO: explain !! */
+//
+// rom_explore() - explore all add-in ROM part.
+// @note:
+//	For now, we can not use the MMU so we can
+// not handle TLB miss. Casio load only the first 4ko
+// of the add-in. To avoid TLB miss we explore all
+// add-in binary to force Casio to generate all pages
+// into the TLB.
+//
 static void rom_explore(volatile void *rom, int32_t size)
 {
 	uint8_t unused;
@@ -53,6 +61,7 @@ static void rom_explore(volatile void *rom, int32_t size)
 	}
 }
 
+/* section_execute() - Used to execute contructors and destructors */
 static void section_execute(void *bsection, void *esection)
 {
 	while ((uint32_t)bsection < (uint32_t)esection)
@@ -62,10 +71,11 @@ static void section_execute(void *bsection, void *esection)
 	}
 }
 
+
+/* start() - Kernel entry point */
 __attribute__((section(".pretext")))
 int start(void)
 {
-	unsigned int key;
 	int error;
 
 	// Wipe .bss section and dump .data / Vhex sections
@@ -91,14 +101,14 @@ int start(void)
 	// before switching the VBR.
 	rom_explore(&brom, (int32_t)&srom);
 
-	// Get Casio's hardware context and set
+	// Save Casio's hardware context and set
 	// Vhex hardware context.
 	// @note:
 	// 	This operation should be atomic
 	// because if an interruption or exception
 	// occur during the hardware context change
 	// the calculator will crash.
-	// 	And this is why between each `atomic_start`
+	// And this is why between each `atomic_start`
 	// and `atomic_end()` the code *SHOULD* be
 	// exception safe.
 	atomic_start();

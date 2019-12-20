@@ -8,12 +8,12 @@
 
 // Define default buffer size.
 // TODO: remove me ?
-#define TTY_BUFFER_LINES	(DISPLAY_SCREEN_WIDTH * 3)
-#define TTY_BUFFER_COLUMNS	(DISPLAY_SCREEN_HEIGHT)
+#define TTY_BUFFER_LINES	(DISPLAY_VCHAR_MAX * 3)
+#define TTY_BUFFER_COLUMNS	(DISPLAY_HCHAR_MAX)
 
 struct tty_s
 {
-	char buffer[TTY_BUFFER_LINES][TTY_BUFFER_COLUMNS];
+	char buffer[TTY_BUFFER_LINES + 1][TTY_BUFFER_COLUMNS + 1];
 	struct {
 		int16_t x;
 		int16_t y;
@@ -55,5 +55,10 @@ extern int tty_open(void);
 extern ssize_t tty_write(const void *buffer, size_t count);
 extern ssize_t tty_read(void *buffer, size_t count);
 extern int tty_close(void);
+
+// IOCTL.
+#define TTY_IOCTL_GETDX	(0x00)
+#define TTY_IOCTL_GETDY	(0x01)
+extern void tty_ioctl(uint32_t cmd, ...);
 
 #endif /*__KERNEL_TTY_H__*/

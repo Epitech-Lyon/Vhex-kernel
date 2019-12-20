@@ -11,7 +11,7 @@ static void tty_vertical_update(void)
 {
 	// Get next line.
 	tty.cursor.y =
-			(tty.cursor.y + 1 < tty.cursor.max.y)
+			(tty.cursor.y + 1 <= tty.cursor.max.y)
 			? tty.cursor.y + 1
 			: 0;
 
@@ -102,7 +102,7 @@ static ssize_t tty_buffer_update(const uint8_t *buffer, size_t count)
 	return (i);
 }
 
-// TODO: this function is device-specific !
+// FIXME: this function is device-specific !
 // TODO: Update me ?
 static void tty_display(void)
 {
@@ -128,13 +128,10 @@ static void tty_display(void)
 
 	// Get the "first" line and number of line.
 	// @note: circular buffer.
-	line = 1;
+	line = 0;
 	start = tty.cursor.y;
-	while (line < DISPLAY_VCHAR_MAX - 1)
+	while (++line < DISPLAY_VCHAR_MAX)
 	{
-		// update line counter.
-		line = line + 1;
-
 		// Update check line.
 		saved_start = start;
 		start = (start - 1 < 0) ? tty.cursor.max.y : start - 1;
@@ -146,17 +143,6 @@ static void tty_display(void)
 			break;
 		}
 	}
-
-/*	dclear();
-	dprint(0, 0, "start = %d", start);
-	dprint(0, 1, "line  = %d", line);
-	dprint(0, 2, "vline = %d", DISPLAY_VCHAR_MAX);
-	dprint(0, 3, "hline = %d", DISPLAY_HCHAR_MAX);
-	dupdate();
-	for (int i = 0 ; i < 900000 ; i = i + 1);
-	dclear();
-	dupdate();*/
-
 
 	// Display "on-screen" string lines.
 	i = -1;
@@ -174,9 +160,8 @@ static void tty_display(void)
 		// Display line.
 		tty.primitives.write(tty.buffer[start], line_len);
 
-
 		// Get "next" line.
-		start = (start + 1 < tty.cursor.max.y) ? start + 1 : 0;
+		start = (start + 1 > tty.cursor.max.y) ? 0 : start + 1;
 	}
 
 	// Display on screen.
