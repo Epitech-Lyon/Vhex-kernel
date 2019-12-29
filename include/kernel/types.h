@@ -26,6 +26,8 @@ typedef enum mpu_e
 	MPU_UNKNOWN,
 } mpu_t;
 
+typedef int pid_t;
+
 // Force inline function.
 #define INLINE	__attribute__((always_inline)) inline
 

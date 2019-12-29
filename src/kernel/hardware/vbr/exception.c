@@ -1,6 +1,5 @@
 #include <lib/display.h>
 
-__attribute__((section(".vhex.exception"), interrupt_handler))
 void exception_handler(void)
 {
 	uint32_t spc;

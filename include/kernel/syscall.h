@@ -3,6 +3,26 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <kernel/types.h>
+
+//---
+//
+//	Vhex part !!
+//
+//---
+extern pid_t sys_fork(void);
+extern pid_t sys_getpid(void);
+extern pid_t sys_getppid(void);
+extern pid_t sys_waitpid(pid_t pid, int *wstatus, int options);
+
+
+//---
+//
+//	CASIO PART !!
+//	TODO: remove me ?
+//
+//----
+
 
 // Internal Casio datat structure
 struct rect

@@ -1,6 +1,7 @@
 #include "builtin.h"
 #include <kernel/devices/ubc.h>
 #include <lib/display.h>
+#include <lib/unistd.h>
 
 // TODO: remove me !!
 extern void test(void);
@@ -15,6 +16,14 @@ VHEX_BUILTIN(fxdb)
 	dprint(0, 0, "FXDB - entry !!");
 	dupdate();
 	for (int i = 0 ; i < 9000000 ; i = i + 1);
+
+	int fion = fork();
+	dclear();
+	dprint(0, 0, "FXDB - entry !!");
+	dprint(0, 1, "fork test = %d", fion);
+	dupdate();
+	for (int i = 0 ; i < 9000000 ; i = i + 1);
+
 	return (0);
 
 	// Open User Break Controller.

@@ -3,8 +3,8 @@
 #include <kernel/context.h>
 #include <kernel/atomic.h>
 #include <kernel/types.h>
+#include <kernel/process.h>
 #include <lib/display.h>
-#include <kernel/syscall.h>
 #include <lib/string.h>
 
 // Internal symbols
@@ -35,6 +35,7 @@ extern uint32_t edtors;
 
 // Internal functions.
 extern void vhex_context_set(void);
+extern void kernel_switch(common_context_t *context);
 extern mpu_t mpu_get(void);
 extern int main(void);
 
@@ -116,18 +117,20 @@ int start(void)
 	vhex_context_set();
 	atomic_end();
 
-	// Call high level abstraction
-	error = main();
+	// Create first process: Vhex.
+	uint32_t ssr = atomic_start();
+	pid_t vhex_pid = process_create("Vhex");
+	process_t *vhex_process = process_get(vhex_pid);
+	vhex_process->context.spc = (uint32_t)&main;
+	vhex_process->context.ssr = ssr;
 
-	// Restore Casio's context.
-	atomic_start();
-	fx9860_context_restore(&casio_context);
-	atomic_end();
+	// Switch to first process.
+	kernel_switch(&vhex_process->context);
 
-	// Execute destructor.
-	section_execute(&bdtors, &edtors);
-
-	// Return properly
-	// TODO: involve main menu ?
-	return (error);
+	// normally the kernel SHOULD not
+	// arrive here.
+	while (1)
+	{
+		__asm__ volatile ("sleep");
+	}
 }

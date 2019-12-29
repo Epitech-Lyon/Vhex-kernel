@@ -88,7 +88,7 @@ SECTIONS
 	
 		*(.data)
 
-		. = ALIGN(4);
+		_ram_start = ALIGN(1024);
 	} > ram AT> rom : data
 	_sdata = SIZEOF(.data);
 

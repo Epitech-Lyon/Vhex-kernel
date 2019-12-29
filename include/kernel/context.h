@@ -48,6 +48,16 @@ typedef struct fx9860_context_s
 	uint32_t vbr;
 } fx9860_context_t;
 
+typedef struct common_context_s
+{
+	uint32_t reg[16];
+	uint32_t gbr;
+	uint32_t macl;
+	uint32_t mach;
+	uint32_t ssr;
+	uint32_t spc;
+} common_context_t;
+
 // Context primitive.
 extern void fx9860_context_save(fx9860_context_t *context);
 extern void fx9860_context_restore(fx9860_context_t *context);
