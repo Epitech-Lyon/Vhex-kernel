@@ -6,6 +6,7 @@
 #include <kernel/context.h>
 #include <kernel/types.h>
 
+#define PROCESS_STACK_SIZE	(2048)
 #define PROCESS_NAME_LENGHT	(16)
 #define PROCESS_MAX		(3)
 

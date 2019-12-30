@@ -1,5 +1,4 @@
 #include <kernel/process.h>
-#include <lib/string.h>
 
 // This function SHOULD not be called
 // without atomic operation !!

@@ -1,5 +1,4 @@
-#include <lib/display.h>
-#include <kernel/syscall.h>
+#include <kernel/util.h>
 
 __attribute__((section(".vhex.tlb"), interrupt_handler))
 void tlb_handler(void)
@@ -20,8 +19,8 @@ void tlb_handler(void)
 	);
 
 	// Write exception informations.
-	dclear();
-	dprint(0, 0,
+	kvram_clear();
+	kvram_print(0, 0,
 		"Ho crap ! TLB Exception !\n"
 		"tra:    %#x\n"
 		"expevt: %#x\n"
@@ -34,6 +33,6 @@ void tlb_handler(void)
 		ssr,
 		sr
 	);
-	dupdate();
+	kvram_display();
 	while (1);
 }

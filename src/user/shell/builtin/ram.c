@@ -1,4 +1,4 @@
-#include "builtin.h"
+/*#include "builtin.h"
 #include <kernel/memory.h>
 #include <lib/display.h>
 
@@ -57,4 +57,4 @@ VHEX_BUILTIN(ram)
 	for (int i = 0 ; i < 9000000 ; i = i + 1);
 
 	return (0);
-}
+}*/

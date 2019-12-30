@@ -1,4 +1,4 @@
-#include <lib/display.h>
+#include <kernel/util.h>
 
 void exception_handler(void)
 {
@@ -18,8 +18,8 @@ void exception_handler(void)
 	);
 
 	// Write exception informations.
-	dclear();
-	dprint(0, 0,
+	kvram_clear();
+	kvram_print(0, 0,
 		"Ho crap ! Exception !\n"
 		"tra:    %#x\n"
 		"expevt: %#x\n"
@@ -32,6 +32,6 @@ void exception_handler(void)
 		ssr,
 		sr
 	);
-	dupdate();
+	kvram_display();
 	while (1);
 }

@@ -1,10 +1,5 @@
 #include "builtin.h"
-#include <kernel/devices/ubc.h>
 #include <lib/display.h>
-#include <lib/unistd.h>
-
-// TODO: remove me !!
-extern void test(void);
 
 VHEX_BUILTIN(fxdb)
 {
@@ -16,14 +11,6 @@ VHEX_BUILTIN(fxdb)
 	dprint(0, 0, "FXDB - entry !!");
 	dupdate();
 	for (int i = 0 ; i < 9000000 ; i = i + 1);
-
-	int fion = fork();
-	dclear();
-	dprint(0, 0, "FXDB - entry !!");
-	dprint(0, 1, "fork test = %d", fion);
-	dupdate();
-	for (int i = 0 ; i < 9000000 ; i = i + 1);
-
 	return (0);
 
 	// Open User Break Controller.
@@ -35,15 +22,15 @@ VHEX_BUILTIN(fxdb)
 	// 	linker script.
 	// 	This module is only on SH7305 - SH4 based MPU.
 	// 	THis function SHOULD not be called !
-	ubc_open();
+//	ubc_open();
 
 	// Jump into the tested function.
 	// @note:
 	// 	Thus USC should be start after the jump.
 	//
-	test();
+//	test();
 
 	// Power OFF UBC module.
-	ubc_close();
+//	ubc_close();
 	return (0);
 }

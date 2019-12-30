@@ -4,7 +4,6 @@
 #include <kernel/keybios.h>
 #include <kernel/syscall.h>
 #include <kernel/extra.h>
-#include <lib/display.h>
 
 
 // Internal function.
@@ -23,7 +22,7 @@ void ubc_module_handler(int action)
 
 void ubc_handler(struct ubc_context_s *context, int channel)
 {
-	void (*menu)(ubc_session_t *session);
+/*	void (*menu)(ubc_session_t *session);
 	ubc_session_t session;
 
 	// Initialize new session.
@@ -47,12 +46,12 @@ void ubc_handler(struct ubc_context_s *context, int channel)
 			case KEY_CTRL_F1: menu = &menu_disassembly; break;
 			case KEY_CTRL_F2: menu = &menu_context; break;
 		}
-	}
+	}*/
 
 	// Update UBC
 	SH7305_UBC.CBR0.CE	= 0; 		// Disable channel.
-	SH7305_UBC.CAR0		= context->spc;	// Update break address.
-	SH7305_UBC.CAMR0	= 0x00000000;	// Update break address.
-	SH7305_UBC.CBR0.CE	= 1; 		// Disable channel.
+//	SH7305_UBC.CAR0		= context->spc;	// Update break address.
+//	SH7305_UBC.CAMR0	= 0x00000000;	// Update break address.
+//	SH7305_UBC.CBR0.CE	= 1; 		// Enable channel.
 	icbi((void*)0xa0000000);
 }

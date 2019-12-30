@@ -1,6 +1,5 @@
 #include <kernel/hardware/keysc.h>
 #include <kernel/hardware/intc.h>
-#include <lib/display.h>
 
 // Internal functions
 extern void keycache_update(int row, int column, uint8_t key_frame);

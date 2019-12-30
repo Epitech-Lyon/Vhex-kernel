@@ -6,8 +6,6 @@
 #include <kernel/hardware/tmu.h>
 #include <kernel/vbr.h>
 
-#include <lib/display.h>
-
 void vhex_context_set(void)
 {
 	extern uint32_t vhex_vbr;

@@ -1,6 +1,5 @@
 #include <kernel/hardware/tmu.h>
 #include <kernel/devices/timer.h>
-#include <lib/display.h>
 
 // Internal timer "cache".
 struct timer_cache_s timercache[TIMER_NUMBER];

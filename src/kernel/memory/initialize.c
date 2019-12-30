@@ -1,5 +1,4 @@
 #include <kernel/memory.h>
-#include <lib/display.h>
 
 // Internal data.
 struct memory_info_s pmemory;

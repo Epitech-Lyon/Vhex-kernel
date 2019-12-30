@@ -2,15 +2,13 @@
 #include <kernel/hardware/ubc.h>
 #include <kernel/hardware/power.h>
 #include <kernel/syscall.h>
-#include <kernel/dbr.h>
 #include <kernel/extra.h>
-#include <lib/display.h>
+#include <kernel/dbr.h>
 
 // Internal data used by UBC device.
 void *casio_dbr;
 
 // Internal function.
-extern void test(void);
 extern void ubc_handler_pre(void);
 
 int ubc_open(void)
@@ -36,7 +34,7 @@ int ubc_open(void)
 	SH7305_UBC.CBR0.CE	= 0;			// Disable Channel 0.
 	
 	// Set up target address.
-	SH7305_UBC.CAR0		= (uint32_t)&test;	// Tested programe address !
+	SH7305_UBC.CAR0		= 0x00000000;	// Tested programe address !
 	SH7305_UBC.CAMR0	= 0x00000000;		// Address Mask.
 	
 	// Setup Control register.

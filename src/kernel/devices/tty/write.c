@@ -1,8 +1,7 @@
 #include <kernel/devices/tty.h>
 #include <kernel/devices/display.h>
 #include <kernel/atomic.h>
-#include <lib/display.h>
-#include <lib/string.h>
+#include <kernel/util.h>
 
 // Internal TTY object.
 extern struct tty_s tty;

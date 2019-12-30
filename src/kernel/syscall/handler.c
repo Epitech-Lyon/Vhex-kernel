@@ -1,5 +1,4 @@
 #include <kernel/syscall.h>
-#include <lib/display.h>
 
 static const void *sys_handler[] = {
 	NULL,		//restart

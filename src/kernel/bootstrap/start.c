@@ -4,8 +4,12 @@
 #include <kernel/atomic.h>
 #include <kernel/types.h>
 #include <kernel/process.h>
-#include <lib/display.h>
-#include <lib/string.h>
+#include <kernel/syscall.h>
+#include <kernel/util.h>
+
+//TODO: remove me !
+#include <kernel/fs/smem.h>
+#include <kernel/loader.h>
 
 // Internal symbols
 mpu_t current_mpu = MPU_UNKNOWN;
@@ -77,6 +81,7 @@ static void section_execute(void *bsection, void *esection)
 __attribute__((section(".pretext")))
 int start(void)
 {
+	extern uint32_t vram[256];
 	int error;
 
 	// Wipe .bss section and dump .data / Vhex sections
@@ -102,6 +107,10 @@ int start(void)
 	// before switching the VBR.
 	rom_explore(&brom, (int32_t)&srom);
 
+	// Mount Casio FS
+	// TODO: Use Virtual File System !
+	casio_smem_mount();
+
 	// Save Casio's hardware context and set
 	// Vhex hardware context.
 	// @note:
@@ -121,11 +130,40 @@ int start(void)
 	uint32_t ssr = atomic_start();
 	pid_t vhex_pid = process_create("Vhex");
 	process_t *vhex_process = process_get(vhex_pid);
-	vhex_process->context.spc = (uint32_t)&main;
+
+	// Initialize CPU configuration for the process.
 	vhex_process->context.ssr = ssr;
 
+	// Load programe.
+	vhex_process->context.spc = (uint32_t)loader("VHEX/shell.elf");
+	if (vhex_process->context.spc == 0x00000000)
+	{
+		// Display message.
+		kvram_clear();
+		kvram_print(0, 0, "Vhex fatal error !");
+		kvram_print(0, 1, "File \"VHEX/shell.elf\" not found !");
+		kvram_print(0, 2, "Press [MENU key]...");
+		kvram_display();
+
+		// Restore Casio context.
+		fx9860_context_restore(&casio_context);
+		atomic_end();
+
+		// Casio VRAM workaround
+		// @note: GetKey call Bdisp_PutDD_VRAM()
+		memcpy(casio_Bdisp_GetVRAM(), vram, 1024);
+
+		// Wait MENU key.
+		unsigned int key;
+		while (1)
+		{
+			casio_GetKey(&key);
+		}
+	}
+		
+
 	// Switch to first process.
-	kernel_switch(&vhex_process->context);
+	//kernel_switch(&vhex_process->context);
 
 	// normally the kernel SHOULD not
 	// arrive here.

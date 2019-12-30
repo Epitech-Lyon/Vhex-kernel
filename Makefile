@@ -2,105 +2,24 @@
 ## ---
 ##	Project: Vhex - On-calc debugger
 ##	Author: yann.magnin@epitech.eu
-## ---
-
-##---
-##	Static variables
-##--
-HEADER		:= -Iinclude -Iinclude/user
-BUILD		:= build
-DEBUG		:= debug
-
-NAME		:= vhex
-EXEC		:= $(NAME).g1a
-LDFLAG		:= -T $(NAME).ld
-MEMORY_MAP	:= $(DEBUG)/$(NAME).map
-ICON		:= icon.bmp
+## --- 
 
 
-COMPILER	:= sh3eb-elf-
-CC		:= $(COMPILER)gcc
-OBJCOPY		:= $(COMPILER)objcopy
-OBJDUMP		:= $(COMPILER)objdump
-WRAPPER		:= g1a-wrapper
-CFLAGS		:= -Werror -Wall -W -Wextra -std=c18 -m3 -mb -mrenesas \
-			-ffreestanding -nostdlib -fstrict-volatile-bitfields \
-			-Wno-unused-const-variable -Wno-unused-function \
-			-Wno-unused-variable -Wno-unused-but-set-variable \
-			-Wno-unused-parameter
-
-
-red		:= \033[1;31m
-green		:= \033[1;32m
-blue		:= \033[1;34m
-white		:= \033[1;37m
-nocolor		:= \033[1;0m
-
-
-
-
-##---
-##	Automated variables
-##---
-SRC		:=
-DIRECTORY	:= $(shell find src -not -path "*/\.*" -type d)
-# Get all source files
-$(foreach path,$(DIRECTORY),$(eval		\
-	SRC	+= $(wildcard $(path)/*.c)	\
-			$(wildcard $(path)/*.S)	\
-			$(wildcard $(path)/*.s)	\
-))
-# Geneate all object files
-OBJ	:= $(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))))
-
-
+KERNEL	:= output/vhex.g1a
+USER	:= output/shell.elf
 
 
 ##---
 ##	General rules
 ##---
-all: | $(BUILD) $(DEBUG) $(EXEC)
+all:
+	@ make --no-print-directory -C src/kernel
+	@ make --no-print-directory -C src/lib
+	@ make --no-print-directory -C src/user
 
-$(EXEC): $(OBJ)
-	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf $(OBJ) $(HEADER) -lgcc > $(MEMORY_MAP)
-	$(OBJCOPY) -R .comment -R .bss -O binary $(DEBUG)/$(NAME).elf $(DEBUG)/$(NAME).bin
-	$(WRAPPER) $(DEBUG)/$(NAME).bin -o $@ -i $(ICON)
-
-$(BUILD) $(DEBUG):
-	@ printf "Create $(blue)$@$(nocolor) directory\n"
-	@ mkdir -p $@
-
-install: $(EXEC)
-	sudo p7 send --force $^
-
-check:
-	@ echo 'src: $(SRC)'
-	@ echo 'obj: $(OBJ)'
-	@ echo 'directory: $(DIRECTORY)'
-
-asm:
-	@ $(OBJDUMP) -D $(DEBUG)/$(NAME).elf | less
-
-map:
-	@ cat $(MEMORY_MAP) | less
-
-sec:
-	@ $(OBJDUMP) -h $(DEBUG)/$(NAME).elf
-
-
-##---
-##	  Automated rules
-##---
-define rule-src
-$(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1
-	@ printf "compiling $(white)$$<$(nocolor)..."
-	@ $(CC) $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
-	@ printf "$(green)[ok]$(nocolor)\n"
-endef
-
-$(foreach source,$(SRC),$(eval		\
-	$(call rule-src,$(source)))	\
-)
+install: all
+	sudo p7 send --force --no-term $(KERNEL)
+	sudo p7 send --force --directory=VHEX $(USER)
 
 
 
@@ -109,11 +28,14 @@ $(foreach source,$(SRC),$(eval		\
 ##	Cleaning rules
 ##---
 clean:
-	rm -rf $(BUILD)
-	rm -rf $(DEBUG)
+	make clean --no-print-directory -C src/kernel
+	make clean --no-print-directory -C src/lib
+	make clean --no-print-directory -C src/user
 
 fclean: clean
-	rm -f $(EXEC)
+	make fclean --no-print-directory -C src/kernel
+	make fclean --no-print-directory -C src/lib
+	make fclean --no-print-directory -C src/user
 
 re: fclean all
 

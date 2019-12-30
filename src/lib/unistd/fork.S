@@ -6,7 +6,8 @@
 
 .align 2
 _fork:
-	trapa	#__NR_fork
+	!trapa	#__NR_fork
+	mov	#-1, r0
 	rts
 	nop
 .end

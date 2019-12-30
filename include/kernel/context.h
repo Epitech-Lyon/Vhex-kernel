@@ -46,6 +46,7 @@ typedef struct fx9860_context_s
 		} timer[3];
 	} tmu;
 	uint32_t vbr;
+	//TODO: SR SSR SPC GBR MACL MACH
 } fx9860_context_t;
 
 typedef struct common_context_s
@@ -56,6 +57,7 @@ typedef struct common_context_s
 	uint32_t mach;
 	uint32_t ssr;
 	uint32_t spc;
+	uint32_t pr;
 } common_context_t;
 
 // Context primitive.

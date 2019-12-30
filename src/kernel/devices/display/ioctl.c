@@ -1,5 +1,5 @@
 #include <kernel/devices/display.h>
-#include <lib/display.h>
+#include <kernel/util.h>
 #include <stdarg.h>
 
 void display_ioctl(uint32_t cmd, ...)
@@ -35,12 +35,12 @@ void display_ioctl(uint32_t cmd, ...)
 		}
 		case DISPLAY_IOCTL_CLEAR:
 		{
-			dclear();	// <- remove me ?
+			kvram_clear();
 			break;
 		}
 		case DISPLAY_IOCTL_DISPLAY:
 		{
-			dupdate();	// <- remove me ?
+			kvram_display();
 			break;
 		}
 	}

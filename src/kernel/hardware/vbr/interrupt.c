@@ -1,4 +1,4 @@
-#include <lib/display.h>
+#include <kernel/util.h>
 
 // Handler prototype.
 extern void keysc_handler(void);
@@ -25,13 +25,13 @@ void interrupt_handler(void)
 	}
 
 	// Display error.
-	dclear();
-	dprint(0, 0,
+	kvram_clear();
+	kvram_print(0, 0,
 		"Ho crap ! Interrupt error !\n"
 		"Interrupt ID (%#x)\n"
 		"Error: handler not foud !\n",
 		intevt
 	);
-	dupdate();
+	kvram_display();
 	while (1);
 }

@@ -1,10 +1,16 @@
-#include <kernel/devices/tty.h>
+#include <lib/display.h>
 #include "util.h"
 
 //TODO: documentation.
 int main(void)
 {
-	char input[12];
+	dclear();
+	dprint(0, 0, "First user program !");
+	dupdate();
+	while (1);
+
+
+/*	char input[12];
 	int cmd_size;
 	char **argv;
 	int argc;
@@ -33,5 +39,5 @@ int main(void)
 			tty_write(": command not found\n", 20);
 		}
 	}
-	return (0);
+	return (0);*/
 }

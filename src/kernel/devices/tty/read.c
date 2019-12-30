@@ -3,10 +3,7 @@
 #include <kernel/context.h>
 #include <kernel/atomic.h>
 #include <kernel/syscall.h>
-#include <lib/display.h>
-#include <lib/string.h>
-#include <lib/stdio.h>
-#include <lib/timer.h>
+#include <kernel/util.h>
 
 // Intenral functions
 static void wait_keyboard_event(void);
@@ -340,8 +337,8 @@ static void cursor_callback(struct keyboard_obj_s *keyboard)
 		tty_ioctl(TTY_IOCTL_GETDY, &y);
 
 		// Display cursor.
-		dreverse(x, y, (KERNEL_FONT_REAL_WIDTH + 1), (KERNEL_FONT_REAL_HEIGHT + 1));
-		dupdate();
+		kvram_reverse(x, y, (KERNEL_FONT_REAL_WIDTH + 1), (KERNEL_FONT_REAL_HEIGHT + 1));
+		kvram_display();
 
 		// Restore TTY cursor position
 		tty.cursor.x = sttyx;
