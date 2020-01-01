@@ -26,7 +26,7 @@ void interrupt_handler(void)
 
 	// Display error.
 	kvram_clear();
-	kvram_print(0, 0,
+	printk(0, 0,
 		"Ho crap ! Interrupt error !\n"
 		"Interrupt ID (%#x)\n"
 		"Error: handler not foud !\n",

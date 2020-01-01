@@ -19,7 +19,7 @@ void exception_handler(void)
 
 	// Write exception informations.
 	kvram_clear();
-	kvram_print(0, 0,
+	printk(0, 0,
 		"Ho crap ! Exception !\n"
 		"tra:    %#x\n"
 		"expevt: %#x\n"

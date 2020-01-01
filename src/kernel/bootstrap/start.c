@@ -127,15 +127,14 @@ int start(void)
 	atomic_end();
 
 	// Create first process: Vhex.
-	uint32_t ssr = atomic_start();
 	pid_t vhex_pid = process_create("Vhex");
 	process_t *vhex_process = process_get(vhex_pid);
 
 	// Initialize CPU configuration for the process.
-	vhex_process->context.ssr = ssr;
+	vhex_process->context.ssr = atomic_start();
 
 	// Load programe.
-	vhex_process->context.spc = (uint32_t)loader("VHEX/shell.elf");
+	vhex_process->context.spc = (uint32_t)loader("VHEX/shell.elf", vhex_process);
 	if (vhex_process->context.spc == 0x00000000)
 	{
 		// Display message.
@@ -161,12 +160,14 @@ int start(void)
 		}
 	}
 		
-
 	// Switch to first process.
-	//kernel_switch(&vhex_process->context);
+	kernel_switch(&vhex_process->context);
 
 	// normally the kernel SHOULD not
 	// arrive here.
+	kvram_clear();
+	kvram_print(0, 0, "Kernel job fini !");
+	kvram_display();
 	while (1)
 	{
 		__asm__ volatile ("sleep");

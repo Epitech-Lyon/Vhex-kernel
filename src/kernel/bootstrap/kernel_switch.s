@@ -40,12 +40,13 @@ _kernel_switch:
 	mov.l	@r0+, r12	! set r12 regsiter
 	mov.l	@r0+, r13	! set r13 regsiter
 	mov.l	@r0+, r14	! set r14 regsiter
-	mov.l	@r0+, r2	! Stack not handled for now
+	mov.l	@r0+, r15	! set r15 register
 	ldc.l	@r0+, gbr	! set gbr regsiter
 	lds.l	@r0+, macl	! set macl regsiter
 	lds.l	@r0+, mach	! set mach regsiter
 	ldc.l	@r0+, ssr	! set ssr regsiter
 	ldc.l	@r0+, spc	! set spc regsiter
+	lds.l	@r0+, pr	! set pr regsiter
 	
 	! Process switch
 	rte

@@ -1,4 +1,4 @@
-#include "builtin.h"
+/*#include "builtin.h"
 #include <lib/display.h>
 
 VHEX_BUILTIN(fxdb)
@@ -33,4 +33,4 @@ VHEX_BUILTIN(fxdb)
 	// Power OFF UBC module.
 //	ubc_close();
 	return (0);
-}
+}*/

@@ -45,7 +45,7 @@ OBJ	:= $(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))))
 all: | $(BUILD) $(DEBUG) $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf.big $(OBJ) $(HEADER) $(LIBS) -lgcc > $(MEMORY_MAP)
+	$(CC) -fPIC -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf.big $(OBJ) $(HEADER) $(LIBS) -lgcc > $(MEMORY_MAP)
 	$(OBJCOPY) -S $(DEBUG)/$(NAME).elf.big $@
 	rm -f $(DEBUG)/$(NAME).elf.big
 
@@ -62,13 +62,13 @@ check:
 	@ echo 'directory: $(DIRECTORY)'
 
 asm:
-	@ $(OBJDUMP) -D $(DEBUG)/$(NAME).elf | less
+	@ $(OBJDUMP) -D $(EXEC) | less
 
 map:
 	@ cat $(MEMORY_MAP) | less
 
 sec:
-	@ $(OBJDUMP) -h $(DEBUG)/$(NAME).elf
+	@ $(OBJDUMP) -h $(EXEC)
 
 
 ##---
@@ -77,7 +77,7 @@ sec:
 define rule-src
 $(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1
 	@ printf "compiling $(white)$$<$(nocolor)..."
-	@ $(CC) $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
+	@ $(CC) -fPIC $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
 	@ printf "$(green)[ok]$(nocolor)\n"
 endef
 

@@ -39,4 +39,27 @@ SECTIONS
 		*(.bss.*);
 		*(COMMON);
 	} : data
+
+
+	.relocgot : {
+		BRELOC_GOT = . ;
+		*(.got.plt)
+		*(.got)
+		ERELOC_GOT = . ;
+	}
+
+	/* unwanted section */
+	/DISCARD/ : {
+		*(.debug_info)
+		*(.debug_abbrev)
+		*(.debug_loc)
+		*(.debug_aranges)
+		*(.debug_ranges)
+		*(.debug_line)
+		*(.debug_str)
+		*(.jcr)
+		*(.eh_frame_hdr)
+		*(.eh_frame)
+		*(.comment)
+	}
 }

@@ -76,6 +76,5 @@ ssize_t casio_smem_read(FILE *file, void *buf, size_t count)
 		file->cursor = file->cursor + real_size;
 		fragment = fragment + 1;
 	}
-	((uint8_t*)buf)[current_size] = '\0';
 	return (current_size);
 }

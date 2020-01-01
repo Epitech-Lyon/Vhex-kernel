@@ -25,6 +25,27 @@ typedef struct process_s
 	// Signals management.
 	//sighandler_t signal[NSIG];
 	
+	// Virtual / Physical memory management.
+	// @note
+	// 	For now, we can not use the MMU
+	// so we just save all physical allocated
+	// space. This is an hardcode of each
+	// process memory management.
+	struct {
+		struct {
+			uint32_t start;
+			uint32_t size;
+		} stack;
+		struct {
+			uint32_t start;
+			uint32_t size;
+		} program;
+		struct {
+			uint32_t start;
+			uint32_t size;
+		} exit;
+	} memory; 
+	
 	// Other process management.
 	struct process_s *parent;
 	struct process_s *child;

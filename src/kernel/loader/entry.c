@@ -2,23 +2,58 @@
 #include <kernel/fs/smem.h>
 #include <kernel/fs/file.h>
 #include <kernel/util.h>
+#include <kernel/elf.h>
 
-void *loader(const char *path)
+void *loader(const char *path, process_t *process)
 {
+	Elf32_Ehdr header;
 	FILE file;
+
+	// Check error.
+	if (process == NULL)
+		return (NULL);
 
 	// TODO: use VFS !
 	if (casio_smem_open(&file, path, O_RDONLY) != 0)
 		return (NULL);
 
+	// Debug !
 	kvram_clear();
-	kvram_print(0, 0, "File found !!");
-	kvram_print(0, 1, "inode = %p", file.abstract);
-	kvram_print(0, 2, "path  = %s", path);
+	printk(0, 0, "File found !!");
+	printk(0, 1, "inode = %p", file.abstract);
+	printk(0, 2, "path  = %s", path);
 	kvram_display();
-	while (1);
+	DBG_WAIT;
 
-	// TODO: detect format !!
-	//return (loader_elf(file));
-	return (NULL);
+	//@NOTE: Only ELF supported !!!
+	//TODO: USE VFS !!
+	//
+	// Get / Check ELF header
+	if (loader_get_header(&file, &header) != 0)
+	{
+		kvram_clear();
+		printk(0, 0, "loader: ELF file header error !");
+		kvram_display();
+		DBG_WAIT;
+		return (NULL);
+	}
+
+	// Get / Check program validity
+	void *entry = loader_load_image(&file, &header, process);
+	if (entry == NULL)
+	{
+		kvram_clear();
+		printk(0, 0, "loader: ELF file image error !");
+		kvram_display();
+		DBG_WAIT;
+		return (NULL);
+	}
+
+	// Success !
+	kvram_clear();
+	printk(0, 0, "loader: file loaded sucees !!");
+	printk(0, 1, "loader: Entry at %p", entry);
+	kvram_display();
+	DBG_WAIT;
+	return (entry);
 }

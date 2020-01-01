@@ -1,11 +1,11 @@
-#include "util.h"
+/*#include "util.h"
 #include "builtin.h"
 #include <lib/string.h>
 
 //TODO: use agc, argv.
 int check_builtin(char *cmd)
 {
-/*	extern uint32_t bbuiltin_section;
+	extern uint32_t bbuiltin_section;
 	extern uint32_t ebuiltin_section;
 	struct builtin_s *list;
 	int wstatus;
@@ -26,13 +26,13 @@ int check_builtin(char *cmd)
 	
 		// If we are the child execute
 		// the builtins.
-*/		//if (pid == 0)
+		//if (pid == 0)
 		//{
-			/*dclear();
+			dclear();
 			dprint(0, 0, "Child process !!");
 			dprint(0, 1, "PID  = %d", getpid());
 			dprint(0, 2, "PPID = %d", getppid());
-			dupdate();*/
+			dupdate();
 
 //			list[i].entry(0, NULL);
 			return (0);
@@ -42,4 +42,4 @@ int check_builtin(char *cmd)
 	//	}
 //	}
 //	return (1);
-}
+}*/

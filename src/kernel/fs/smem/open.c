@@ -120,11 +120,6 @@ int casio_smem_open(FILE *file, char const *name, int mode)
 		}
 	}
 
-	kvram_clear();
-	kvram_print(0, 0, "CUL !");
-	kvram_display();
-	while (1);
-
 	// Initilaize fiel object
 	// TODO: Use VFS to do this !!
 	file->cursor = 0;

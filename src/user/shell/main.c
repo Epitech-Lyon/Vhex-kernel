@@ -7,7 +7,12 @@ int main(void)
 	dclear();
 	dprint(0, 0, "First user program !");
 	dupdate();
-	while (1);
+	while (1)
+	{
+		// @note: we can use "sleep" because we
+		// are in privilegied mode
+		__asm__ volatile ("sleep");
+	}
 
 
 /*	char input[12];

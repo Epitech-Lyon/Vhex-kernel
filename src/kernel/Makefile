@@ -49,7 +49,7 @@ OBJ	:= $(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(basename $(SRC))))
 all: | $(BUILD) $(DEBUG) $(OUTPUT) $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf $(OBJ) $(HEADER) -lgcc > $(MEMORY_MAP)
+	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf $(OBJ) $(HEADER) -lgcc -L../lib -l_display > $(MEMORY_MAP)
 	$(OBJCOPY) -R .comment -R .bss -O binary $(DEBUG)/$(NAME).elf $(DEBUG)/$(NAME).bin
 	$(WRAPPER) $(DEBUG)/$(NAME).bin -o $@ -i $(ICON)
 

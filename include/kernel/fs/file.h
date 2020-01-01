@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <kernel/types.h>
 
 #ifndef FILE_OPEN_NUMBER
 # define FILE_OPEN_NUMBER   4
