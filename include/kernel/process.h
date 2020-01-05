@@ -6,16 +6,23 @@
 #include <kernel/context.h>
 #include <kernel/types.h>
 
-#define PROCESS_STACK_SIZE	(2048)
-#define PROCESS_NAME_LENGHT	(16)
-#define PROCESS_MAX		(3)
+#define PROCESS_USER_STACK_SIZE		(2048)
+#define PROCESS_KERNEL_STACK_SIZE	(512)
+#define PROCESS_NAME_LENGHT		(16)
+#define PROCESS_MAX			(3)
 
-#define PROC_IDLE		(0)
+#define PROC_IDLE			(0)
 
 // define process struct.
 //TODO: signal !
 typedef struct process_s
 {
+	// Used when interrupt or exception occur
+	struct {
+		uint32_t kernel;
+		uint32_t user;
+	} stack;
+
 	// Process name.
 	char name[PROCESS_NAME_LENGHT];
 

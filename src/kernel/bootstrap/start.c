@@ -85,27 +85,6 @@ static void section_execute(void *bsection, void *esection)
 	}
 }
 
-//TEST
-void vfs_test(struct dentry *node, int level)
-{
-	// Check error
-	if (node == NULL)
-		return;
-
-	// Space test
-	for (int i = 0 ; i < level ; i++)
-		tty_write(" ", 1);
-
-	// display name
-	tty_write(node->name, strlen(node->name));
-	tty_write("\n", 1);
-
-	// Try child and sibling
-	vfs_test(vfs_dentry_find_first_child(node), level + 1);
-	vfs_test(vfs_dentry_find_next_sibling(node), level);
-}
-
-
 /* start() - Kernel entry point */
 __attribute__((section(".pretext")))
 int start(void)
@@ -163,14 +142,8 @@ int start(void)
 	vfs_mount(NULL, NULL, "gladfs", VFS_MOUNT_ROOT, NULL);
 	vfs_mkdir("/dev", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	vfs_mkdir("/mnt", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-	vfs_mkdir("/mnt/smemfs", S_IRUSR | S_IRGRP | S_IROTH);
+	vfs_mkdir("/mnt/smemfs", S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	vfs_mount(NULL, "/mnt/smemfs", "smemfs", /*MS_RDONLY*/0, NULL);
-
-//	extern struct dentry *vfs_root_node;
-//	tty_open();
-//	vfs_test(vfs_root_node->child, 0);
-//	tty_write("FINI !", 6);
-//	while (1);
 
 	// Create first process: Vhex.
 	pid_t vhex_pid = process_create("Vhex");
@@ -206,6 +179,10 @@ int start(void)
 		}
 	}
 		
+	// Set the first process
+	extern process_t *process_current;
+	process_current = vhex_process;
+
 	// Switch to first process.
 	kernel_switch(&vhex_process->context);
 

@@ -18,10 +18,19 @@ pid_t process_create(const char *name)
 	if (process == NULL)
 		return (-1);
 
-	// Initialize stack
-	process->memory.stack.size = PROCESS_STACK_SIZE;
+	// Initialize user stack
+	process->memory.stack.size = PROCESS_USER_STACK_SIZE;
 	process->memory.stack.start = (uint32_t)pm_alloc(process->memory.stack.size);
 	if (process->memory.stack.start == 0x00000000)
+	{
+		//TODO:  errno
+		//FIXME: free allocated process.
+		return (-1);
+	}
+
+	// Initialize kernel stack
+	process->stack.kernel = (uint32_t)pm_alloc(PROCESS_KERNEL_STACK_SIZE);
+	if (process->stack.kernel == 0x00000000)
 	{
 		//TODO:  errno
 		//FIXME: free allocated process.

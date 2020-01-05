@@ -1,4 +1,4 @@
-#include <kernel/process.h>
+/*#include <kernel/process.h>
 
 //FIXME: atomic operation !!
 int process_switch(pid_t pid)
@@ -24,4 +24,4 @@ int process_switch(pid_t pid)
 	// TODO: SYSCALL !!!!!
 	//context_switch(context_current, context_next);
 	return (0);
-}
+}*/

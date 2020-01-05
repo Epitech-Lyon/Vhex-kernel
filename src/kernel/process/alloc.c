@@ -1,6 +1,6 @@
 #include <kernel/process.h>
 
-// This function SHOULD not be called
+// This function SHOULD NOT be called
 // without atomic operation !!
 pid_t process_alloc(process_t **process)
 {

@@ -1,7 +1,6 @@
 #include <kernel/devices/ubc.h>
 #include <kernel/devices/display.h>
 #include <kernel/hardware/ubc.h>
-#include <kernel/keybios.h>
 #include <kernel/syscall.h>
 #include <kernel/extra.h>
 
