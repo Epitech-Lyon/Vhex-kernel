@@ -1,21 +1,33 @@
 #ifndef __KERNEL_UNISTD_32_H__
 # define __KERNEL_UNISTD_32_H__
 
-#define __NR_restart_syscall	0
+// Kernel Test
+#define __NR_test_syscall	0
+
+// Process
 #define __NR_exit 		1
 #define __NR_exec 		2
-#define __NR_read 		3
-#define __NR_write		4
-#define __NR_open 		5
-#define __NR_close 		6
-#define __NR_waitpid 		7
+#define __NR_waitpid 		3
 
-// Custom !
-#define __NR_kvram_display	8
-#define __NR_kvram_clear	9
-#define __NR_kvram_print	10
-#define __NR_kvram_ascii	11
-#define __NR_kvram_reverse	12
-#define __NR_kvram_scroll	13
+// VFS
+#define __NR_read 		4
+#define __NR_write		5
+#define __NR_open 		6
+#define __NR_close 		7
+#define __NR_lseek 		8
+
+//--
+//	Custom !
+//--
+
+// Display
+#define __NR_kvram_display	9
+#define __NR_kvram_clear	10
+#define __NR_kvram_print	11
+#define __NR_kvram_ascii	12
+#define __NR_kvram_reverse	13
+#define __NR_kvram_scroll	14
+
+//TODO: keyboard
 
 #endif /*__KERNEL_UNISTD_32_H__*/

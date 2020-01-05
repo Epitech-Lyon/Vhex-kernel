@@ -9,6 +9,10 @@ extern void *memset(void *s, int c, size_t n);
 extern void *memcpy(void *dest, const void *src, size_t count);
 extern char *strncpy(char *dest, char const *str, size_t size);
 extern size_t strnlen(char const *str, size_t maxlen);
+extern int strcmp(const char *s1, const char *s2);
+extern int strncmp(const char *s1, const char *s2, size_t n);
+extern char *strrchr(const char *s1, int c);
+extern size_t strlen(char const *str);
 
 // Video RAM functions
 extern void kvram_clear(void);

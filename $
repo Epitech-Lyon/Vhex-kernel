@@ -1,0 +1,41 @@
+#include <fs/vfs.h>
+#include <physical_memory.h>
+#include <utils.h>
+
+///TODO add flags and mode parameter.
+FILE *vfs_file_open(char const *path)
+{
+	struct dentry *dentry;
+	FILE *new_file;
+
+	// Get target inode.
+	dentry = vfs_dentry_resolve(path);
+	if (dentry == NULL)
+	{
+		printk(KERN_DEBUG, "vfs open: inode fault !\n");
+		return (NULL);
+	}
+
+	// Check directory.
+	// TODO return value ?
+	// TODO device handling ?
+	// FIXME: device error !!
+	//if (inode->type & VFS_INODE_TYPE_PARENT){
+	//	printk(KERN_DEBUG, "vfs open: file type error !\n");
+	//	return (NULL);
+	//}
+
+	// Alloc new FILE.
+	new_file = pm_heap_alloc(sizeof(FILE));
+	if (new_file == NULL)
+	{
+		printk(KERN_DEBUG, "vfs open: file alloc error !\n");
+		return (NULL);
+	}
+
+	// Fill new file.
+	new_file->private = dentry->inode;
+	new_file->permisssion = 0; //<-- TODO
+	new_file->cursor = 0;
+	return (new_file);
+}

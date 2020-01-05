@@ -51,6 +51,15 @@ void printk(int x, int y, char const *str, ...)
 				nb = va_arg(ap, int32_t);
 				base = (str[i + 1] == 'd') ? 10 : 16;
 
+				// Check negative value
+				// FIXME: negative error (max)
+				if (nb < 0 && str[i + 1] == 'd')
+				{
+					nb = 0 - nb;
+					font_draw(x, y, '-');
+					x = x + KERNEL_FONT_REAL_WIDTH + 1;
+				}
+
 				// Generate buffer
 				// @note: generate in LSB mode.
 				while (digits == 0 || nb != 0)

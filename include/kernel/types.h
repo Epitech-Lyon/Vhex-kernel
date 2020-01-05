@@ -28,6 +28,9 @@ typedef enum mpu_e
 
 typedef int pid_t;
 
+typedef int16_t mode_t;
+typedef uint16_t umode_t;
+
 // Force inline function.
 #define INLINE	__attribute__((always_inline)) inline
 

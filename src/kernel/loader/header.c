@@ -1,5 +1,5 @@
 #include <kernel/loader.h>
-#include <kernel/fs/smem.h>
+#include <kernel/fs/vfs.h>
 #include <kernel/util.h>
 #include <kernel/elf.h>
 
@@ -7,7 +7,7 @@
 int loader_get_header(FILE *file, Elf32_Ehdr *header)
 {
 	// Read ELF header.
-	if (casio_smem_read(file, header, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr))
+	if (vfs_read(file, header, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr))
 		return (-1);
 
 	// Check magic number

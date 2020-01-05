@@ -4,17 +4,26 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <kernel/types.h>
+#include <kernel/fs/filesystem.h>
 
 #ifndef FILE_OPEN_NUMBER
 # define FILE_OPEN_NUMBER   4
 #endif
 
+#define O_RDONLY	0x00
+#define O_WRONLY	0x01
+#define O_RDWR		0x02
+
+#define SEEK_SET	0
+#define SEEK_CUR	1
+#define SEEK_END	2
+
 struct file_s
 {
-    void *abstract;
+    void *private;
     off_t cursor;
-    uint8_t mode;
-    size_t size;
+    int permission;
+    struct file_operations *file_op;
 };
 typedef struct file_s FILE;
 

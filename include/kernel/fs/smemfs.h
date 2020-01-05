@@ -6,7 +6,6 @@
 #include <kernel/types.h>
 #include <kernel/fs/file.h>
 
-
 #define CASIO_SMEM_NAME_LENGHT			12
 #define CASIO_SMEM_ROOT_ID			0xffff
 #define CASIO_SMEM_BLOCK_ENTRY_MAGIC		0x4200
@@ -20,13 +19,6 @@
 
 #define CASIO_SMEM_ROOT_ID	0xffff
 
-#define O_RDONLY	0x00
-#define O_WRONLY	0x01
-#define O_RDWR		0x02
-
-#define SEEK_SET    0
-#define SEEK_CUR    1
-#define SEEK_END    2
 
 // 
 typedef struct casio_smem_block_s
@@ -80,10 +72,31 @@ typedef struct casio_smem_fragment_s
 	uint8_t fill[12];		// 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, ...
 } casio_smem_fragment_t;
 
-// Primitives
-extern int casio_smem_mount(void);
-extern int casio_smem_open(FILE *file, char const *name, int mode);
-extern ssize_t casio_smem_read(FILE *file, void *buf, size_t count);
-extern off_t casio_smem_lseek(FILE *file, off_t offset, int whence);
+
+
+// Internal superblock
+struct smemfs_superblock_s
+{
+	casio_smem_header_t *inode_table;
+	casio_smem_block_t  *sector_table;
+};
+
+// Constructor
+extern void smemfs_initialize();
+
+
+// Superblock primitives
+extern void *smemfs_mount(void);
+
+// File primitives
+extern ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos);
+
+// Inode primitive
+extern void *smemfs_find_first_inode(casio_smem_header_t *inode, uint16_t parent_id);
+extern void *smemfs_find_next_sibling(void *inode);
+extern void *smemfs_find_first_child(void *inode);
+extern void *smemfs_find_parent(void *inode);
+extern int smemfs_get_name(void *inode, char *name, size_t count);
+extern mode_t smemfs_get_mode(void *inode);
 
 #endif /*_CASIO_SMEM_H__*/

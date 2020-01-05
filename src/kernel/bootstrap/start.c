@@ -6,10 +6,15 @@
 #include <kernel/process.h>
 #include <kernel/syscall.h>
 #include <kernel/util.h>
+#include <kernel/fs/vfs.h>
+#include <kernel/fs/stat.h>
+#include <kernel/util.h>
 
 //TODO: remove me !
-#include <kernel/fs/smem.h>
+#include <kernel/fs/smemfs.h>
+#include <kernel/fs/gladfs.h>
 #include <kernel/loader.h>
+#include <kernel/devices/tty.h>
 
 // Internal symbols
 mpu_t current_mpu = MPU_UNKNOWN;
@@ -42,6 +47,10 @@ extern void vhex_context_set(void);
 extern void kernel_switch(common_context_t *context);
 extern mpu_t mpu_get(void);
 extern int main(void);
+
+// Internal object
+extern struct file_system_type gladfs_filesystem;
+extern struct file_system_type smemfs_filesystem;
 
 
 //
@@ -76,6 +85,26 @@ static void section_execute(void *bsection, void *esection)
 	}
 }
 
+//TEST
+void vfs_test(struct dentry *node, int level)
+{
+	// Check error
+	if (node == NULL)
+		return;
+
+	// Space test
+	for (int i = 0 ; i < level ; i++)
+		tty_write(" ", 1);
+
+	// display name
+	tty_write(node->name, strlen(node->name));
+	tty_write("\n", 1);
+
+	// Try child and sibling
+	vfs_test(vfs_dentry_find_first_child(node), level + 1);
+	vfs_test(vfs_dentry_find_next_sibling(node), level);
+}
+
 
 /* start() - Kernel entry point */
 __attribute__((section(".pretext")))
@@ -107,10 +136,6 @@ int start(void)
 	// before switching the VBR.
 	rom_explore(&brom, (int32_t)&srom);
 
-	// Mount Casio FS
-	// TODO: Use Virtual File System !
-	casio_smem_mount();
-
 	// Save Casio's hardware context and set
 	// Vhex hardware context.
 	// @note:
@@ -126,6 +151,27 @@ int start(void)
 	vhex_context_set();
 	atomic_end();
 
+	// Internal FS init !
+	gladfs_initialize();
+	smemfs_initialize();
+
+	// Initilize Virtual File System
+	vfs_register_filesystem(&gladfs_filesystem);
+	vfs_register_filesystem(&smemfs_filesystem);
+
+	// Creat initial file tree
+	vfs_mount(NULL, NULL, "gladfs", VFS_MOUNT_ROOT, NULL);
+	vfs_mkdir("/dev", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	vfs_mkdir("/mnt", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	vfs_mkdir("/mnt/smemfs", S_IRUSR | S_IRGRP | S_IROTH);
+	vfs_mount(NULL, "/mnt/smemfs", "smemfs", /*MS_RDONLY*/0, NULL);
+
+//	extern struct dentry *vfs_root_node;
+//	tty_open();
+//	vfs_test(vfs_root_node->child, 0);
+//	tty_write("FINI !", 6);
+//	while (1);
+
 	// Create first process: Vhex.
 	pid_t vhex_pid = process_create("Vhex");
 	process_t *vhex_process = process_get(vhex_pid);
@@ -134,7 +180,7 @@ int start(void)
 	vhex_process->context.ssr = atomic_start();
 
 	// Load programe.
-	vhex_process->context.spc = (uint32_t)loader("VHEX/shell.elf", vhex_process);
+	vhex_process->context.spc = (uint32_t)loader("/mnt/smemfs/VHEX/shell.elf", vhex_process);
 	if (vhex_process->context.spc == 0x00000000)
 	{
 		// Display message.

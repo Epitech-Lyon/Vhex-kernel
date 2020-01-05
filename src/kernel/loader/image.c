@@ -1,5 +1,5 @@
 #include <kernel/loader.h>
-#include <kernel/fs/smem.h>
+#include <kernel/fs/vfs.h>
 #include <kernel/memory.h>
 #include <kernel/util.h>
 #include <kernel/elf.h>
@@ -18,8 +18,8 @@ void *loader_load_image(FILE *file, Elf32_Ehdr *header, process_t *process)
 	while (++i < header->e_phnum)
 	{
 		// Read programme header.
-		casio_smem_lseek(file, header->e_phoff + (sizeof(Elf32_Phdr) * i), SEEK_SET);
-		if (casio_smem_read(file, &program, sizeof(Elf32_Phdr)) != sizeof(Elf32_Phdr))
+		vfs_lseek(file, header->e_phoff + (sizeof(Elf32_Phdr) * i), SEEK_SET);
+		if (vfs_read(file, &program, sizeof(Elf32_Phdr)) != sizeof(Elf32_Phdr))
 			return (NULL);
 
 		// Check programe type.
@@ -42,8 +42,8 @@ void *loader_load_image(FILE *file, Elf32_Ehdr *header, process_t *process)
 	while (++i < header->e_phnum)
 	{
 		// Read programme header.
-		casio_smem_lseek(file, header->e_phoff + (sizeof(Elf32_Phdr) * i), SEEK_SET);
-		casio_smem_read(file, &program, sizeof(Elf32_Phdr));
+		vfs_lseek(file, header->e_phoff + (sizeof(Elf32_Phdr) * i), SEEK_SET);
+		vfs_read(file, &program, sizeof(Elf32_Phdr));
 
 		// Generate physical address
 		paddress = program.p_vaddr + process->memory.program.start;
@@ -53,8 +53,8 @@ void *loader_load_image(FILE *file, Elf32_Ehdr *header, process_t *process)
 		memset((void *)paddress, 0, program.p_memsz);
 
 		// Dump the program. 
-		casio_smem_lseek(file, program.p_offset, SEEK_SET);
-		casio_smem_read(file, (void *)paddress, program.p_filesz);
+		vfs_lseek(file, program.p_offset, SEEK_SET);
+		vfs_read(file, (void *)paddress, program.p_filesz);
 	}
 
 	// Generate program entry address

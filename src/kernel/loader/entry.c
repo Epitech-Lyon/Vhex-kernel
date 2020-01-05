@@ -1,5 +1,5 @@
 #include <kernel/loader.h>
-#include <kernel/fs/smem.h>
+#include <kernel/fs/vfs.h>
 #include <kernel/fs/file.h>
 #include <kernel/util.h>
 #include <kernel/elf.h>
@@ -14,13 +14,13 @@ void *loader(const char *path, process_t *process)
 		return (NULL);
 
 	// TODO: use VFS !
-	if (casio_smem_open(&file, path, O_RDONLY) != 0)
+	if (vfs_open(&file, path, O_RDONLY) != 0)
 		return (NULL);
 
 	// Debug !
 	kvram_clear();
 	printk(0, 0, "File found !!");
-	printk(0, 1, "inode = %p", file.abstract);
+	printk(0, 1, "inode = %p", file.private);
 	printk(0, 2, "path  = %s", path);
 	kvram_display();
 	DBG_WAIT;

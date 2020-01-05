@@ -12,17 +12,23 @@ static void sys_test(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 	DBG_WAIT;
 }
 
-static const void *sys_handler[14] = {
+static const void *sys_handler[15] = {
+	// Kernel Test
 	sys_test,	//restart
+
+	// Process
 	NULL,		//exit
-	NULL,		//exiec
+	sys_waitpid,	//waitpid
+	NULL,		//exec
+
+	// VFS
 	NULL,		//read
 	NULL,		//write
 	NULL,		//open
 	NULL,		//close
-	sys_waitpid,	//waitpid
+	NULL,		//lseek
 
-	// Custom
+	// Display
 	kvram_display,	//kvram_display
 	kvram_clear,	//kvram_clear
 	kvram_print,	//kvram_print

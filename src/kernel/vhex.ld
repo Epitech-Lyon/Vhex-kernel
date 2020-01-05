@@ -51,16 +51,16 @@ SECTIONS
 		_bctors = ALIGN(4) ;
 		*(SORT_BY_INIT_PRIORITY(.ctors.*))
 		*(.ctors);
-		_ectors = ALIGN(4) ;
+		_ectors = . ;
 		_bdtors = ALIGN(4) ;
 		*(SORT_BY_INIT_PRIORITY(.dtors.*))
 		*(.dtors);
-		_edtors = ALIGN(4) ;
+		_edtors = . ;
 
-		/* Built-in */
-		_bbuiltin_section = ALIGN(4) ;
-		*(.builtin);
-		_ebuiltin_section = ALIGN(4) ;
+		/* File System */
+		_bfilesystem_section = ALIGN(4) ;
+		*(.filesystem);
+		_efilesystem_section = . ;
 	} > rom : text
 
 
