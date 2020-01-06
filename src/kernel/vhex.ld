@@ -61,6 +61,11 @@ SECTIONS
 		_bfilesystem_section = ALIGN(4) ;
 		*(.filesystem);
 		_efilesystem_section = . ;
+
+		/* Device */
+		_bdevice_section = ALIGN(4);
+		*(.device);
+		_edevice_section = . ;
 	} > rom : text
 
 

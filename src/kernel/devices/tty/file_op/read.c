@@ -15,7 +15,7 @@ static int buffer_insert(struct keyboard_obj_s *keyboard, char n);
 static void cursor_callback(struct keyboard_obj_s *keyboard);
 
 //FIXME: this function is device-specifique !!
-ssize_t tty_read(void *buffer, size_t count)
+ssize_t tty_read(void *inode, void *buffer, size_t count)
 {
 	extern struct keycache_s *keylist;
 	extern struct tty_s tty;
@@ -238,7 +238,7 @@ static void tty_buffer_display(struct keyboard_obj_s *keyboard)
 		: keyboard->buffer.clen;
 
 	// Write buffer.
-	tty_write(keyboard->buffer.addr, size);
+	tty_write(NULL, keyboard->buffer.addr, size);
 }
 
 static int update_buffer(struct keyboard_obj_s *keyboard, key_t key)
@@ -333,8 +333,8 @@ static void cursor_callback(struct keyboard_obj_s *keyboard)
 		tty.cursor.y = y;
 
 		// Get Display X and Y position.
-		tty_ioctl(TTY_IOCTL_GETDX, &x);
-		tty_ioctl(TTY_IOCTL_GETDY, &y);
+		tty_ioctl(NULL, TTY_IOCTL_GETDX, &x);
+		tty_ioctl(NULL, TTY_IOCTL_GETDY, &y);
 
 		// Display cursor.
 		kvram_reverse(x, y, (KERNEL_FONT_REAL_WIDTH + 1), (KERNEL_FONT_REAL_HEIGHT + 1));

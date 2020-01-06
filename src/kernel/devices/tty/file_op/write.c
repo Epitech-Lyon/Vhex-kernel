@@ -174,7 +174,7 @@ static void tty_display(void)
 	atomic_end();
 }
 
-ssize_t tty_write(const void *buffer, size_t count)
+ssize_t tty_write(void *inode, const void *buffer, size_t count)
 {
 	ssize_t written;
 

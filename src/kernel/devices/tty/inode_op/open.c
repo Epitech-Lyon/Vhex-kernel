@@ -6,7 +6,7 @@
 // Internal TTY object.
 struct tty_s tty;
 
-int tty_open(void)
+void *tty_open(dev_t major, dev_t minor)
 {
 	int lines;
 
@@ -31,5 +31,5 @@ int tty_open(void)
 	// Call TTY primitives constructor
 	keyboard_open();
 	display_open();
-	return (0);
+	return (&tty);
 }

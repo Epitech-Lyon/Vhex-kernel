@@ -54,6 +54,7 @@ struct file_operations
 {
 	ssize_t (*read)(void *inode, void *buf, size_t count, off_t pos);
 	ssize_t (*write)(void *inode, const void *buf, size_t count, off_t pos);
+	void (*ioctl)(void *inode, uint32_t cmd, ...);
 };
 
 // Based on UNIX Kernel 2.6.39

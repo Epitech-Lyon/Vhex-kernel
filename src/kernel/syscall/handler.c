@@ -22,11 +22,11 @@ static const void *sys_handler[15] = {
 	NULL,		//exec
 
 	// VFS
-	NULL,		//read
-	NULL,		//write
-	NULL,		//open
-	NULL,		//close
-	NULL,		//lseek
+	sys_read,	//read
+	sys_write,	//write
+	sys_open,	//open
+	sys_close,	//close
+	sys_lseek,	//lseek
 
 	// Display
 	kvram_display,	//kvram_display

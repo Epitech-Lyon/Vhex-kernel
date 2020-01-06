@@ -3,9 +3,11 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <kernel/fs/file.h>
 #include <kernel/context.h>
 #include <kernel/types.h>
 
+#define PROCESS_NB_OPEN_FILE		(4)
 #define PROCESS_USER_STACK_SIZE		(2048)
 #define PROCESS_KERNEL_STACK_SIZE	(512)
 #define PROCESS_NAME_LENGHT		(16)
@@ -28,6 +30,15 @@ typedef struct process_s
 
 	// Context management
 	common_context_t context;
+
+	// Open file management
+	struct {
+		enum {
+			PROCESS_FILE_SLOT_UNUSED,
+			PROCESS_FILE_SLOT_USED
+		} status;
+		FILE file;
+	} opfile[PROCESS_NB_OPEN_FILE];
 
 	// Signals management.
 	//sighandler_t signal[NSIG];

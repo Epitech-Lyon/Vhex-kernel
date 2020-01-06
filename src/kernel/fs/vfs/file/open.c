@@ -5,18 +5,30 @@
 // Intrenal functions
 extern struct dentry *vfs_dentry_resolve(const char *path, int mode);
 
-int vfs_open(FILE *file, char const *path, int flags)
+int vfs_open(FILE *file, char const *pathname, int flags)
 {
 	struct dentry *dentry;
 
 	// Get target inode.
-	dentry = vfs_dentry_resolve(path, 0);
+	dentry = vfs_dentry_resolve(pathname, 0);
 	if (dentry == NULL)
+	{
+		kvram_clear();
+		printk(0, 0, "VFS_open(): path error '%s'", pathname);
+		kvram_display();
+		DBG_WAIT;
 		return (-1);
+	}
 
 	// Check directory.
 	if ((dentry->mode & __S_IFDIR) != 0)
+	{
+		kvram_clear();
+		printk(0, 0, "VFS_open(): file type error '%s'", pathname);
+		kvram_display();
+		DBG_WAIT;
 		return (-2);
+	}
 
 	// Initialize new file.
 	file->private = dentry->inode;

@@ -1,7 +1,7 @@
 #include <kernel/devices/tty.h>
 #include <stdarg.h>
 
-void tty_ioctl(uint32_t cmd, ...)
+void tty_ioctl(void *inode, uint32_t cmd, ...)
 {
 	extern struct tty_s tty;
 	va_list ap;

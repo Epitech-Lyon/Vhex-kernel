@@ -1,5 +1,5 @@
 #include <kernel/memory.h>
-#include <kernel/devices/tty.h>
+#include <kernel/util.h>
 
 void pm_free(void *ptr)
 {
@@ -17,10 +17,13 @@ void pm_free(void *ptr)
 	// Check misaligned pointer.
 	if (((uint32_t)ptr % PM_BLOCK_SIZE) != 0)
 	{
-		tty_write(
+		kvram_clear();
+		printk(0, 0,
 			"pm_free: Warning, you try to free misaligned"
 			"pointer address (%p)\n", sptr
 		);
+		kvram_display();
+		DBG_WAIT;
 		return;
 	}
 
@@ -46,8 +49,11 @@ void pm_free(void *ptr)
 	}
 
 	// No block found, display error.
-	tty_write(
+	kvram_clear();
+	printk(0, 0,
 		"pm_free: Warning, you try to free unused"
 		"allocated memory (%p)", sptr
 	);
+	kvram_display();
+	DBG_WAIT;
 }
