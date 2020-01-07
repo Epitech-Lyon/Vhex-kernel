@@ -1,14 +1,11 @@
 #include <kernel/fs/smemfs.h>
 #include <kernel/util.h>
 
-// Internal function
-extern casio_smem_header_t *smemfs_walk(casio_smem_header_t *current_inode,
-						uint16_t parent_id, int skip);
-
+/* smemfs_find_first_child() - Find the fist file in the (folder) inode */
 void *smemfs_find_first_child(void *inode)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
-	uint16_t parent_id;
+	uint16_t folder_id;
 
 	// Check error.
 	if (inode == NULL)
@@ -17,16 +14,21 @@ void *smemfs_find_first_child(void *inode)
 	// Check root inode
 	if (inode == smemfs_superblock.sector_table)
 	{
-		parent_id = CASIO_SMEM_ROOT_ID;
+		folder_id = CASIO_SMEM_ROOT_ID;
 	} else {
+		// Check inode validity
+		if (((struct casio_smem_header_s *)inode)->info != CASIO_SMEM_HEADER_INFO_EXIST)
+			return (NULL);
+
 		// Check directory
 		if (((struct casio_smem_header_s *)inode)->type != CASIO_SMEM_HEADER_TYPE_DIRECTORY)
 			return (NULL);
 
 		// Get directory ID
-		parent_id = ((struct casio_smem_header_s *)inode)->id;
+		folder_id = ((struct casio_smem_header_s *)inode)->id;
 	}
 
 	// Return the first child of the file.
-	return (smemfs_walk(smemfs_superblock.inode_table, parent_id, 0));
+	return (smemfs_walk(inode, smemfs_superblock.inode_table,
+				folder_id, WALK_FLAG_ID_CHECK_PARENT));
 }

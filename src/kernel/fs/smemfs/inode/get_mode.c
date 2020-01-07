@@ -4,7 +4,7 @@
 mode_t smemfs_get_mode(void *inode)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
-	casio_smem_header_t *header;
+	struct casio_smem_header_s *header;
 	int inode_type;
 
 	// Check error

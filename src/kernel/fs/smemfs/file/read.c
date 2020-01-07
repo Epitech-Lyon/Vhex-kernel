@@ -3,10 +3,10 @@
 #include <kernel/util.h>
 
 /* casio_smem_data_base_address() - Generate the fragmented data address (0xa0000000 + offset) */
-static void *casio_smem_get_data_base_address(casio_smem_fragment_t *fragment)
+static void *casio_smem_get_data_base_address(smemfs_fragdata_t *fragment)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
-	casio_smem_block_t *block;
+	struct casio_smem_block_s *block;
 
 	block = smemfs_superblock.sector_table;
 	while (block->magic_start == CASIO_SMEM_BLOCK_ENTRY_MAGIC &&
@@ -22,7 +22,7 @@ static void *casio_smem_get_data_base_address(casio_smem_fragment_t *fragment)
 /* casio_smem_read() - Read the file data (based on internal cursor) */
 ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 {
-	casio_smem_fragment_t *fragment;
+	smemfs_fragdata_t *fragment;
 	off_t fragment_data_offset;
 	void *data_base_addr;
 	ssize_t current_size;
@@ -34,7 +34,7 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 
 	// Get the current data fragment.
 	current_size = 0;
-	fragment = (void *)((uint32_t)inode + sizeof(casio_smem_header_t));
+	fragment = (void *)((uint32_t)inode + sizeof(struct casio_smem_header_s));
 	while (fragment->magic == CASIO_SMEM_FRAGMENT_MAGIC &&
 			pos > (off_t)(current_size + fragment->data_size + 1))
 	{

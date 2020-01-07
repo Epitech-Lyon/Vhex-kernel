@@ -3,7 +3,7 @@
 int smemfs_get_name(void *inode, char *buf, size_t count)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
-	casio_smem_header_t *header;
+	struct casio_smem_header_s *header;
 
 	// Check error
 	if (inode == NULL)

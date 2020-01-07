@@ -1,42 +1,38 @@
 #include <kernel/fs/smemfs.h>
-#include <kernel/util.h>
 
-casio_smem_header_t *smemfs_walk(casio_smem_header_t *current_inode, uint16_t parent_id, int skip)
+/* smemfs_walk() - Find inode based on directory ID and flags */
+smemfs_inode_t *smemfs_walk(smemfs_inode_t *current,
+				smemfs_inode_t *entry, uint16_t folder_id, int flags)
 {
-	struct casio_smem_fragment_s *current_fragment;
+	smemfs_fragdata_t *fragdata;
 
 	// Check current inode validity.
-	if (current_inode == NULL)
+	if (entry == NULL)
 		return (NULL);
 
 	// Walk entry
-	while (current_inode->info == CASIO_SMEM_HEADER_INFO_EXIST ||
-			current_inode->info == CASIO_SMEM_HEADER_INFO_DELETE)
+	while (entry->info == CASIO_SMEM_HEADER_INFO_EXIST ||
+			entry->info == CASIO_SMEM_HEADER_INFO_DELETE)
 	{
 		// New inode validity check.
-		if (current_inode->info == CASIO_SMEM_HEADER_INFO_EXIST &&
-				((skip & 0x01) == 0) &&
-				(((skip & 0x02) == 0 && current_inode->parent.id == parent_id) ||
-				((skip & 0x02) != 0  && current_inode->id == parent_id)))
+		if (entry != current &&
+			entry->info == CASIO_SMEM_HEADER_INFO_EXIST &&
+			(((flags & WALK_FLAG_ID_CHECK_PARENT) != 0 && entry->parent.id == folder_id) ||
+			((flags & WALK_FLAG_ID_CHECK_PARENT) == 0  && entry->id == folder_id)))
 		{
-			return (current_inode);
+			return (entry);
 		}
 
 		// Fast fragmentation skip
-		current_fragment = (void *)((uint32_t)(current_inode) + sizeof(struct casio_smem_header_s));
-		if (current_fragment->magic == CASIO_SMEM_FRAGMENT_MAGIC)
+		fragdata = (void *)((uint32_t)(entry) + sizeof(struct casio_smem_header_s));
+		if (fragdata->magic == CASIO_SMEM_FRAGMENT_MAGIC)
 		{
-			current_fragment = (void *)((uint32_t)current_fragment +
-				sizeof(struct casio_smem_fragment_s) * 
-				current_fragment->frag_total);
+			fragdata = (void *)((uint32_t)fragdata +
+					(sizeof(struct casio_smem_fragment_s) * fragdata->frag_total));
 		}
 
 		// Update current inode
-		current_inode = (void*)current_fragment;
-
-		// Workaround update
-		skip = skip & ~0x01;
-
+		entry = (void*)fragdata;
 	} 
 	return (NULL);
 }
