@@ -5,6 +5,7 @@
 // Internal helper
 extern struct gladfs_fragment_data_s **gladfs_file_pos(off_t *offset, struct gladfs_inode_s *inode, off_t pos);
 
+/* gladfs_read() - GladFS inode read primitive (sync) */
 ssize_t gladfs_read(void *inode, void *buf, size_t count, off_t pos)
 {
 	struct gladfs_fragment_data_s **fragdata;
@@ -19,7 +20,10 @@ ssize_t gladfs_read(void *inode, void *buf, size_t count, off_t pos)
 	// Get appropriate data fragment
 	fragdata = gladfs_file_pos(&offset, inode, pos);
 	if (fragdata == NULL || *fragdata == NULL)
+	{
+		atomic_stop();
 		return (-1);
+	}
 
 	// Walk into fragemented data
 	current_size = 0;
@@ -58,7 +62,7 @@ ssize_t gladfs_read(void *inode, void *buf, size_t count, off_t pos)
 	}
 
 	// End atomic operations
-	atomic_end();
+	atomic_stop();
 
 	// Return read bytes
 	return (current_size);

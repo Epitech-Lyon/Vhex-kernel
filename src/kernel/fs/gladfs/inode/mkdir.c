@@ -2,6 +2,7 @@
 #include <kernel/fs/stat.h>
 #include <kernel/atomic.h>
 
+/* gladfs_mkdir() - Create new folder inode (atomically, sync) */
 void *gladfs_mkdir(void *parent_inode, const char *file_name, mode_t mode)
 {
 	extern struct gladfs_superblock_s gladfs_superblock;
@@ -14,7 +15,10 @@ void *gladfs_mkdir(void *parent_inode, const char *file_name, mode_t mode)
 	// Create new inode
 	new_inode = gladfs_superblock.super_op.alloc_inode(file_name, mode | __S_IFDIR);
 	if (new_inode == NULL)
+	{
+		atomic_stop();
 		return (NULL);
+	}
 
 	// Update FHS
 	parent = parent_inode;
@@ -22,8 +26,8 @@ void *gladfs_mkdir(void *parent_inode, const char *file_name, mode_t mode)
 	new_inode->next = parent->children;
 	parent->children = new_inode;
 
-	// Stp atomic operation
-	atomic_end();
+	// Stop atomic operation
+	atomic_stop();
 
 	// Return inode
 	return(new_inode);

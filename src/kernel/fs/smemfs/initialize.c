@@ -12,7 +12,7 @@ struct file_system_type smemfs_filesystem =
 	// FS specific openrations	
 	.filesystem_operations = {
 		.mount  = &smemfs_mount,
-		.umount = NULL
+		.umount = &smemfs_umount
 	},
 
 	// File operations

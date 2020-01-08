@@ -44,7 +44,7 @@ int timer_install(void *callback, void *arg, uint32_t delay_ms, uint8_t mode)
 
 	// End of atomic operations.
 	// and return the timer ID.
-	atomic_end();
+	atomic_stop();
 	return (timer_ID);
 }
 
@@ -73,6 +73,6 @@ int timer_uninstall(int timer_ID)
 	timercache[timer_ID].status = TIMER_UNUSED;
 
 	// Stop atomic operation and return.
-	atomic_end();
+	atomic_stop();
 	return (0);
 }

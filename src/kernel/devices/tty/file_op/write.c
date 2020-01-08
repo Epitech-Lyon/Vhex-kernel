@@ -171,7 +171,7 @@ static void tty_display(void)
 	display_ioctl(DISPLAY_IOCTL_SETY, srow);
 
 	// End atomic operation
-	atomic_end();
+	atomic_stop();
 }
 
 ssize_t tty_write(void *inode, const void *buffer, size_t count)

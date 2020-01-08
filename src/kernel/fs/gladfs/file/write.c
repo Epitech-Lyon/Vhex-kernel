@@ -5,6 +5,7 @@
 // Internal helper
 extern struct gladfs_fragment_data_s **gladfs_file_pos(off_t *offset, struct gladfs_inode_s *inode, off_t pos);
 
+/* gladfs_write() - GladFS inode write primitive (sync) */
 ssize_t gladfs_write(void *inode, const void *buf, size_t count, off_t pos)
 {
 	extern struct gladfs_superblock_s gladfs_superblock;
@@ -14,31 +15,36 @@ ssize_t gladfs_write(void *inode, const void *buf, size_t count, off_t pos)
 	size_t write_size;
 	off_t offset;
 
+	// Check error
+	if (inode == NULL)
+		return (-1);
+
+	// Start atomic operation
+	atomic_start();
+
 	// Get appropriate data fragment
 	fragdata = gladfs_file_pos(&offset, inode, pos);
 	if (fragdata == NULL)
+	{
+		atomic_stop();
 		return (-1);
+	}
 
 	// Generate new indirect block if needed
 	if (*fragdata == NULL)
 	{
-		// @note: for now, the indirect block allocation is
-		// not really implemented :(
+		// @note: for now, the indirect block allocation (like
+		// ext2 file system) is not really implemented :(
 		gladfs_superblock.super_op.alloc_fragdata(fragdata, 1);
 		if (*fragdata == NULL)
+		{
+			atomic_stop();
 			return (-1);
+		}
 
 		// Reset offset
 		offset = 0;
 	}
-
-	// Debug
-	kvram_clear();
-	printk(0, 0, "Le sexe !");
-	printk(0, 1, "offset = %d", offset);
-	printk(0, 2, "fragdata = %p", *fragdata);
-	kvram_display();
-	DBG_WAIT;
 
 	// Walk into fragemented data
 	current_size = 0;
@@ -86,7 +92,7 @@ ssize_t gladfs_write(void *inode, const void *buf, size_t count, off_t pos)
 	}
 
 	// End atomic operations
-	atomic_end();
+	atomic_stop();
 
 	// Return written bytes.
 	return (current_size);

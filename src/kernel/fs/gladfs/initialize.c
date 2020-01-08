@@ -12,7 +12,7 @@ struct file_system_type gladfs_filesystem =
 	// FS specific openrations	
 	.filesystem_operations = {
 		.mount  = &gladfs_mount,
-		.umount = NULL
+		.umount = &gladfs_umount
 	},
 
 	// File operations

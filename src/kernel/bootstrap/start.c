@@ -145,7 +145,7 @@ int start(void)
 	atomic_start();
 	fx9860_context_save(&casio_context);
 	vhex_context_set();
-	atomic_end();
+	atomic_stop();
 
 	// Internal FS init !
 	gladfs_initialize();
@@ -193,7 +193,7 @@ int start(void)
 
 		// Restore Casio context.
 		fx9860_context_restore(&casio_context);
-		atomic_end();
+		atomic_stop();
 
 		// Casio VRAM workaround
 		// @note: GetKey call Bdisp_PutDD_VRAM()

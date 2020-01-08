@@ -61,7 +61,7 @@ ssize_t display_write(const void *buffer, size_t count)
 	//t6k11_display(vram);
 
 	// End atomic operation.
-	atomic_end();
+	atomic_stop();
 
 	// Return the number of written char.
 	return (i);

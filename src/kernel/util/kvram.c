@@ -23,7 +23,7 @@ void kvram_clear(void)
 		vram[i] = 0x00000000;
 
 	// End of atomic operation
-	atomic_end();
+	atomic_stop();
 }
 
 /* kvram_display() - Disaplay Video RAM into screen */
@@ -64,7 +64,7 @@ void kvram_scroll(int lines)
 	}
 
 	// End of atomic operation
-	atomic_end();
+	atomic_stop();
 }
 
 /* kvram_reverse() - Reverse Video RAM area */
@@ -130,7 +130,7 @@ void kvram_reverse(int x, int y, int width, int height)
 	}
 
 	// End of atomic operation
-	atomic_end();
+	atomic_stop();
 }
 
 /* kvram_print() - Print string on Video RAM */

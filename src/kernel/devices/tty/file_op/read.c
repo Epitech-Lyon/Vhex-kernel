@@ -74,7 +74,7 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 			// Get next key.
 			keynode = keynode->next;
 		}
-		atomic_end();
+		atomic_stop();
 
 		// Display buffer on TTY.
 		tty_buffer_display(&keyboard);
@@ -163,7 +163,7 @@ static int check_special(struct keyboard_obj_s *keyboard, key_t key)
 			atomic_start();
 			fx9860_context_save(&vhex_context);
 			fx9860_context_restore(&casio_context);
-			atomic_end();
+			atomic_stop();
 
 			// Inject MENU key and call GetKey().
 			// TODO !!!
@@ -178,7 +178,7 @@ static int check_special(struct keyboard_obj_s *keyboard, key_t key)
 			atomic_start();
 			fx9860_context_save(&casio_context);
 			fx9860_context_restore(&vhex_context);
-			atomic_end();
+			atomic_stop();
 			return (1);
 		}
 

@@ -1,5 +1,6 @@
 #include <kernel/fs/smemfs.h>
 #include <kernel/fs/file.h>
+#include <kernel/atomic.h>
 #include <kernel/util.h>
 
 /* casio_smem_data_base_address() - Generate the fragmented data address (0xa0000000 + offset) */
@@ -32,6 +33,9 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 	if (inode == NULL || buf == NULL)
 		return (-1);
 
+	// Start atomic operation
+	atomic_start();
+
 	// Get the current data fragment.
 	current_size = 0;
 	fragment = (void *)((uint32_t)inode + sizeof(struct casio_smem_header_s));
@@ -44,7 +48,10 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 
 	// Check fragment error
 	if (fragment->magic != CASIO_SMEM_FRAGMENT_MAGIC)
+	{
+		atomic_stop();
 		return (-1);
+	}
 
 	// Read file data
 	current_size = 0;
@@ -60,7 +67,7 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 		// Get the data address.
 		data_base_addr = casio_smem_get_data_base_address(fragment);
 		if (data_base_addr == NULL)
-			return (current_size);
+			break;
 
 		// Handle fragment data offset.
 		if (fragment_data_offset != 0)
@@ -76,5 +83,8 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 		current_size = current_size + real_size;
 		fragment = fragment + 1;
 	}
+
+	// Stop atomic operation
+	atomic_stop();
 	return (current_size);
 }

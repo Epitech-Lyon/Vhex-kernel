@@ -5,6 +5,6 @@
 #include <stdint.h>
 
 extern uint32_t atomic_start(void);
-extern uint32_t atomic_end(void);
+extern uint32_t atomic_stop(void);
 
 #endif /*__KERNEL_ATOMIC_H__*/

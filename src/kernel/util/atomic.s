@@ -3,10 +3,10 @@
 ##---
 .text
 .global	_atomic_start
-.global	_atomic_end
+.global	_atomic_stop
 
 .type	_atomic_start, @function
-.type	_atomic_end, @function
+.type	_atomic_stop, @function
 
 .extern	_sr_save
 .extern	_atomic_counter
@@ -48,12 +48,12 @@ atomic_start_exit:
 
 /*TODO: Fix reentrace corruption !!!*/
 /*
-** @proto: uint32_t atomic_end(void)
+** @proto: uint32_t atomic_stop(void)
 ** @return:
 **	* Saved SR register if has been restored.
 **	* 0xffffffff otherwise.
 */
-_atomic_end:
+_atomic_stop:
 
 	! Check if the calculator is currently
 	! into an atomic operation and update

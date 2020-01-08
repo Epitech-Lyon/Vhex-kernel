@@ -1,5 +1,7 @@
 #include <kernel/fs/smemfs.h>
+#include <kernel/atomic.h>
 
+/* smemfs_get_name() - Dump the name of a file (sync) */
 int smemfs_get_name(void *inode, char *buf, size_t count)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
@@ -9,18 +11,25 @@ int smemfs_get_name(void *inode, char *buf, size_t count)
 	if (inode == NULL)
 		return (-1);
 
+	// Start atomic operation
+	atomic_start();
+
 	// Check root inode
 	if (inode == smemfs_superblock.sector_table)
 	{
 		buf[0] = '/';
 		buf[1] = '\0';
+		atomic_stop();
 		return (0);
 	}
 
 	// Check inode validity
 	header = inode;
 	if (header->info != CASIO_SMEM_HEADER_INFO_EXIST)
+	{
+		atomic_stop();
 		return (-1);
+	}
 
 	// Get "real" name size
 	count = count - 1;
@@ -35,5 +44,8 @@ int smemfs_get_name(void *inode, char *buf, size_t count)
 			header->name[i] != 0xffff)
 		buf[i] = header->name[i];
 	buf[i] = '\0';
+
+	// Start atomic operation
+	atomic_stop();
 	return (0);
 }

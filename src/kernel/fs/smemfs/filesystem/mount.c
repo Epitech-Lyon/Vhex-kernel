@@ -1,10 +1,21 @@
 #include <kernel/fs/smemfs.h>
+#include <kernel/atomic.h>
 
-/* casio_smem_mount() - Get Block and Preheader Table addresses */
+/* casio_smem_mount() - Mount the file system (sync) */
 void *smemfs_mount(void)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
+	void *root_inode;
+
+	// Start atomic operation
+	atomic_start();
+
+	// Get root inode
+	root_inode = smemfs_superblock.sector_table;
+
+	// Stop atomic operation
+	atomic_stop();
 
 	// Return the sector table to simulate the root inode.
-	return ((void*)smemfs_superblock.sector_table);
+	return (root_inode);
 }

@@ -15,7 +15,7 @@
 struct file_system_operations
 {
 	void *(*mount)(void);
-	void *(*umount)(void);
+	int (*umount)(void);
 };
 
 // Internal super block operations

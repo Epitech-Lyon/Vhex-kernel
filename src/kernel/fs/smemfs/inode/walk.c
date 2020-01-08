@@ -1,6 +1,7 @@
 #include <kernel/fs/smemfs.h>
 
 /* smemfs_walk() - Find inode based on directory ID and flags */
+/* @note: This function is internal of smemFS, do not call it ! */
 smemfs_inode_t *smemfs_walk(smemfs_inode_t *current,
 				smemfs_inode_t *entry, uint16_t folder_id, int flags)
 {

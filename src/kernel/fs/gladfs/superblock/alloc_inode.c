@@ -1,15 +1,23 @@
 #include <kernel/fs/gladfs.h>
 #include <kernel/memory.h>
+#include <kernel/atomic.h>
 #include <kernel/util.h>
 
+/* gladfs_alloc_inode() - Superblock primitive to alloc "empty" inode (sync) */
 struct gladfs_inode_s *gladfs_alloc_inode(const char *name, mode_t mode)
 {
 	struct gladfs_inode_s *inode;
 
+	// Start atomic operation
+	atomic_start();
+
 	// alloc memory
 	inode = pm_alloc(sizeof(struct gladfs_inode_s));
 	if (inode == NULL)
+	{
+		atomic_stop();
 		return (NULL);
+	}
 
 	// Fill inode.
 	memset(inode, 0x00, sizeof(struct gladfs_inode_s));
@@ -21,5 +29,8 @@ struct gladfs_inode_s *gladfs_alloc_inode(const char *name, mode_t mode)
 	inode->size		= 0;
 	inode->fragnumber	= 0;
 	inode->fragdata		= NULL;
+
+	// Stop atomic operation
+	atomic_stop();
 	return (inode);
 }

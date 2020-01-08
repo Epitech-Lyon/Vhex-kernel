@@ -1,6 +1,8 @@
 #include <kernel/fs/gladfs.h>
 #include <kernel/memory.h>
 
+/* gladfs_file_pos() - Get approriate file fragment date */
+/* @note: This function is internal of GladFS, do not call it ! */
 struct gladfs_fragment_data_s **gladfs_file_pos(off_t *offset, struct gladfs_inode_s *inode, off_t pos)
 {
 	struct gladfs_fragment_data_s **fragdata;
