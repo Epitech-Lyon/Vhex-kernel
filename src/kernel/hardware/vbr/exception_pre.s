@@ -9,7 +9,7 @@
 
 .align 2
 _exception_handler_pre:
-	! Due to TRAPA syscall API we should
+	! Due to TRAPA syscall ABI we should
 	! switch stack to avoid variodic argument
 	! corruption.
 	mov.l	.process_current, r2		! get current_process address

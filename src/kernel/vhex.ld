@@ -30,13 +30,14 @@ SECTIONS
 	/*
 	** ROM sections
 	*/
-	_brom = 0x00300000;
-	_srom = 0x200 + SIZEOF(.text) +
-			SIZEOF(.data) +
-			SIZEOF(.vhex) +
-			SIZEOF(.ubc);
-
 	. = ORIGIN(rom);
+	_brom = ABSOLUTE (0x00300000) ;
+	_srom = ABSOLUTE (0x200 +
+				SIZEOF(.text) +
+				SIZEOF(.data) +
+				SIZEOF(.vhex) +
+				SIZEOF(.ubc)) ;
+
 	.text	: {
 		/* Source Code */
 		*(.pretext)

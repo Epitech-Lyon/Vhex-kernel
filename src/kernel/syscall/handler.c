@@ -44,12 +44,15 @@ void *sys_get_handler(int sysno)
 		return (0);
 
 	// DEBUG
-/*	kvram_clear();
-	printk(0, 0, "sysno   = %d", sysno);
-	printk(0, 0, "handler = %p", sys_handler[sysno]);
+	kvram_clear();
+	printk(0, 0, "TRAPA ABI pre_handler !");
+	printk(0, 1, "sysno   = %d", sysno);
+	printk(0, 2, "handler = %p", sys_handler[sysno]);
 	kvram_display();
 	DBG_WAIT;
-*/
+	DBG_WAIT;
+	DBG_WAIT;
+
 	// Return syscall 
 	return ((void *)sys_handler[sysno]);
 }

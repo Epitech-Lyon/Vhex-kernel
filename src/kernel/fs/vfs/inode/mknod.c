@@ -2,6 +2,7 @@
 #include <kernel/fs/stat.h>
 #include <kernel/util.h>
 
+/* gevice_get() - Find internal device */
 struct device *device_get(dev_t major)
 {
 	extern uint32_t bdevice_section;
@@ -19,6 +20,7 @@ struct device *device_get(dev_t major)
 	return (NULL);
 }
 
+/* vfs_mknod - Create VFS inode (file, device special file, or pipe) named pathname */
 int vfs_mknod(const char *pathname, mode_t mode, dev_t dev)
 {
 	extern struct dentry *vfs_root_node;
@@ -27,60 +29,54 @@ int vfs_mknod(const char *pathname, mode_t mode, dev_t dev)
 	struct dentry *file;
 	char *name;
 
+	// Check device
+	// TODO: remove me !
+	if (dev == 0)
+		return (-2);
 
 	// Get parent dentry
-	parent_dentry = vfs_dentry_resolve(pathname, 1);
+	parent_dentry = vfs_dentry_resolve(pathname, VFS_DENTRY_RESOLVE_FLAG_PATHNAME);
 	if (parent_dentry == NULL)
-	{
-		kvram_clear();
-		printk(0, 0, "mknod: parent dentry error !");
-		kvram_display();
-		DBG_WAIT;
 		return (-1);
-	}
 
 	// Get folder name
 	name = strrchr(pathname, '/');
 	name = (name == NULL) ? (void *)pathname : &name[1];
 	
-	// Try to find open device
+	// Try to find the device
+	// TODO: handle othe file (mode) !!!
 	device = device_get(dev_get_major(dev));
 	if (device == NULL)
-	{
-		kvram_clear();
-		printk(0, 0, "mknod: device error !");
-		kvram_display();
-		DBG_WAIT;
 		return (-2);
-	}
 
 	// Tru to create empty node
 	file = vfs_dentry_alloc(name, mode | __S_IFCHR);
 	if (file == NULL)
-	{
-		kvram_clear();
-		printk(0, 0, "mknod: dentry alloc error !");
-		kvram_display();
-		DBG_WAIT;
 		return (-3);
-	}
+
 
 	// Try to open device
 	file->inode = device->open(dev_get_major(dev), dev_get_minor(dev));
 	if (file->inode == NULL)
-	{
-		kvram_clear();
-		printk(0, 0, "mknod: device inode error !");
-		kvram_display();
-		DBG_WAIT;
-		vfs_dentry_free(file);
 		return (-4);
-	}
+
+
+	// Debug !
+	kvram_clear();
+	printk(0, 0, "New mknod device !");
+	printk(0, 1, "dentry: %p$", file);
+	printk(0, 2, "inode: %p$", file->inode);
+	printk(0, 3, "name: %s$", file->name);
+	printk(0, 4, "dev->file_op: %p$", &device->file_op);
+	kvram_display();
+	DBG_WAIT;
+	DBG_WAIT;
 
 	// Set file operations
 	file->dentry_op.file_op = &device->file_op;
 
 	// Add file into VFS
+	file->parent = parent_dentry;
 	file->next = parent_dentry->child;
 	parent_dentry->child = file;
 	return (0);

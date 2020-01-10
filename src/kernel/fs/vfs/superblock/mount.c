@@ -42,8 +42,12 @@ int vfs_mount(const char *source, const char *target,
 	// Check ROOT mount.
 	if (target == NULL && mountflags == (unsigned long)VFS_MOUNT_ROOT)
 	{
+		// Check VFS root
+		if (vfs_root_node != NULL)
+			return (-4);
+
 		// Alloc root mnt
-		vfs_root_node = pm_alloc(sizeof(struct dentry));
+		vfs_root_node = vfs_dentry_alloc("/", __S_IFDIR);
 		if (vfs_root_node == NULL)
 			return (-1);
 		
@@ -58,22 +62,23 @@ int vfs_mount(const char *source, const char *target,
 			while (1) { __asm__ volatile ("sleep"); }
 		}
 
-		// Initialize entry
-		vfs_root_node->name[0] = '/';
-		vfs_root_node->name[1] = '\0';
-		vfs_root_node->parent = NULL;
-		vfs_root_node->child = NULL;
-		vfs_root_node->next = NULL;
+		// Get File System primitives
 		vfs_root_node->dentry_op.file_op = &filesystem->file_operations;
 		vfs_root_node->dentry_op.inode_op = &filesystem->inode_operations;
-		vfs_root_node->mnt.inode = NULL;
-		vfs_root_node->mnt.file_op = NULL;
-		vfs_root_node->mnt.inode_op = NULL;
+
+		// Debug !
+		kvram_clear();
+		printk(0, 0, "vfs_root_node = %p", vfs_root_node);
+		printk(0, 1, "vfs_root_node = %s$", vfs_root_node->name);
+		printk(0, 2, "vfs_root_node = %p", vfs_root_node->child);
+		printk(0, 3, "vfs_root_node = %p", vfs_root_node->next);
+		kvram_display();
+		DBG_WAIT;
 		return (0);
 	}
 
 	// Get target inode informations
-	struct dentry *mnt = vfs_dentry_resolve(target, 0);
+	struct dentry *mnt = vfs_dentry_resolve(target, VFS_DENTRY_RESOLVE_FLAG_FULL_PATH);
 	if (mnt == NULL)
 		return (-1);
 

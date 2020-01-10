@@ -25,7 +25,7 @@ struct dentry *vfs_dentry_find_next_sibling(struct dentry *dentry)
 		return (NULL);
 
 	// Try to create new dentry
-	struct dentry *new_dentry = pm_alloc(sizeof(struct dentry));
+	struct dentry *new_dentry = vfs_dentry_alloc(NULL, 0);
 	if (new_dentry == NULL)
 		return (NULL);
 
@@ -34,15 +34,11 @@ struct dentry *vfs_dentry_find_next_sibling(struct dentry *dentry)
 	new_dentry->mode = dentry->dentry_op.inode_op->get_mode(inode);
 	new_dentry->inode = inode;
 	new_dentry->parent = dentry;
-	new_dentry->child = NULL;
-	new_dentry->next = dentry->next;
 	new_dentry->dentry_op.file_op = dentry->dentry_op.file_op;
 	new_dentry->dentry_op.inode_op = dentry->dentry_op.inode_op;
-	new_dentry->mnt.inode = NULL;
-	new_dentry->mnt.file_op = NULL;
-	new_dentry->mnt.inode_op = NULL;
 
 	// Update VFS cache en return
+	new_dentry->next = dentry->next;
 	dentry->next = new_dentry;
 	return (new_dentry);
 

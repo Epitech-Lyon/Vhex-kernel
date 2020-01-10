@@ -85,22 +85,6 @@ static void section_execute(void *bsection, void *esection)
 	}
 }
 
-void vfs_test(struct dentry *node, int level)
-{
-	if (node == NULL)
-		return;
-
-	// space !
-	for (int i = 0 ; i < level ; i++)
-		tty_write(NULL, " ", 1);
-
-	// Name
-	tty_write(NULL, node->name, strlen(node->name));
-	tty_write(NULL, "\n", 1);
-
-	vfs_test(vfs_dentry_find_first_child(node), level + 1);
-	vfs_test(vfs_dentry_find_next_sibling(node), level);
-}
 
 /* start() - Kernel entry point */
 __attribute__((section(".pretext")))
@@ -158,6 +142,7 @@ int start(void)
 	// Creat initial file tree
 	vfs_mount(NULL, NULL, "gladfs", VFS_MOUNT_ROOT, NULL);
 	vfs_mkdir("/dev", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	vfs_mkdir("/home", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	vfs_mkdir("/mnt", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	vfs_mkdir("/mnt/smemfs", S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	vfs_mount(NULL, "/mnt/smemfs", "smemfs", /*MS_RDONLY*/0, NULL);
@@ -166,12 +151,8 @@ int start(void)
 	vfs_mknod("/dev/tty", S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH,
 			dev_make_major(TTY_DEV_MAJOR));
 
-	// VFS test
-	tty_open(0, 0);
-	extern struct dentry *vfs_root_node;
-	vfs_test(vfs_root_node, 0);
-	tty_write(NULL, "FINIT !\n", 8);
-	DBG_WAIT;
+	extern void kernel_test(void);
+	kernel_test();
 
 	// Create first process: Vhex.
 	pid_t vhex_pid = process_create("Vhex");
@@ -181,7 +162,9 @@ int start(void)
 	vhex_process->context.ssr = atomic_start();
 
 	// Load programe.
-	vhex_process->context.spc = (uint32_t)loader("/mnt/smemfs/VHEX/shell.elf", vhex_process);
+	extern void kernel_test(void);
+	vhex_process->context.spc = (uint32_t)&kernel_test;
+	//vhex_process->context.spc = (uint32_t)loader("/mnt/smemfs/VHEX/shell.elf", vhex_process);
 	if (vhex_process->context.spc == 0x00000000)
 	{
 		// Display message.

@@ -5,6 +5,7 @@
 
 pid_t process_create(const char *name)
 {
+	extern struct dentry *vfs_root_node;
 	extern process_t *process_current;
 	process_t *process;
 	pid_t process_pid;
@@ -68,6 +69,17 @@ pid_t process_create(const char *name)
 	process->context.mach = 0x00000000;
 	process->context.ssr  = 0x00000000;
 	process->context.spc  = 0x00000000;
+
+	// Initialise file cache
+	for (int i = 0 ; i < PROCESS_NB_OPEN_FILE ; i = i + 1)
+	{
+		process->opfile[i].status = PROCESS_FILE_SLOT_UNUSED;
+		process->opfile[i].file.private = NULL;
+		process->opfile[i].file.file_op = NULL;
+		process->opfile[i].file.cursor = 0;
+		process->opfile[i].file.permission = 0;
+	}
+	process->working_dir = vfs_root_node;
 
 	// Initialize processes.
 	process->parent = process_current;

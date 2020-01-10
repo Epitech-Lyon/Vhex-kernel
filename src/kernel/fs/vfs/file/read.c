@@ -10,7 +10,9 @@ ssize_t vfs_read(FILE *file, void *buf, size_t count)
 		return (-1);
 
 	// Get / check file's informations
-	if (file->private == NULL || file->file_op->read == NULL)
+	if (file->private == NULL ||
+			file->file_op == NULL ||
+			file->file_op->read == NULL)
 		return (-1);
 	
 	// Read with FS specifique primitive and return the numbe of reading bytes.

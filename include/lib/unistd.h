@@ -17,7 +17,7 @@ extern pid_t waitpid(pid_t pid, int *wstatus, int options);
 
 // File syscall
 #define O_DIRECT	0
-extern int open(const char *pathname, int flags);	// <-- TODO: va_arg
+extern int open(const char *pathname, int flags, ...);
 extern ssize_t write(int fd, const void *buf, size_t count);
 extern ssize_t read(int fd, void *buf, size_t count);
 extern int close(int fd);

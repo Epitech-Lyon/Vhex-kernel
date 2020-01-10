@@ -21,8 +21,9 @@ off_t vfs_lseek(FILE *file, off_t offset, int whence)
 	if (whence == SEEK_END)
 	{
 		//TODO: get file size !!
+		//TODO: use copy-on-write system !!
 		//file->cursor = file->size + offset - 1;
-		return (file->cursor);
+		return (-1);
 	}
 	return (-1);
 }

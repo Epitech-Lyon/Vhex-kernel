@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <kernel/fs/file.h>
+#include <kernel/fs/filesystem.h>
 #include <kernel/context.h>
 #include <kernel/types.h>
 
@@ -39,6 +40,7 @@ typedef struct process_s
 		} status;
 		FILE file;
 	} opfile[PROCESS_NB_OPEN_FILE];
+	struct dentry *working_dir;
 
 	// Signals management.
 	//sighandler_t signal[NSIG];

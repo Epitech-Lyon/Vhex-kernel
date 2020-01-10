@@ -9,7 +9,10 @@
 #include <kernel/devices/device.h>
 
 // Internal VFS macros
-#define VFS_MOUNT_ROOT	(-1)
+#define VFS_MOUNT_ROOT				(-1)
+#define VFS_DENTRY_RESOLVE_FLAG_FULL_PATH	(0)
+#define VFS_DENTRY_RESOLVE_FLAG_PATHNAME	(1)
+
 
 
 // Constructor / destructor

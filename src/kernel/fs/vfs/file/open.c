@@ -2,9 +2,7 @@
 #include <kernel/fs/stat.h>
 #include <kernel/util.h>
 
-// Intrenal functions
-extern struct dentry *vfs_dentry_resolve(const char *path, int mode);
-
+/* vfs_open() - Open file named pathname */
 int vfs_open(FILE *file, char const *pathname, int flags)
 {
 	struct dentry *dentry;
@@ -14,7 +12,8 @@ int vfs_open(FILE *file, char const *pathname, int flags)
 	if (dentry == NULL)
 	{
 		kvram_clear();
-		printk(0, 0, "VFS_open(): path error '%s'", pathname);
+		printk(0, 0, "VFS_open() error !");
+		printk(0, 1, "path error '%s'", pathname);
 		kvram_display();
 		DBG_WAIT;
 		return (-1);
@@ -29,6 +28,18 @@ int vfs_open(FILE *file, char const *pathname, int flags)
 		DBG_WAIT;
 		return (-2);
 	}
+
+	// debug
+	kvram_clear();
+	printk(0, 0, "vfs_open(): inode found !");
+	printk(0, 1, "path: %s", pathname);
+	printk(0, 2, "name: %s", dentry->name);
+	printk(0, 3, "inode: %p", dentry->inode);
+	printk(0, 4, "file_op: %p", dentry->dentry_op.file_op);
+	kvram_display();
+	DBG_WAIT;
+
+	//TODO: update interne dentry counter !!
 
 	// Initialize new file.
 	file->private = dentry->inode;

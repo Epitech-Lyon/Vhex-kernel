@@ -3,6 +3,15 @@
 #include <kernel/util.h>
 #include <kernel/fs/stat.h>
 
+//
+// vfs_dentry_find_first_child()
+// Find the fist file of a file
+// @note:
+// 	To avoid useless memory used, the VFS cache
+// is generated only if the user want to access to a file
+// unregister to the cahe.
+// TODO: explain correctly x)
+//
 struct dentry *vfs_dentry_find_first_child(struct dentry *dentry)
 {
 	// Check file type
@@ -43,7 +52,7 @@ struct dentry *vfs_dentry_find_first_child(struct dentry *dentry)
 	}
 
 	// Try to create new dentry
-	struct dentry *new_dentry = pm_alloc(sizeof(struct dentry));
+	struct dentry *new_dentry = vfs_dentry_alloc(NULL, 0);
 	if (new_dentry == NULL)
 		return (NULL);
 
@@ -64,11 +73,7 @@ struct dentry *vfs_dentry_find_first_child(struct dentry *dentry)
 	// Common init
 	new_dentry->inode = inode;
 	new_dentry->parent = dentry;
-	new_dentry->child = NULL;
 	new_dentry->next = dentry->child;
-	new_dentry->mnt.inode = NULL;
-	new_dentry->mnt.file_op = NULL;
-	new_dentry->mnt.inode_op = NULL;
 
 	// Update VFS cache en return
 	dentry->child = new_dentry;

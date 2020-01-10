@@ -2,6 +2,7 @@
 #include <kernel/memory.h>
 #include <kernel/util.h>
 
+/* vfs_dentry_alloc() - Allocate new "empty" dentry */
 struct dentry *vfs_dentry_alloc(const char *name, mode_t mode)
 {
 	struct dentry *node;
@@ -13,9 +14,16 @@ struct dentry *vfs_dentry_alloc(const char *name, mode_t mode)
 
 	// Initialize dentry
 	memset(node->name, 0x00, VFS_DENTRY_NAME_LENGHT);
-	strncpy(node->name, name, VFS_DENTRY_NAME_LENGHT);
-	node->inode = NULL;
+
+	// Set the name if possible
+	if (name != NULL)
+		strncpy(node->name, name, VFS_DENTRY_NAME_LENGHT);
+
+	// Set the mode
 	node->mode = mode;
+
+	// Set default value
+	node->inode = NULL;
 	node->parent = NULL;
 	node->child = NULL;
 	node->next = NULL;
