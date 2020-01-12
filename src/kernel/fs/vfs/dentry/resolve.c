@@ -27,7 +27,7 @@ static int get_name(int *name_lenght, const char *path, char *name)
 //TODO add '..' handling.
 struct dentry *vfs_dentry_resolve(const char *path, int mode)
 {
-	extern struct process_s *process_current;
+	extern struct process *process_current;
 	extern struct dentry *vfs_root_node;
 	struct dentry *file;
 	struct dentry *next;

@@ -3,7 +3,7 @@
 
 ssize_t sys_read(int fd, void *buf, size_t count)
 {
-	extern process_t *process_current;
+	extern struct process *process_current;
 
 	// Check fd
 	if (fd < 0 || fd >= PROCESS_NB_OPEN_FILE)

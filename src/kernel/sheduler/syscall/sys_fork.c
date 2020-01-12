@@ -1,4 +1,4 @@
-#include <kernel/process.h>
+/*#include <kernel/process.h>
 
 pid_t sys_fork(void)
 {
@@ -18,4 +18,4 @@ pid_t sys_fork(void)
 	
 	// Initialize context.
 	return (-1);
-}
+}*/

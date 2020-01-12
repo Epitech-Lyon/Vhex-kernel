@@ -2,8 +2,8 @@
 
 // Create all internal global
 // used to handle process.
-struct process_stack_s process_stack[PROCESS_MAX];
-process_t *process_current;
+struct process_stack process_stack[PROCESS_MAX];
+struct process *process_current;
 
 __attribute__((constructor))
 void process_constructor(void)

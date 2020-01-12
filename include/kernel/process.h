@@ -9,7 +9,7 @@
 #include <kernel/types.h>
 
 #define PROCESS_NB_OPEN_FILE		(4)
-#define PROCESS_USER_STACK_SIZE		(2048)
+#define PROCESS_USER_STACK_SIZE		(15 * 1024)
 #define PROCESS_KERNEL_STACK_SIZE	(512)
 #define PROCESS_NAME_LENGHT		(16)
 #define PROCESS_MAX			(3)
@@ -18,7 +18,7 @@
 
 // define process struct.
 //TODO: signal !
-typedef struct process_s
+struct process
 {
 	// Used when interrupt or exception occur
 	struct {
@@ -42,7 +42,7 @@ typedef struct process_s
 	} opfile[PROCESS_NB_OPEN_FILE];
 	struct dentry *working_dir;
 
-	// Signals management.
+	// ignals management.
 	//sighandler_t signal[NSIG];
 	
 	// Virtual / Physical memory management.
@@ -53,8 +53,12 @@ typedef struct process_s
 	// process memory management.
 	struct {
 		struct {
-			uint32_t start;
-			uint32_t size;
+			uint32_t user;
+			uint32_t kernel;
+			struct {
+				uint32_t user;
+				uint32_t kernel;
+			} size;
 		} stack;
 		struct {
 			uint32_t start;
@@ -67,25 +71,32 @@ typedef struct process_s
 	} memory; 
 	
 	// Other process management.
-	struct process_s *parent;
-	struct process_s *child;
-	struct process_s *next;
-} process_t;
+	struct process *parent;
+	struct process *child;
+	struct process *next;
+};
 
 // Internal struct used by the
 // static process stack
-struct process_stack_s
+struct process_stack
 {
-	struct process_s process;
-	int status;
+	// Indicate process slot status
+	enum {
+		PROC_USED,
+		PROC_UNUSED
+	} status;
+
+	// Internal process data
+	struct process process;
 };
 
 // Functions.
-extern pid_t process_create(const char *name);
-extern process_t *process_get(pid_t pid);
+extern struct process *process_create(const char *name);
+extern struct process *process_get(pid_t pid);
 extern int process_switch(pid_t pid);
 
 // Internal function.
-extern pid_t process_alloc(process_t **process);
+extern pid_t process_alloc(struct process **process);
+extern int process_free(struct process *process);
 
 #endif /*__KERNEL_PROCESS_H__*/

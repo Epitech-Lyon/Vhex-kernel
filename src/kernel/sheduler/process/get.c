@@ -1,8 +1,8 @@
 #include <kernel/process.h>
 
-process_t *process_get(pid_t pid)
+struct process *process_get(pid_t pid)
 {
-	extern struct process_stack_s process_stack[PROCESS_MAX];
+	extern struct process_stack process_stack[PROCESS_MAX];
 
 	// Check error
 	if (pid < 0 || pid >= PROCESS_MAX)

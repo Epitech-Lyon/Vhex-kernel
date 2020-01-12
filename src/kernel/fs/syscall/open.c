@@ -4,8 +4,9 @@
 
 int sys_open(const char *pathname, int flags, ...)
 {
-	extern process_t *process_current;
+	extern struct process *process_current;
 
+	// DEBUG !
 	kvram_clear();
 	printk(0, 0, "Syscall open() !");
 	printk(0, 1, "path:  %s", pathname);

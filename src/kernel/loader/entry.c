@@ -4,18 +4,33 @@
 #include <kernel/util.h>
 #include <kernel/elf.h>
 
-void *loader(const char *path, process_t *process)
+void *loader(const char *path, struct process *process)
 {
 	Elf32_Ehdr header;
 	FILE file;
 
 	// Check error.
 	if (process == NULL)
+	{
+		kvram_clear();
+		printk(0, 0, "loader: Fault error !");
+		printk(0, 1, "path: %s$", path);
+		printk(0, 2, "process: %p", process);
+		kvram_display();
+		DBG_WAIT;
 		return (NULL);
+	}
 
 	// TODO: use VFS !
 	if (vfs_open(&file, path, O_RDONLY) != 0)
+	{
+		kvram_clear();
+		printk(0, 0, "loader: File open error !");
+		printk(0, 1, "path: %s$", path);
+		kvram_display();
+		DBG_WAIT;
 		return (NULL);
+	}
 
 	// Debug !
 	kvram_clear();

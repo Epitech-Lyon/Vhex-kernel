@@ -3,7 +3,7 @@
 
 off_t sys_lseek(int fd, off_t offset, int whence)
 {
-	extern process_t *process_current;
+	extern struct process *process_current;
 
 	// Check fd
 	if (fd < 0 || fd >= PROCESS_NB_OPEN_FILE)

@@ -2,9 +2,9 @@
 
 // This function SHOULD NOT be called
 // without atomic operation !!
-pid_t process_alloc(process_t **process)
+pid_t process_alloc(struct process **process)
 {
-	extern struct process_stack_s process_stack[PROCESS_MAX];
+	extern struct process_stack process_stack[PROCESS_MAX];
 
 	for (int i = 0 ; i < PROCESS_MAX ; i = i + 1)
 	{

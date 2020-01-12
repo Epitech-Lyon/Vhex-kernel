@@ -5,7 +5,7 @@
 #include <kernel/elf.h>
 
 /* loader_load_image() - Load the program into Virtual Memory */
-void *loader_load_image(FILE *file, Elf32_Ehdr *header, process_t *process)
+void *loader_load_image(FILE *file, Elf32_Ehdr *header, struct process *process)
 {
 	Elf32_Phdr program;
 	uint32_t paddress;

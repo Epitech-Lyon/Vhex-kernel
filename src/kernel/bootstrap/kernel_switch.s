@@ -6,9 +6,6 @@
 .align 2
 _kernel_switch:
 	! Save process context into unbakable register
-	! @note:
-	!	I do not save r8 ~ r14 because we will
-	! never return into the bootstrap part.
 	mov	r4, r8
 
 	! Update SR register to block
@@ -53,5 +50,5 @@ _kernel_switch:
 	nop
 
 .align 4
-.sr_msk:	.long 0x300000f0
+.sr_msk:	.long 0x700000f0
 .end

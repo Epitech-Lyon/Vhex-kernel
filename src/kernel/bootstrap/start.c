@@ -93,6 +93,10 @@ int start(void)
 	extern uint32_t vram[256];
 	int error;
 
+	//--
+	//	Bootstrap part !
+	//--
+
 	// Wipe .bss section and dump .data / Vhex sections
 	memset(&bbss, 0x00, (size_t)&sbss);
 	memcpy(&bdata_ram, &bdata_rom, (size_t)&sdata);
@@ -131,6 +135,10 @@ int start(void)
 	vhex_context_set();
 	atomic_stop();
 
+	//---
+	//	File System part !
+	//---
+
 	// Internal FS init !
 	gladfs_initialize();
 	smemfs_initialize();
@@ -151,20 +159,47 @@ int start(void)
 	vfs_mknod("/dev/tty", S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH,
 			dev_make_major(TTY_DEV_MAJOR));
 
+
+	// Test mode !
 	extern void kernel_test(void);
-	kernel_test();
+	//kernel_test();
+
+	//---
+	//	Start first process !
+	//---
+	//TODO: initialize sheduler !!
+
+	atomic_start();
+
+	// Test process switch
+	/*__asm__ volatile (
+		"ldc	%0, ssr;"
+		"ldc	%1, spc;"
+		"rte;"
+		"nop;"
+		:
+		: "r"(0x50000000), "r"(&kernel_test) 
+		: 
+	);*/
 
 	// Create first process: Vhex.
-	pid_t vhex_pid = process_create("Vhex");
-	process_t *vhex_process = process_get(vhex_pid);
+	struct process *vhex_process = process_create("Vhex");
+	if (vhex_process == NULL)
+	{
+		kvram_clear();
+		kvram_print(0, 0, "Vhex fatal error !");
+		kvram_print(0, 1, "First process error !");
+		kvram_print(0, 2, "Wait manual reset...");
+		kvram_display();
+		while (1) { __asm__ volatile ("sleep"); }
+	}
 
 	// Initialize CPU configuration for the process.
-	vhex_process->context.ssr = atomic_start();
+	vhex_process->context.ssr = 0x40000000;
 
 	// Load programe.
-	extern void kernel_test(void);
-	vhex_process->context.spc = (uint32_t)&kernel_test;
-	//vhex_process->context.spc = (uint32_t)loader("/mnt/smemfs/VHEX/shell.elf", vhex_process);
+	//vhex_process->context.spc = (uint32_t)&kernel_test;
+	vhex_process->context.spc = (uint32_t)loader("/mnt/smemfs/VHEX/shell.elf", vhex_process);
 	if (vhex_process->context.spc == 0x00000000)
 	{
 		// Display message.
@@ -179,7 +214,9 @@ int start(void)
 		atomic_stop();
 
 		// Casio VRAM workaround
-		// @note: GetKey call Bdisp_PutDD_VRAM()
+		// @note: GetKey will call Bdisp_PutDD_VRAM(),
+		// so save the current internal Video RAM data into
+		// Casio's VRAM.
 		memcpy(casio_Bdisp_GetVRAM(), vram, 1024);
 
 		// Wait MENU key.
@@ -189,9 +226,25 @@ int start(void)
 			casio_GetKey(&key);
 		}
 	}
-		
+
+	// Test context
+	/*__asm__ volatile (
+		"ldc	%0, ssr;"
+		"ldc	%1, spc;"
+		"mov	%2, r15;"
+		"rte;"
+		"nop;"
+		:
+		: "r"(vhex_process->context.ssr),
+			"r"(&kernel_test), 
+			"r"(vhex_process->context.reg[15])
+		: 
+	);*/
+	
+
 	// Set the first process
-	extern process_t *process_current;
+	// TODO: send the process to the sheduler !!
+	extern struct process *process_current;
 	process_current = vhex_process;
 
 	// Switch to first process.
