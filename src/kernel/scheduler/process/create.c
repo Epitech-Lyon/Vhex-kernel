@@ -5,8 +5,8 @@
 
 struct process *process_create(const char *name)
 {
-	extern struct dentry *vfs_root_node;
 	extern struct process *process_current;
+	extern struct dentry *vfs_root_node;
 	struct process *process;
 	pid_t process_pid;
 
@@ -83,7 +83,7 @@ struct process *process_create(const char *name)
 	process->context.gbr  = 0x00000000;
 	process->context.macl = 0x00000000;
 	process->context.mach = 0x00000000;
-	process->context.ssr  = 0x00000000;
+	process->context.ssr  = 0x40000000;	// <- force privilegied mode !
 	process->context.spc  = 0x00000000;
 
 	// Initialise file cache

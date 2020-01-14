@@ -9,10 +9,10 @@
 #include <kernel/types.h>
 
 #define PROCESS_NB_OPEN_FILE		(4)
-#define PROCESS_USER_STACK_SIZE		(15 * 1024)
+#define PROCESS_USER_STACK_SIZE		(2 * 1024)
 #define PROCESS_KERNEL_STACK_SIZE	(512)
 #define PROCESS_NAME_LENGHT		(16)
-#define PROCESS_MAX			(3)
+#define PROCESS_MAX			(4)
 
 #define PROC_IDLE			(0)
 
@@ -26,11 +26,11 @@ struct process
 		uint32_t user;
 	} stack;
 
-	// Process name.
-	char name[PROCESS_NAME_LENGHT];
-
 	// Context management
 	common_context_t context;
+
+	// Process name.
+	char name[PROCESS_NAME_LENGHT];
 
 	// Open file management
 	struct {

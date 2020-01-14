@@ -3,7 +3,6 @@
 // Create all internal global
 // used to handle process.
 struct process_stack process_stack[PROCESS_MAX];
-struct process *process_current;
 
 __attribute__((constructor))
 void process_constructor(void)
@@ -13,7 +12,4 @@ void process_constructor(void)
 	{
 		process_stack[i].status = PROC_IDLE;
 	}
-
-	// No process is currently running.
-	process_current = NULL;
 }

@@ -1,10 +1,11 @@
 #include <stdint.h>
 #include <stddef.h>
+#include <kernel/types.h>
 #include <kernel/context.h>
 #include <kernel/atomic.h>
-#include <kernel/types.h>
 #include <kernel/process.h>
 #include <kernel/syscall.h>
+#include <kernel/scheduler.h>
 #include <kernel/util.h>
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/stat.h>
@@ -161,26 +162,12 @@ int start(void)
 
 
 	// Test mode !
-	extern void kernel_test(void);
+	//extern void kernel_test(void);
 	//kernel_test();
 
 	//---
 	//	Start first process !
 	//---
-	//TODO: initialize sheduler !!
-
-	atomic_start();
-
-	// Test process switch
-	/*__asm__ volatile (
-		"ldc	%0, ssr;"
-		"ldc	%1, spc;"
-		"rte;"
-		"nop;"
-		:
-		: "r"(0x50000000), "r"(&kernel_test) 
-		: 
-	);*/
 
 	// Create first process: Vhex.
 	struct process *vhex_process = process_create("Vhex");
@@ -193,9 +180,6 @@ int start(void)
 		kvram_display();
 		while (1) { __asm__ volatile ("sleep"); }
 	}
-
-	// Initialize CPU configuration for the process.
-	vhex_process->context.ssr = 0x40000000;
 
 	// Load programe.
 	//vhex_process->context.spc = (uint32_t)&kernel_test;
@@ -227,31 +211,19 @@ int start(void)
 		}
 	}
 
-	// Test context
-	/*__asm__ volatile (
-		"ldc	%0, ssr;"
-		"ldc	%1, spc;"
-		"mov	%2, r15;"
-		"rte;"
-		"nop;"
-		:
-		: "r"(vhex_process->context.ssr),
-			"r"(&kernel_test), 
-			"r"(vhex_process->context.reg[15])
-		: 
-	);*/
-	
+	// DEBUG !
+	kvram_clear();
+	printk(0, 0, "Initialize scheduler !");
+	printk(0, 1, "Try to start sceduler...");
+	kvram_display();
+	DBG_WAIT;
 
-	// Set the first process
-	// TODO: send the process to the sheduler !!
-	extern struct process *process_current;
-	process_current = vhex_process;
+	// Initialize sheduler !!
+	sched_initialize();
+	sched_add_task(vhex_process);
+	sched_start();
 
-	// Switch to first process.
-	kernel_switch(&vhex_process->context);
-
-	// normally the kernel SHOULD not
-	// arrive here.
+	// normally the kernel SHOULD / CAN not arrive here.
 	kvram_clear();
 	kvram_print(0, 0, "Kernel job fini !");
 	kvram_display();

@@ -16,7 +16,7 @@ ssize_t vfs_write(FILE *file, const void *buf, size_t count)
 		return (-1);
 
 	// Writa with FS specifique primitive and return the numbe of reading bytes.
-	ssize_t write = file->file_op->write(file->private, buf, count, file->cursor);
+	ssize_t write = file->file_op->write(((struct dentry*)file->private)->inode, buf, count, file->cursor);
 	if (write != -1)
 		file->cursor = file->cursor + write;
 	return (write);

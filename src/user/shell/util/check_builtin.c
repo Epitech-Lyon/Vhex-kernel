@@ -1,4 +1,4 @@
-/*#include "util.h"
+#include "util.h"
 #include "builtin.h"
 #include <lib/string.h>
 
@@ -18,7 +18,12 @@ int check_builtin(char *cmd)
 	{
 		if (strcmp(list[i].name, cmd) != 0)
 			continue;
-			
+		
+		// Execute builtin
+		list[i].entry(0, NULL);
+		return (0);
+	}
+	return (-1);
 		// Create subprocess
 		//pid = fork();
 		//if (pid < 0)
@@ -27,19 +32,17 @@ int check_builtin(char *cmd)
 		// If we are the child execute
 		// the builtins.
 		//if (pid == 0)
-		//{
-			dclear();
-			dprint(0, 0, "Child process !!");
-			dprint(0, 1, "PID  = %d", getpid());
-			dprint(0, 2, "PPID = %d", getppid());
-			dupdate();
+//		//{
+//			dclear();
+//			dprint(0, 0, "Child process !!");
+//			dprint(0, 1, "PID  = %d", getpid());
+//			dprint(0, 2, "PPID = %d", getppid());
+//			dupdate();
 
-//			list[i].entry(0, NULL);
-			return (0);
 	//	} else {
 	//		waitpid(pid, &wstatus, WCONTINUED);
 			//TODO: signal handling.
 	//	}
 //	}
 //	return (1);
-}*/
+}

@@ -29,7 +29,7 @@ int vfs_open(FILE *file, char const *pathname, int flags)
 		return (-2);
 	}
 
-	// debug
+	// Debug
 	kvram_clear();
 	printk(0, 0, "vfs_open(): inode found !");
 	printk(0, 1, "path: %s", pathname);
@@ -39,10 +39,11 @@ int vfs_open(FILE *file, char const *pathname, int flags)
 	kvram_display();
 	DBG_WAIT;
 
-	//TODO: update interne dentry counter !!
+	// Update interne dentry counter 
+	dentry->counter = dentry->counter + 1;
 
 	// Initialize new file.
-	file->private = dentry->inode;
+	file->private = dentry;
 	file->permission = dentry->mode & (~__S_IFMT);
 	file->file_op = dentry->dentry_op.file_op;
 	file->cursor = 0;

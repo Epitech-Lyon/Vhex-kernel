@@ -17,7 +17,7 @@ ssize_t vfs_read(FILE *file, void *buf, size_t count)
 	
 	// Read with FS specifique primitive and return the numbe of reading bytes.
 	memset(buf, 0x00, count);
-	ssize_t read = file->file_op->read(file->private, buf, count, file->cursor);
+	ssize_t read = file->file_op->read(((struct dentry*)file->private)->inode, buf, count, file->cursor);
 	if (read != -1)
 		file->cursor = file->cursor + read;
 	return (read);

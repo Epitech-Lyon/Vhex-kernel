@@ -79,6 +79,9 @@ struct dentry
 	// Internal inode 
 	void *inode;
 
+	// Internal counter used by opne() and close()
+	uint32_t counter;
+
 	// Internal file informations
 	mode_t mode;
 
