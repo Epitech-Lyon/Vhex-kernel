@@ -4,7 +4,6 @@
 extern void keysc_handler(void);
 extern void timer_handler(void);
 
-__attribute__((section(".vhex.interrupt"), interrupt_handler))
 void interrupt_handler(void)
 {
 	uint32_t intevt = *(uint32_t*)0xff000028;

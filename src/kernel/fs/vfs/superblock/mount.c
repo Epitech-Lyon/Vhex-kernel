@@ -67,13 +67,13 @@ int vfs_mount(const char *source, const char *target,
 		vfs_root_node->dentry_op.inode_op = &filesystem->inode_operations;
 
 		// Debug !
-		kvram_clear();
+		/*kvram_clear();
 		printk(0, 0, "vfs_root_node = %p", vfs_root_node);
 		printk(0, 1, "vfs_root_node = %s$", vfs_root_node->name);
 		printk(0, 2, "vfs_root_node = %p", vfs_root_node->child);
 		printk(0, 3, "vfs_root_node = %p", vfs_root_node->next);
 		kvram_display();
-		DBG_WAIT;
+		DBG_WAIT;*/
 		return (0);
 	}
 

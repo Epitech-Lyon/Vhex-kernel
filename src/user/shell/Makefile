@@ -3,16 +3,16 @@
 ##	Project: Vhex - On-calc debugger
 ##	Author: yann.magnin@epitech.eu
 ## ---
-include ../../global.mk
+include ../../../global.mk
 
 ##---
 ##	Static variables
 ##--
-HEADER		:= -I../../include -I../../include/user
-LIBS		:= -L../lib/ -l_unistd -l_stdio -l_string -l_display
-BUILD		:= ../../build/user
-DEBUG		:= ../../debug
-OUTPUT		:= ../../output
+HEADER		:= -I../../../include -I../../../include/user
+LIBS		:= -L../../lib/ -l_unistd -l_stdio -l_string -l_display
+BUILD		:= ../../../build/user/shell
+DEBUG		:= ../../../debug
+OUTPUT		:= ../../../output
 
 NAME		:= shell
 EXEC		:= $(OUTPUT)/$(NAME).elf
@@ -26,7 +26,7 @@ MEMORY_MAP	:= $(DEBUG)/$(NAME).map
 ##	Automated variables
 ##---
 SRC		:=
-DIRECTORY	:= $(shell find shell -not -path "*/\.*" -type d)
+DIRECTORY	:= $(shell find . -not -path "*/\.*" -type d)
 # Get all source files
 $(foreach path,$(DIRECTORY),$(eval		\
 	SRC	+= $(wildcard $(path)/*.c)	\
@@ -34,7 +34,7 @@ $(foreach path,$(DIRECTORY),$(eval		\
 			$(wildcard $(path)/*.s)	\
 ))
 # Geneate all object files
-OBJ	:= $(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))))
+OBJ	:= $(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))))
 
 
 
@@ -75,7 +75,7 @@ sec:
 ##	  Automated rules
 ##---
 define rule-src
-$(patsubst %,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1
+$(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1
 	@ printf "compiling $(white)$$<$(nocolor)..."
 	@ $(CC) -fPIC $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
 	@ printf "$(green)[ok]$(nocolor)\n"

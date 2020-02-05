@@ -1,4 +1,4 @@
-.global	_test
+/*.global	_test
 .type	_test, @function
 
 .align 2
@@ -20,4 +20,4 @@ _test:
 .align 4
 .syscall_entry:	.long 0xa0010070
 .syscall_vram:	.long 0x00000135
-.end
+.end*/

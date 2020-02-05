@@ -174,9 +174,9 @@ int start(void)
 	if (vhex_process == NULL)
 	{
 		kvram_clear();
-		kvram_print(0, 0, "Vhex fatal error !");
-		kvram_print(0, 1, "First process error !");
-		kvram_print(0, 2, "Wait manual reset...");
+		printk(0, 0, "Vhex fatal error !");
+		printk(0, 1, "First process error !");
+		printk(0, 2, "Wait manual reset...");
 		kvram_display();
 		while (1) { __asm__ volatile ("sleep"); }
 	}
@@ -188,9 +188,9 @@ int start(void)
 	{
 		// Display message.
 		kvram_clear();
-		kvram_print(0, 0, "Vhex fatal error !");
-		kvram_print(0, 1, "File \"VHEX/shell.elf\" not found !");
-		kvram_print(0, 2, "Press [MENU key]...");
+		printk(0, 0, "Vhex fatal error !");
+		printk(0, 1, "File \"VHEX/shell.elf\" not found !");
+		printk(0, 2, "Press [MENU key]...");
 		kvram_display();
 
 		// Restore Casio context.
@@ -225,7 +225,7 @@ int start(void)
 
 	// normally the kernel SHOULD / CAN not arrive here.
 	kvram_clear();
-	kvram_print(0, 0, "Kernel job fini !");
+	printk(0, 0, "Kernel job fini !");
 	kvram_display();
 	while (1)
 	{

@@ -10,6 +10,6 @@ void process_constructor(void)
 	// Set all process to idle state.
 	for (int i = 0 ; i < PROCESS_MAX ; i = i + 1)
 	{
-		process_stack[i].status = PROC_IDLE;
+		process_stack[i].status = PROC_UNUSED;
 	}
 }

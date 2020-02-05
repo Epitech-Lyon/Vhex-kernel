@@ -44,10 +44,10 @@ save_current_context:
 	! @note: current process can be NULL !
 	tst	r4, r4					! if current task == NULL...
 	bt	context_load				! ...if yes, jump at <context_switch> 
-	add	#88, r4					! get &process->context (end)
+	add	#84, r4					! get &process->context (end)
 
 	! save current context
-	sts.l	pr, @-r4				! get pr regsiter
+	!sts.l	pr, @-r4				! get pr regsiter
 	stc.l	spc, @-r4				! get spc regsiter
 	stc.l	ssr, @-r4				! get ssr regsiter
 	sts.l	mach, @-r4				! get mach regsiter
@@ -95,7 +95,7 @@ context_load:
 	lds.l	@r5+, mach				! set mach regsiter
 	ldc.l	@r5+, ssr				! set ssr regsiter
 	ldc.l	@r5+, spc				! set spc regsiter
-	lds.l	@r5+, pr				! set pr regsiter
+	!lds.l	@r5+, pr				! set pr regsiter
 
 
 	! Process switch

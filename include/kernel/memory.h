@@ -15,7 +15,7 @@ struct pm_block_cache_s
 	} status;
 
 	// Space informations.
-	uint16_t start;
+	uint32_t start;
 	uint32_t end;
 
 	// Linked list

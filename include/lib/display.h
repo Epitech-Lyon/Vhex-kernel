@@ -6,7 +6,8 @@
 
 // Draw primtives
 extern void dclear(void);
-extern void dprint(int x, int y, char const *str);
+extern void dclr_str_area(int x, int y, int with, int height);
+extern void dprint(int x, int y, char const *str, ...);
 extern void dascii(int x, int y, char const c);
 extern void dreverse(int x, int y, int width, int height);
 extern void dscroll(int line);

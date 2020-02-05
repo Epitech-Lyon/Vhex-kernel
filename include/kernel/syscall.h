@@ -14,6 +14,8 @@ extern pid_t sys_fork(void);
 extern pid_t sys_getpid(void);
 extern pid_t sys_getppid(void);
 extern pid_t sys_waitpid(pid_t pid, int *wstatus, int options);
+extern pid_t sys_fexecve(const char *pathname);
+extern void sys_exit(int status);
 
 extern int sys_open(const char *pathname, int flags, ...);
 extern ssize_t sys_write(int fd, const void *buf, size_t count);

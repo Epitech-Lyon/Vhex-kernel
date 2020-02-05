@@ -42,7 +42,8 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	keyboard.saved.tty.cursor.y = tty.cursor.y;
 
 	// Initialize timer for cursor.
-	timer_fd = timer_install(&cursor_callback, &keyboard, 500, 1);
+	// FIXME: find real ticks value !!
+	timer_fd = timer_install(&cursor_callback, &keyboard, 500 * 500 * 2, 1);
 	if (timer_fd == -1)
 		return (0);
 

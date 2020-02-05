@@ -31,6 +31,7 @@ _syscall_pre:
 	! Switch register bank and allow interrupt
 	! @note: user context has been saved
 	! during the `exception_handler_pre`
+	! TODO: do not allow interrupt ?
 	mov.l	.sr_mask, r1		! get SR mask for BL and IMASK
 	and	r1, r0			! set SR.BL = 0, SR.RB = 0 and SR.IMASK = 0b0000
 	ldc	r0, sr			! update SR regsiter

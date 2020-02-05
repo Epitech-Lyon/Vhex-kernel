@@ -59,10 +59,10 @@ extern int sched_add_task(struct process *process);
 extern void sched_start(void);
 
 /*
-** Save current context of the current task and run the
-** next one based on internal task priority.
+** Get the current task context and the next one
+** based on internal task priority / status.
 */
-extern void sched_schedule(void);
+extern int sched_schedule(common_context_t **current, common_context_t **next);
 
 /*
 ** Internal function wich will switch current process

@@ -62,7 +62,7 @@ int vfs_mknod(const char *pathname, mode_t mode, dev_t dev)
 
 
 	// Debug !
-	kvram_clear();
+	/*kvram_clear();
 	printk(0, 0, "New mknod device !");
 	printk(0, 1, "dentry: %p$", file);
 	printk(0, 2, "inode: %p$", file->inode);
@@ -70,7 +70,7 @@ int vfs_mknod(const char *pathname, mode_t mode, dev_t dev)
 	printk(0, 4, "dev->file_op: %p$", &device->file_op);
 	kvram_display();
 	DBG_WAIT;
-	DBG_WAIT;
+	DBG_WAIT;*/
 
 	// Set file operations
 	file->dentry_op.file_op = &device->file_op;

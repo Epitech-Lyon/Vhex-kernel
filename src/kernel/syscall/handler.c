@@ -12,35 +12,36 @@ static void sys_test(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 	DBG_WAIT;
 }
 
-static const void *sys_handler[15] = {
+static const void *sys_handler[16] = {
 	// Kernel Test
-	sys_test,	//restart
+	sys_test,		// test
 
 	// Process
-	NULL,		//exit
-	sys_waitpid,	//waitpid
-	NULL,		//exec
+	sys_exit,		// exit
+	sys_fexecve,		// fexecve
+	sys_waitpid,		// waitpid
 
 	// VFS
-	sys_read,	//read
-	sys_write,	//write
-	sys_open,	//open
-	sys_close,	//close
-	sys_lseek,	//lseek
+	sys_read,		// read
+	sys_write,		// write
+	sys_open,		// open
+	sys_close,		// close
+	sys_lseek,		// lseek
 
 	// Display
-	kvram_display,	//kvram_display
-	kvram_clear,	//kvram_clear
-	kvram_print,	//kvram_print
-	kvram_ascii,	//kvram_ascii
-	kvram_reverse,	//kvram_reverse
-	kvram_scroll	//kvram_scroll
+	kvram_display,		// kvram_display
+	kvram_clear,		// kvram_clear
+	printk,			// printk
+	kvram_ascii,		// kvram_ascii
+	kvram_reverse,		// kvram_reverse
+	kvram_scroll,		// kvram_scroll
+	kvram_clr_str_area	// kvram_clr_str_area
 };
 
 void *sys_get_handler(int sysno)
 {
 	// Check sysno validity
-	if (sysno < 0 || sysno >= 14)
+	if (sysno < 0 || sysno >= 16)
 		return (0);
 
 	// DEBUG

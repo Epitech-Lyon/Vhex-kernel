@@ -7,6 +7,7 @@
 
 KERNEL	:= output/vhex.g1a
 USER	:= output/shell.elf
+TEST	:= output/test.elf
 
 
 ##---
@@ -15,11 +16,13 @@ USER	:= output/shell.elf
 all:
 	@ make --no-print-directory -C src/lib
 	@ make --no-print-directory -C src/kernel
-	@ make --no-print-directory -C src/user
+	@ make --no-print-directory -C src/user/shell
+	@ make --no-print-directory -C src/user/test
 
 install: all
 	sudo p7 send --force --no-term $(KERNEL)
-	sudo p7 send --force --directory=VHEX $(USER)
+	sudo p7 send --force --no-term --directory=VHEX $(USER)
+	sudo p7 send --force --directory=VHEX $(TEST)
 
 
 
@@ -30,12 +33,15 @@ install: all
 clean:
 	make clean --no-print-directory -C src/lib
 	make clean --no-print-directory -C src/kernel
-	make clean --no-print-directory -C src/user
+	make clean --no-print-directory -C src/user/shell
+	make clean --no-print-directory -C src/user/test
 
 fclean: clean
 	make fclean --no-print-directory -C src/lib
 	make fclean --no-print-directory -C src/kernel
-	make fclean --no-print-directory -C src/user
+	make fclean --no-print-directory -C src/user/shell
+	make fclean --no-print-directory -C src/user/test
+	rm -rf build
 
 re: fclean all
 

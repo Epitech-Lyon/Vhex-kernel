@@ -14,6 +14,7 @@
 #define WUNTRACED	1
 #define WCONTINUED	2
 extern pid_t waitpid(pid_t pid, int *wstatus, int options);
+extern pid_t fexecve(const char *pathname);
 
 // File syscall
 #define O_DIRECT	0

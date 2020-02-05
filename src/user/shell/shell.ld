@@ -27,11 +27,6 @@ SECTIONS
 	.rodata : {
 		*(.rodata);
 		*(.rodata.*);
-
-		/* Builtin */
-		_bbuiltin_section = ALIGN(4) ;
-		*(.builtin);
-		_ebuiltin_section = . ;
 	}
 
 	.data ALIGN(4) : {

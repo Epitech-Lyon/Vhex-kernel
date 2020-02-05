@@ -133,42 +133,49 @@ void kvram_reverse(int x, int y, int width, int height)
 	atomic_stop();
 }
 
-/* kvram_print() - Print string on Video RAM */
-void kvram_print(int x, int y, char const *str)
+/* kvram_clr_str_area() - Clear area based on kernel font size on Video RAM */
+//FIXME: secure
+void kvram_clr_str_area(int x, int y, int width, int height)
 {
-	int default_pos_x;
-	int starting_x;
-	int i;
+	uint32_t vram_offset_y;
+	int cur_x;
+	int cur_y;
 
 	// Initialize part
-	i = -1;
-	starting_x = x;
 	x = x * (KERNEL_FONT_REAL_WIDTH + 1);
 	y = y * (KERNEL_FONT_REAL_HEIGHT + 1);
-	default_pos_x = x;
+	width = width * (KERNEL_FONT_REAL_WIDTH + 1);
+	height = height * (KERNEL_FONT_REAL_HEIGHT + 1);
 
-	// Walk into string and display character by character
-	while (str[++i] != '\0')
+	// Get VRAM offset
+	vram_offset_y = y << 2;
+
+	//DEbug
+	/*kvram_clear();
+	printk(0, 0, "kvram_clr_str_area debug !");
+	printk(0, 1, "x = %d", x);
+	printk(0, 2, "y = %d", y);
+	printk(0, 3, "width = %d", width);
+	printk(0, 4, "height = %d", height);
+	kvram_display();
+	DBG_WAIT;*/
+
+	// Clear area, pixel per pixel x____x
+	// TODO: update me !!!!
+	cur_y = -1;
+	while (++cur_y < height)
 	{
-		// New line
-		if (str[i] == '\n')
+		cur_x = -1;
+		while (++cur_x < width)
 		{
-			y = y + KERNEL_FONT_REAL_HEIGHT + 1;
-			x = default_pos_x;
-			continue;
-		}
-		// Horizontal tab
-		if (str[i] == '\t')
-		{
-			x = x / (KERNEL_FONT_REAL_WIDTH + 1);
-			x = (x + (4 - ((x - starting_x) & 3))) * (KERNEL_FONT_REAL_WIDTH + 1);
-			continue;
+			vram[((x + cur_x) >> 5) + vram_offset_y] &=
+				~(0x80000000 >> ((x + cur_x) & 31));
 		}
 
-		// Default, display character
-		font_draw(x, y, str[i]);
-		x = x + KERNEL_FONT_REAL_WIDTH + 1;
+		// update internal counter
+		vram_offset_y = vram_offset_y + 4;
 	}
+
 }
 
 /* kvram_ascii() - Draw ASCII character into Video RAM */

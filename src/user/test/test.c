@@ -1,8 +1,19 @@
-/*#include <kernel/syscall.h>
+#include <lib/display.h>
 
-void test(void)
+int main(void)
 {
-	uint8_t *vram;
+	uint32_t counter = 0;
+	while (1)
+	{
+		// Display data
+		dclr_str_area(0, 2, 20, 1);
+		dprint(0, 2, "C process: %d", counter);
+		dupdate();
 
-	vram = casio_Bdisp_GetVRAM();
-}*/
+		// Update counter and "wait"
+		counter = counter + 1;
+		if (counter >= 100)
+			counter = 0;
+		for (int i = 0 ; i < 300000 ; ++i);
+	}
+}

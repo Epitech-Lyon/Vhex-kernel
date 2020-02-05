@@ -19,7 +19,7 @@ void *gladfs_mount(void)
 		if (gladfs_superblock.root_inode == NULL)
 		{
 			kvram_clear();
-			kvram_print(0, 0, "GladFS: ROOT inode alloc error !");
+			printk(0, 0, "GladFS: ROOT inode alloc error !");
 			kvram_display();
 			DBG_WAIT;
 		}

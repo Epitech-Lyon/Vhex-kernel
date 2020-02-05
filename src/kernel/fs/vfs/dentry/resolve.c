@@ -24,7 +24,7 @@ static int get_name(int *name_lenght, const char *path, char *name)
 	return (0);
 }
 
-//TODO add '..' handling.
+//TODO: update ?
 struct dentry *vfs_dentry_resolve(const char *path, int mode)
 {
 	extern struct process *process_current;
@@ -114,7 +114,6 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 				printk(0, 3, "name: %s$", name);
 				kvram_display();
 				DBG_WAIT;
-				while (1);
 				return (NULL);
 			}
 		}
@@ -138,7 +137,7 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 
 			// Try to find first child
 			next = vfs_dentry_find_first_child(next);
-			if (next != NULL)
+			/*if (next != NULL)
 			{
 				// Debug !
 				kvram_clear();
@@ -148,7 +147,7 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 				printk(0, 3, "name: %s$", name);
 				kvram_display();
 				DBG_WAIT;
-			}
+			}*/
 
 			// Update name lenght to skip '/' char
 			name_lenght = name_lenght + 1; 

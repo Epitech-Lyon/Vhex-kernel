@@ -14,8 +14,6 @@
 #define PROCESS_NAME_LENGHT		(16)
 #define PROCESS_MAX			(4)
 
-#define PROC_IDLE			(0)
-
 // define process struct.
 //TODO: signal !
 struct process
@@ -93,6 +91,7 @@ struct process_stack
 // Functions.
 extern struct process *process_create(const char *name);
 extern struct process *process_get(pid_t pid);
+extern pid_t process_get_pid(struct process *process);
 extern int process_switch(pid_t pid);
 
 // Internal function.

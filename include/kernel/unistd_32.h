@@ -6,7 +6,7 @@
 
 // Process
 #define __NR_exit 		1
-#define __NR_exec 		2
+#define __NR_fexecve 		2
 #define __NR_waitpid 		3
 
 // VFS
@@ -27,6 +27,7 @@
 #define __NR_kvram_ascii	12
 #define __NR_kvram_reverse	13
 #define __NR_kvram_scroll	14
+#define __NR_kvram_clr_str_area	15
 
 //TODO: keyboard
 
