@@ -13,7 +13,7 @@ uint32_t sched_timer_tstr_bit = 0;
 //void sched_handler(void);
 
 //FIXME: remove me and wrap timer interrupt when occur !!
-static void scheduler_timer_callback(void)
+/*static void scheduler_timer_callback(void)
 {
 	common_context_t *context_current;
 	common_context_t *context_next;
@@ -38,7 +38,7 @@ static void scheduler_timer_callback(void)
 
 	// Context switch	
 	sched_context_switch(context_current, context_next);
-}
+}*/
 
 void sched_start(void)
 {
@@ -93,7 +93,6 @@ void sched_start(void)
 	// @note: I use Po/4 on TMU prescaler
 	// TODO: generate quantum and quantum counter for preemption !
 	uint32_t ticks = (per_freq / 4) / 16;
-	//sched_timer_id = timer_install(scheduler_timer_callback, NULL, ticks, 0);
 	sched_timer_id = timer_install(NULL, NULL, ticks, 0);
 	sched_timer_address = (uint32_t)&SH7305_TMU.TIMER[sched_timer_id].TCR; 
 	sched_timer_intevt = 0x400 + (0x20 * sched_timer_id);

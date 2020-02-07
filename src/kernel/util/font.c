@@ -1,5 +1,6 @@
 #include <kernel/font.h>
 #include <kernel/devices/display.h>
+#include <kernel/atomic.h>
 
 // Font bitmap.
 static const uint8_t kernel_font_bitmap[] = {
@@ -55,9 +56,11 @@ static void font_draw_core(struct font_block_s *fblock)
 	// this is why we use y << 2 because 2^2 = 4.
 	vram_offset_y = fblock->y << 2;
 
+	// Start atomic operations
+	atomic_start();
+
 	// Draw character, pixer per pixel... (x_x)
 	// TODO: update me !!
-	// TODO: atomic operation !!
 	y = -1;
 	while (++y < fblock->height)
 	{
@@ -80,6 +83,9 @@ static void font_draw_core(struct font_block_s *fblock)
 		fblock->bitmap.y = fblock->bitmap.y + KERNEL_FONT_BITMAP_WIDTH; 
 		vram_offset_y = vram_offset_y + 4;
 	}
+
+	// Stop atomic operations
+	atomic_stop();
 }
 
 

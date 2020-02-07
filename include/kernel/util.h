@@ -26,7 +26,8 @@ extern void kvram_clr_str_area(int x, int y, int width, int height);
 extern void printk(int x, int y, char const *str, ...);
 
 // Hardware specific function (do not use !)
-extern void t6k11_display(void *vram);
+extern void t6k11_lcd_driver(void *vram);
+extern void t6k11_variant_lcd_driver(uint8_t *vram);
 
 //---
 //	Timer functions.

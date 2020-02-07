@@ -30,7 +30,11 @@ void kvram_clear(void)
 void kvram_display(void)
 {
 	//TODO: handle screen hadware !
-	t6k11_display(vram);
+	//TODO: load dynamically screen driver during the boot
+	if (*(uint8_t*)0xa0010021 == '3')
+		t6k11_variant_lcd_driver((void*)vram);
+	else
+		t6k11_lcd_driver(vram);
 }
 
 /* kvram_scroll() - Scroll up the Video RAM */
@@ -150,6 +154,9 @@ void kvram_clr_str_area(int x, int y, int width, int height)
 	// Get VRAM offset
 	vram_offset_y = y << 2;
 
+	// Start atomic operations
+	atomic_start();
+
 	//DEbug
 	/*kvram_clear();
 	printk(0, 0, "kvram_clr_str_area debug !");
@@ -176,6 +183,8 @@ void kvram_clr_str_area(int x, int y, int width, int height)
 		vram_offset_y = vram_offset_y + 4;
 	}
 
+	// Stop atomic operations
+	atomic_start();
 }
 
 /* kvram_ascii() - Draw ASCII character into Video RAM */

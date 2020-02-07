@@ -198,7 +198,7 @@ process_switch:
 .sched_schedule:	.long _sched_schedule
 .timer_tstr_register:	.long 0xa4490004
 .timer_unf_field:	.long 0x00000100
-#ifndef __SCHED_DEBUG__
+#ifdef __SCHED_DEBUG__
 .sched_debug:		.long _sched_debug
 #endif
 .end
