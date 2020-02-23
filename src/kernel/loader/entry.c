@@ -1,8 +1,8 @@
 #include <kernel/loader.h>
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/file.h>
-#include <kernel/util.h>
-#include <kernel/elf.h>
+#include <kernel/util/debug.h>
+#include <kernel/util/elf.h>
 
 void *loader(const char *path, struct process *process)
 {

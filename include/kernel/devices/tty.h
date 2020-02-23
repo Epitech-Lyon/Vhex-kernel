@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <kernel/devices/display.h>
 #include <kernel/devices/device.h>
-#include <kernel/types.h>
+#include <kernel/util/types.h>
 
 // Define default buffer size.
 // TODO: remove me ?

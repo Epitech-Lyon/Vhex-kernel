@@ -1,5 +1,4 @@
-#include <kernel/util.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 // Internal symbols
 static volatile uint8_t *sel = (void *)0xb4000000;

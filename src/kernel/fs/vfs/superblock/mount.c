@@ -1,6 +1,7 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/memory.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
+#include <kernel/util/string.h>
 #include <kernel/fs/stat.h>
 
 // Internal informations

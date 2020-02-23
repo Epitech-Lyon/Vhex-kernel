@@ -1,6 +1,6 @@
 #include <kernel/fs/gladfs.h>
-#include <kernel/atomic.h>
-#include <kernel/util.h>
+#include <kernel/util/atomic.h>
+#include <kernel/util/string.h>
 
 // Internal helper
 extern struct gladfs_fragment_data_s **gladfs_file_pos(off_t *offset, struct gladfs_inode_s *inode, off_t pos);

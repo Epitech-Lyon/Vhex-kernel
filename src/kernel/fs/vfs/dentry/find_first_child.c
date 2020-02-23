@@ -1,6 +1,5 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/memory.h>
-#include <kernel/util.h>
 #include <kernel/fs/stat.h>
 
 //

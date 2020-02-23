@@ -1,8 +1,7 @@
 #include <kernel/loader.h>
 #include <kernel/fs/vfs.h>
 #include <kernel/memory.h>
-#include <kernel/util.h>
-#include <kernel/elf.h>
+#include <kernel/util/string.h>
 
 /* loader_load_image() - Load the program into Virtual Memory */
 void *loader_load_image(FILE *file, Elf32_Ehdr *header, struct process *process)

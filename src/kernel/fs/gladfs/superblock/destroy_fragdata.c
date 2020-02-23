@@ -1,6 +1,6 @@
 #include <kernel/fs/gladfs.h>
 #include <kernel/memory.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 /* gladfs_destroy_fragdata() - Free'd allocated fragmented data (sync) */
 /* @note: *WARNING* no verification will be done, so do not use this primitive */

@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <kernel/types.h>
+#include <kernel/util/types.h>
 #include <kernel/fs/filesystem.h>
 #include <kernel/fs/file.h>
 #include <kernel/devices/device.h>

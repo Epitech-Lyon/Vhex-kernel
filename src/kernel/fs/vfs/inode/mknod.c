@@ -1,6 +1,6 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/stat.h>
-#include <kernel/util.h>
+#include <kernel/util/string.h>
 
 /* gevice_get() - Find internal device */
 struct device *device_get(dev_t major)

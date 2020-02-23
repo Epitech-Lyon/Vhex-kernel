@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/types.h>
+#include <kernel/util/types.h>
 
 # define GLADFS_INODE_NAME_LENGHT	(16)
 

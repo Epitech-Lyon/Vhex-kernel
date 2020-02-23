@@ -1,6 +1,6 @@
 #include <kernel/fs/gladfs.h>
 #include <kernel/memory.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 /* gladfs_destroy_inode() - Free'd allocated inode (sync) */
 /* @note: *WARNING* no verification will be done, so do not use this primitive */

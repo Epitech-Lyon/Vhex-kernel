@@ -12,7 +12,6 @@
 .extern	_atomic_counter
 
 .align 2
-/*TODO: Fix reentrace corruption !!!*/
 /*
 ** @proto: uint32_t atomic_start(void)
 ** @return:
@@ -46,7 +45,6 @@ atomic_start_exit:
 	rts				! exit.
 	nop				! (db) nop.
 
-/*TODO: Fix reentrace corruption !!!*/
 /*
 ** @proto: uint32_t atomic_stop(void)
 ** @return:

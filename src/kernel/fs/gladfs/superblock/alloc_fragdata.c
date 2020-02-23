@@ -1,6 +1,6 @@
 #include <kernel/fs/gladfs.h>
 #include <kernel/memory.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 /* gladfs_alloc_fragdata() - Superblock primitive to alloc "empty" fragment data block (sync) */
 int gladfs_alloc_fragdata(struct gladfs_fragment_data_s **parent, int nb_block)

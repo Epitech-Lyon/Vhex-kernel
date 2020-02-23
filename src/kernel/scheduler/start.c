@@ -1,7 +1,8 @@
 #include <kernel/scheduler.h>
 #include <kernel/hardware/cpg.h>
 #include <kernel/hardware/tmu.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
+#include <kernel/util/timer.h>
 
 // Internal data used by the scheduler handler
 uint32_t sched_timer_id = 0;
@@ -92,7 +93,7 @@ void sched_start(void)
 	// Setup TMU0 (scheduler) interrupt !
 	// @note: I use Po/4 on TMU prescaler
 	// TODO: generate quantum and quantum counter for preemption !
-	uint32_t ticks = (per_freq / 4) / 16;
+	uint32_t ticks = (per_freq / 4) / 32;
 	sched_timer_id = timer_install(NULL, NULL, ticks, 0);
 	sched_timer_address = (uint32_t)&SH7305_TMU.TIMER[sched_timer_id].TCR; 
 	sched_timer_intevt = 0x400 + (0x20 * sched_timer_id);

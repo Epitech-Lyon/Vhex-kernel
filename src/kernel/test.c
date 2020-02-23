@@ -1,13 +1,13 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/devices/tty.h>
 #include <kernel/memory.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
+#include <kernel/util/draw.h>
+#include <kernel/util/string.h>
 
 // Tree-wrapper 
 static void vfs_test(struct dentry *node, int level)
 {
-	int curr_line;
-
 	// Check error.
 	if (node == NULL)
 		return;
@@ -29,7 +29,6 @@ void kernel_test(void)
 {
 	extern struct dentry *vfs_root_node;
 	char path[] = "/../dev/./../dev/////tty";
-	void *test;
 	FILE file;
 
 	// Debug !

@@ -1,6 +1,6 @@
 #include <kernel/fs/gladfs.h>
 #include <kernel/fs/stat.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 /* gladfs_mkdir() - Create new folder inode (atomically, sync) */
 void *gladfs_mkdir(void *parent_inode, const char *file_name, mode_t mode)

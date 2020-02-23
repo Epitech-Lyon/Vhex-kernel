@@ -1,7 +1,8 @@
 #include <kernel/devices/tty.h>
 #include <kernel/devices/display.h>
-#include <kernel/atomic.h>
-#include <kernel/util.h>
+#include <kernel/util/atomic.h>
+#include <kernel/util/debug.h>
+#include <kernel/util/string.h>
 
 // Internal TTY object.
 extern struct tty_s tty;
@@ -107,7 +108,6 @@ static void tty_display(void)
 {
 	int saved_start;
 	int line_len;
-	int row_last;
 	int scolumn;
 	int srow;
 	int line;

@@ -1,6 +1,6 @@
 #include <kernel/fs/smemfs.h>
 #include <kernel/fs/filesystem.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
 
 // Kernel FS block
 struct file_system_type smemfs_filesystem =

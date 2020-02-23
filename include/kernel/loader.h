@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <kernel/fs/file.h>
 #include <kernel/process.h>
-#include <kernel/elf.h>
+#include <kernel/util/elf.h>
 
 // Function
 extern void *loader(const char *path, struct process *process);

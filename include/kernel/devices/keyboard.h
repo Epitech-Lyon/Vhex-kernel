@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <kernel/types.h>
+#include <kernel/util/types.h>
 
 #define KEYCODE_GEN(row, column) \
 	(((row & 0x0f) << 4) | ((column & 0x0f) << 0))

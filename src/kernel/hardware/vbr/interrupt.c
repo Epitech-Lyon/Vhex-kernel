@@ -1,4 +1,4 @@
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
 
 // Handler prototype.
 extern void keysc_handler(void);

@@ -1,6 +1,5 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/memory.h>
-#include <kernel/util.h>
 
 struct dentry *vfs_dentry_find_next_sibling(struct dentry *dentry)
 {

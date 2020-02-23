@@ -1,6 +1,5 @@
 #include <kernel/fs/smemfs.h>
-#include <kernel/atomic.h>
-#include <kernel/util.h>
+#include <kernel/util/atomic.h>
 
 /* smemfs_find_first_child() - Find the fist file in the (folder) inode (sync) */
 void *smemfs_find_first_child(void *inode)

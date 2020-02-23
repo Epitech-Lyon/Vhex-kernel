@@ -1,6 +1,6 @@
 #include <kernel/fs/gladfs.h>
-#include <kernel/atomic.h>
-#include <kernel/util.h>
+#include <kernel/util/atomic.h>
+#include <kernel/util/string.h>
 
 /* gladfs_get_name() - Dump the name of a file (sync) */
 int gladfs_get_name(void *inode, char *name, size_t count)

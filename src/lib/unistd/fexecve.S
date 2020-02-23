@@ -1,8 +1,8 @@
+#include <kernel/util/unistd_32.h>
 .text
 .global	_fexecve
 .type	_fexecve, @function
 
-#include "kernel/unistd_32.h"
 
 .align 2
 _fexecve:

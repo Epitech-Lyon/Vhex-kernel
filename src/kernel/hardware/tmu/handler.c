@@ -1,10 +1,10 @@
 #include <kernel/hardware/tmu.h>
-#include <kernel/util.h>
+#include <kernel/util/timer.h>
 
 void timer_handler(void)
 {
 	extern struct timer_cache_s timercache[TIMER_NUMBER];
-	static uint32_t counter = 0;
+	//static uint32_t counter = 0;
 	uint32_t intevt;
 	int timer_ID;
 

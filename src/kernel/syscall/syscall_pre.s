@@ -24,6 +24,12 @@ _syscall_pre:
 	bt.s	syscall_pre_exit	! ...if yes, jump at <syscall_pre_exit>
 	mov	r0, r9			! save kernel handler into unbankable register
 
+	! We should restore the user stack
+	mov.l	.process_current, r10	! get current_process adress
+	mov.l	@r10, r10		! get current process
+	mov.l	r15, @r10		! save current kernel stack
+	mov.l	@(4, r10), r15		! restore user stack
+
 	! Get and save SR register
 	stc	sr, r0			! get SR register
 	mov	r0, r8			! save SR register
@@ -36,22 +42,17 @@ _syscall_pre:
 	and	r1, r0			! set SR.BL = 0, SR.RB = 0 and SR.IMASK = 0b0000
 	ldc	r0, sr			! update SR regsiter
 
-	! We should restore the user stack
-	mov.l	.process_current, r10	! get current_process adress
-	mov.l	@r10, r10		! get current process
-	mov.l	r15, @r10		! save current kernel stack
-	mov.l	@(4, r10), r15		! restore user stack
-
 	! Call kernel abstraction
 	jsr	@r9			! call system handler
 	nop				! (db) nop.
+
+	! Restore SR regsiter
+	ldc	r8, sr			! SR.BL = 1, SR.RB = 1 and SR.IMASK = old mask.
 
 	! Switch stack
 	mov.l	r15, @(4, r10)		! save user stack
 	mov.l	@r10, r15		! restore kernel stack
 
-	! Restore SR regsiter
-	ldc	r8, sr			! SR.BL = 1, SR.RB = 1 and SR.IMASK = old mask.
 
 syscall_pre_exit:
 	! Restore used regsiter.

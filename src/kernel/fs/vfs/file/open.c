@@ -1,6 +1,6 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/stat.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
 
 /* vfs_open() - Open file named pathname */
 int vfs_open(FILE *file, char const *pathname, int flags)

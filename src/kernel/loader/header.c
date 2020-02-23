@@ -1,7 +1,5 @@
 #include <kernel/loader.h>
 #include <kernel/fs/vfs.h>
-#include <kernel/util.h>
-#include <kernel/elf.h>
 
 /* loader_get_header() - get ELF header and check validity */
 int loader_get_header(FILE *file, Elf32_Ehdr *header)

@@ -2,7 +2,7 @@
 #include <kernel/devices/display.h>
 #include <kernel/hardware/ubc.h>
 #include <kernel/syscall.h>
-#include <kernel/extra.h>
+#include <kernel/util/extra.h>
 
 
 // Internal function.

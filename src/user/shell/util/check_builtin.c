@@ -18,7 +18,6 @@
 	//}
 };*/
 
-
 //TODO: use agc, argv.
 int check_builtin(char *cmd)
 {
@@ -45,6 +44,7 @@ int check_builtin(char *cmd)
 		dclr_str_area(0, 1, 20, 1);
 		dprint(0, 1, "P process: %d", counter);
 		dupdate();
+
 		counter = counter + 1;
 		for (int i = 0 ; i < 30000 ; ++i);
 	}

@@ -1,7 +1,8 @@
 #include <kernel/process.h>
-#include <kernel/unistd_32.h>
+#include <kernel/util/unistd_32.h>
 #include <kernel/memory.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
+#include <kernel/util/string.h>
 
 struct process *process_create(const char *name)
 {

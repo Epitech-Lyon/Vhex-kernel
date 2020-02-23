@@ -1,5 +1,5 @@
 #include <kernel/syscall.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
 
 static void sys_test(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 {
@@ -42,7 +42,7 @@ void *sys_get_handler(int sysno)
 {
 	// Check sysno validity
 	if (sysno < 0 || sysno >= 16)
-		return (0);
+		return (NULL);
 
 	// DEBUG
 	/*kvram_clear();

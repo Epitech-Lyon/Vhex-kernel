@@ -1,5 +1,4 @@
 #include <kernel/fs/vfs.h>
-#include <kernel/util.h>
 
 ssize_t vfs_write(FILE *file, const void *buf, size_t count)
 {

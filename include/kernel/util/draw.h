@@ -1,5 +1,5 @@
-#ifndef __KERNEL_FONT_H__
-# define __KERNEL_FONT_H__
+#ifndef __KERNEL_UTIL_DRAW_H__
+# define __KERNEL_UTIL_DRAW_H__
 
 #include <stddef.h>
 #include <stdint.h>
@@ -28,7 +28,14 @@ struct font_block_s
 	int16_t y;
 };
 
-// Font function.
-extern void font_draw(int x, int y, char n);
 
-#endif /*__KERNEL_FONT_H__*/
+
+// Prototype
+extern void kvram_clear(void);
+extern void kvram_display(void);
+extern void kvram_scroll(int lines);
+extern void kvram_reverse(int x, int y, int width, int height);
+extern void kvram_clr_str_area(int x, int y, int width, int height);
+extern void kvram_ascii(int x, int y, char const c);
+
+#endif /*__KERNEL_UTIL_DRAW_H__*/

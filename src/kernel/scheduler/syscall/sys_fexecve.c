@@ -1,14 +1,13 @@
 #include <kernel/process.h>
 #include <kernel/scheduler.h>
 #include <kernel/loader.h>
-#include <kernel/atomic.h>
-#include <kernel/util.h>
+#include <kernel/util/atomic.h>
+#include <kernel/util/debug.h>
 
 pid_t sys_fexecve(const char *pathname)
 {
 	struct process *proc;
 	pid_t child_pid;
-	FILE *bin;
 	int error;
 
 	// Start atomic operation

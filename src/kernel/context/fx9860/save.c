@@ -3,7 +3,7 @@
 #include <kernel/hardware/power.h>
 #include <kernel/hardware/intc.h>
 #include <kernel/hardware/tmu.h>
-#include <kernel/vbr.h>
+#include <kernel/util/extra.h>
 
 void fx9860_context_save(fx9860_context_t *context)
 {

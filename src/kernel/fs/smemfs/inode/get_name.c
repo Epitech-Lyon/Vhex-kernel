@@ -1,5 +1,5 @@
 #include <kernel/fs/smemfs.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 /* smemfs_get_name() - Dump the name of a file (sync) */
 int smemfs_get_name(void *inode, char *buf, size_t count)

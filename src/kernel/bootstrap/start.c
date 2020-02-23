@@ -1,17 +1,16 @@
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/types.h>
+#include <kernel/util/types.h>
+#include <kernel/util/atomic.h>
+#include <kernel/util/debug.h>
+#include <kernel/util/string.h>
+#include <kernel/util/casio.h>
 #include <kernel/context.h>
-#include <kernel/atomic.h>
 #include <kernel/process.h>
 #include <kernel/syscall.h>
 #include <kernel/scheduler.h>
-#include <kernel/util.h>
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/stat.h>
-#include <kernel/util.h>
-
-//TODO: remove me !
 #include <kernel/fs/smemfs.h>
 #include <kernel/fs/gladfs.h>
 #include <kernel/loader.h>

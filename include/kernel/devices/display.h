@@ -3,8 +3,8 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <kernel/types.h>
-#include <kernel/font.h>
+#include <kernel/util/types.h>
+#include <kernel/util/draw.h>
 
 // Define screen informations.
 #define DISPLAY_SCREEN_WIDTH		(128)

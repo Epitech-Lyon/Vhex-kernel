@@ -1,4 +1,4 @@
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
 
 __attribute__((section(".vhex.tlb"), interrupt_handler))
 void tlb_handler(void)

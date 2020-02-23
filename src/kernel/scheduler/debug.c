@@ -1,6 +1,6 @@
 #include <kernel/context.h>
 #include <kernel/hardware/tmu.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
 
 // Test
 uint32_t counter = 0;

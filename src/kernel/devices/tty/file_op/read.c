@@ -1,9 +1,12 @@
 #include <kernel/devices/tty.h>
 #include <kernel/devices/keyboard.h>
 #include <kernel/context.h>
-#include <kernel/atomic.h>
 #include <kernel/syscall.h>
-#include <kernel/util.h>
+#include <kernel/util/atomic.h>
+#include <kernel/util/debug.h>
+#include <kernel/util/string.h>
+#include <kernel/util/timer.h>
+#include <kernel/util/casio.h>
 
 // Intenral functions
 static void wait_keyboard_event(void);
@@ -117,7 +120,6 @@ static int check_special(struct keyboard_obj_s *keyboard, key_t key)
 {
 	extern fx9860_context_t casio_context;
 	extern fx9860_context_t vhex_context;
-	unsigned int tmp;
 
 	switch (key)
 	{

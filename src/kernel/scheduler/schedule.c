@@ -1,6 +1,4 @@
 #include <kernel/scheduler.h>
-#include <kernel/atomic.h>
-#include <kernel/util.h>
 
 //TODO: assembly !
 // @note: This part *SHOULD* be exeption safe !

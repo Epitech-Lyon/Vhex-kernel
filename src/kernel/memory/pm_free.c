@@ -1,5 +1,5 @@
 #include <kernel/memory.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
 
 void pm_free(void *ptr)
 {

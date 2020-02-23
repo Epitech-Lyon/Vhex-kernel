@@ -1,6 +1,6 @@
 #include <kernel/fs/smemfs.h>
 #include <kernel/fs/stat.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 /* smemfs_get_mode() - Return the permission dans the type of a file (sync) */
 mode_t smemfs_get_mode(void *inode)

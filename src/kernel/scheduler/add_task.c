@@ -1,5 +1,5 @@
 #include <kernel/scheduler.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 static struct sched_task *sched_alloc(void)
 {

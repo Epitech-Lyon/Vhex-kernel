@@ -1,4 +1,4 @@
-#include <kernel/types.h>
+#include <kernel/util/types.h>
 
 /* check_sh3 - Detecting sh3-based MPU */
 static mpu_t check_sh3(uint16_t tplcr)

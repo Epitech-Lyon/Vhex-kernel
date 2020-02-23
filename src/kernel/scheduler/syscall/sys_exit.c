@@ -1,5 +1,5 @@
 #include <kernel/scheduler.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
 
 void sys_exit(int status)
 {

@@ -1,5 +1,5 @@
 #include <kernel/fs/smemfs.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 /* casio_smem_mount() - Mount the file system (sync) */
 void *smemfs_mount(void)

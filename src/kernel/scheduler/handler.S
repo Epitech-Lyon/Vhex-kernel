@@ -66,10 +66,6 @@ get_contexts:
 	mov	r15, r8					! save first context pointer
 	add	#-4, r15				! create second context pointer
 	mov	r15, r9					! save second context pointer
-	add	#-4, r15				! create context pointer
-	mov.l	r15, @r8				! save context pointer
-	add	#-4, r15				! create context pointer
-	mov.l	r15, @r9				! save context pointer
 	
 	! call high level abstraction
 	mov	r8, r4					! send current contexts pointer
@@ -81,7 +77,7 @@ get_contexts:
 	! Restore stack and register (epilogue)
 	mov.l	@r8, r4					! save current context
 	mov.l	@r9, r5					! save next context
-	add	#16, r15				! restore stack
+	add	#8, r15					! restore stack
 	lds.l	@r15+, pr				! restore pr register
 	mov.l	@r15+, r8				! restore r8 register
 	mov.l	@r15+, r9				! restore r9 register

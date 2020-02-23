@@ -1,5 +1,5 @@
 #include <kernel/fs/smemfs.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 /* smemfs_find_parent() - Return the parent inode */
 void *smemfs_find_parent(void *inode)

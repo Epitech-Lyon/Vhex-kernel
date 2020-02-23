@@ -37,7 +37,7 @@ kernel_stack_switch_end:
 	bt	trapa_entry			! ...if yes, jump at <trapa_entry>
 
 	! Call high-level abstraction
-	mov.l	.exception_handler, r0		! get high-level aception abstraction
+	mov.l	.exception_handler, r0		! get high-level exception abstraction
 	jsr	@r0				! call abstraction
 	nop					! (db) nop
 	bra	exception_handler_exit		! jump at <exception_handler_exit>
@@ -45,7 +45,7 @@ kernel_stack_switch_end:
 
 trapa_entry:
 	! Check current process
-	tst	r2, r2				! if current process == NULL...
+	tst	r8, r8				! if current process == NULL...
 	bt	exception_handler_exit		! ...if yes, jump at <exception_handler_exit>
 
 	! Call syscall pre handler

@@ -1,7 +1,8 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/stat.h>
 #include <kernel/process.h>
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
+#include <kernel/util/string.h>
 
 static int get_name(int *name_lenght, const char *path, char *name)
 {

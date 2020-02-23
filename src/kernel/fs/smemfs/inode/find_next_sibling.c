@@ -1,6 +1,5 @@
 #include <kernel/fs/smemfs.h>
-#include <kernel/atomic.h>
-#include <kernel/util.h>
+#include <kernel/util/atomic.h>
 
 /* smemfs_find_next_sibling() - Find the next file from the same parent (sync) */
 void *smemfs_find_next_sibling(void *inode)

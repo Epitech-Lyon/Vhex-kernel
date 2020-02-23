@@ -1,6 +1,6 @@
 #include <kernel/fs/gladfs.h>
-#include <kernel/atomic.h>
-#include <kernel/util.h>
+#include <kernel/util/atomic.h>
+#include <kernel/util/debug.h>
 
 /* gladfs_mount() - GladFS mount primitive (sync) */
 void *gladfs_mount(void)

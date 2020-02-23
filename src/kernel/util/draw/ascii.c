@@ -1,6 +1,6 @@
-#include <kernel/font.h>
+#include <kernel/util/draw.h>
 #include <kernel/devices/display.h>
-#include <kernel/atomic.h>
+#include <kernel/util/atomic.h>
 
 // Font bitmap.
 static const uint8_t kernel_font_bitmap[] = {
@@ -36,7 +36,6 @@ static const uint8_t kernel_font_bitmap[] = {
 	0x99, 0xc1, 0xb1, 0x99, 0x93, 0x2b, 0xb2, 0x9a, 0xa9, 0x20, 0xa3, 0x19,
 	0x92, 0xa9, 0x39, 0x93, 0x03, 0x80
 };
-
 
 static void font_draw_core(struct font_block_s *fblock)
 {
@@ -89,7 +88,8 @@ static void font_draw_core(struct font_block_s *fblock)
 }
 
 
-void font_draw(int x, int y, char c)
+/* kvram_ascii() - Draw ASCII character into Video RAM */
+void kvram_ascii(int x, int y, char const c)
 {
 	struct font_block_s fblock;
 

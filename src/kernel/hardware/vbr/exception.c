@@ -1,4 +1,4 @@
-#include <kernel/util.h>
+#include <kernel/util/debug.h>
 
 void exception_handler(void)
 {

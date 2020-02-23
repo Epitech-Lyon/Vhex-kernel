@@ -6,7 +6,7 @@
 #include <kernel/fs/file.h>
 #include <kernel/fs/filesystem.h>
 #include <kernel/context.h>
-#include <kernel/types.h>
+#include <kernel/util/types.h>
 
 #define PROCESS_NB_OPEN_FILE		(4)
 #define PROCESS_USER_STACK_SIZE		(2 * 1024)

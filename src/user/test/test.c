@@ -6,9 +6,9 @@ int main(void)
 	while (1)
 	{
 		// Display data
-		dclr_str_area(0, 2, 20, 1);
-		dprint(0, 2, "C process: %d", counter);
-		dupdate();
+//		dclr_str_area(0, 2, 20, 1);
+//		dprint(0, 2, "C process: %d", counter);
+//		dupdate();
 
 		// Update counter and "wait"
 		counter = counter + 1;
