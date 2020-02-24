@@ -1,12 +1,12 @@
 #include <kernel/devices/tty.h>
-#include <kernel/devices/keyboard.h>
-#include <kernel/context.h>
-#include <kernel/syscall.h>
+#include <kernel/drivers/keyboard.h>
+#include <kernel/drivers/timer.h>
 #include <kernel/util/atomic.h>
 #include <kernel/util/debug.h>
 #include <kernel/util/string.h>
-#include <kernel/util/timer.h>
 #include <kernel/util/casio.h>
+#include <kernel/context.h>
+#include <kernel/syscall.h>
 
 // Intenral functions
 static void wait_keyboard_event(void);
@@ -21,15 +21,18 @@ static void cursor_callback(struct keyboard_obj_s *keyboard);
 ssize_t tty_read(void *inode, void *buffer, size_t count)
 {
 	extern struct keycache_s *keylist;
-	extern struct tty_s tty;
 	struct keycache_s *keynode;
 	struct keyboard_obj_s keyboard;
+	struct tty_s *tty;
 	int first_key;
 	int timer_fd;
 
 	// Check potential error.
 	if (count < 2)
 		return (0);
+	
+	// get tty device
+	tty = inode;
 
 	// Initialize internal struc.
 	memset(buffer, '\0', count);
@@ -41,8 +44,8 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	keyboard.cvisible = 0;
 
 	// save TTY informations.
-	keyboard.saved.tty.cursor.x = tty.cursor.x;
-	keyboard.saved.tty.cursor.y = tty.cursor.y;
+	keyboard.saved.tty.cursor.x = tty->cursor.x;
+	keyboard.saved.tty.cursor.y = tty->cursor.y;
 
 	// Initialize timer for cursor.
 	// FIXME: find real ticks value !!
@@ -227,7 +230,6 @@ static int check_special(struct keyboard_obj_s *keyboard, key_t key)
 
 static void tty_buffer_display(struct keyboard_obj_s *keyboard)
 {
-	extern struct tty_s tty;
 	size_t size;
 
 	// Restore TTY X/Y axis positions.
@@ -315,7 +317,6 @@ static int buffer_insert(struct keyboard_obj_s *keyboard, char n)
 
 static void cursor_callback(struct keyboard_obj_s *keyboard)
 {
-	extern struct tty_s tty;
 	int x;
 	int y;
 

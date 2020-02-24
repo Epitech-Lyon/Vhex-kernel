@@ -1,14 +1,19 @@
 #include <kernel/devices/tty.h>
 #include <kernel/devices/display.h>
-#include <kernel/devices/keyboard.h>
 #include <kernel/util/string.h>
 
 // Internal TTY object.
 struct tty_s tty;
 
+//TODO: MULTIPLE OPEN !!!!
+//TODO: SHARED TTY DEVICE !!!!
 void *tty_open(dev_t major, dev_t minor)
 {
 	int lines;
+
+	// TODO: handle major / minor ?
+	(void)major;
+	(void)minor;
 
 	// Initialize TTY cursor.
 	tty.cursor.x = 0;
@@ -21,15 +26,5 @@ void *tty_open(dev_t major, dev_t minor)
 	lines = TTY_BUFFER_LINES;
 	while (--lines >= 0)
 		memset(tty.buffer[lines], '\0', TTY_BUFFER_COLUMNS);
-
-	// Set TTY primitives
-	// TODO: Add USB primitives
-	// TODO: update this part.
-	tty.primitives.write = &display_write;
-	tty.primitives.read = &keyboard_read;
-
-	// Call TTY primitives constructor
-	keyboard_open();
-	display_open();
 	return (&tty);
 }

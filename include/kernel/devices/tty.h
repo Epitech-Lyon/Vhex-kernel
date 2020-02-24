@@ -26,14 +26,16 @@ struct tty_s
 			int16_t y;
 		} max;
 	} cursor;
-	struct {
+
+	/*struct {
 		ssize_t (*write)(const void *buffer, size_t count);
 		ssize_t (*read)(void *buffer, size_t count);
-	} primitives;
+	} primitives;*/
 };
 
 // internal strct used by the TTY read primitives
 // TODO: Move me ?
+// TODO: Add internal keyboard buffer  !!!
 struct keyboard_obj_s
 {
 	struct {

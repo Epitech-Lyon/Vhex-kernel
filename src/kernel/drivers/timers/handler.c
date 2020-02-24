@@ -1,5 +1,5 @@
 #include <kernel/hardware/tmu.h>
-#include <kernel/util/timer.h>
+#include <kernel/drivers/timer.h>
 
 void timer_handler(void)
 {

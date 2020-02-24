@@ -14,6 +14,17 @@
 #define KERNEL_FONT_NB_CHAR_X		((KERNEL_FONT_BITMAP_WIDTH / KERNEL_FONT_BITMAP_CWIDTH) + 1)
 #define KERNEL_FONT_NB_CHAR_Y		((KERNEL_FONT_BITMAP_HEIGHT / KERNEL_FONT_BITMAP_CHEIGHT) + 1)
 
+// Define screen informations.
+#define DISPLAY_SCREEN_WIDTH		(128)
+#define DISPLAY_SCREEN_HEIGHT		(64)
+
+// Define Number of vertical lines
+// and horizontal lines.
+#define DISPLAY_VCHAR_MAX		(DISPLAY_SCREEN_HEIGHT / (KERNEL_FONT_REAL_HEIGHT + 1))
+#define DISPLAY_HCHAR_MAX		(DISPLAY_SCREEN_WIDTH / (KERNEL_FONT_REAL_WIDTH + 1))
+
+
+
 // Internal struct used to draw
 // the ASCII character.
 struct font_block_s
@@ -36,6 +47,7 @@ extern void kvram_display(void);
 extern void kvram_scroll(int lines);
 extern void kvram_reverse(int x, int y, int width, int height);
 extern void kvram_clr_str_area(int x, int y, int width, int height);
+extern void kvram_print(int x, int y, const char *string, size_t len);
 extern void kvram_ascii(int x, int y, char const c);
 
 #endif /*__KERNEL_UTIL_DRAW_H__*/
