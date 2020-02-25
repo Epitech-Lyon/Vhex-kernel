@@ -3,10 +3,10 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <kernel/types.h>
+#include <kernel/util/types.h>
 
 // Define syscall LIST
-#include <kernel/unistd_32.h>
+#include <kernel/util/unistd_32.h>
 
 
 //TODO: move me

@@ -23,7 +23,6 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	extern struct keycache_s *keylist;
 	struct keycache_s *keynode;
 	struct keyboard_obj_s keyboard;
-	struct tty_s *tty;
 	int first_key;
 	int timer_fd;
 
@@ -32,7 +31,6 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 		return (0);
 	
 	// get tty device
-	tty = inode;
 
 	// Initialize internal struc.
 	memset(buffer, '\0', count);
@@ -42,14 +40,15 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	keyboard.buffer.clen = 0;
 	keyboard.mode = 0x00;
 	keyboard.cvisible = 0;
+	keyboard.tty = inode;
 
 	// save TTY informations.
-	keyboard.saved.tty.cursor.x = tty->cursor.x;
-	keyboard.saved.tty.cursor.y = tty->cursor.y;
+	keyboard.saved.tty.cursor.x = keyboard.tty->cursor.x;
+	keyboard.saved.tty.cursor.y = keyboard.tty->cursor.y;
 
 	// Initialize timer for cursor.
 	// FIXME: find real ticks value !!
-	timer_fd = timer_install(&cursor_callback, &keyboard, 500 * 500 * 2, 1);
+	timer_fd = timer_install(&cursor_callback, &keyboard, 500 * 500 * 2, TIMER_START);
 	if (timer_fd == -1)
 		return (0);
 
@@ -233,8 +232,8 @@ static void tty_buffer_display(struct keyboard_obj_s *keyboard)
 	size_t size;
 
 	// Restore TTY X/Y axis positions.
-	tty.cursor.x = keyboard->saved.tty.cursor.x;
-	tty.cursor.y = keyboard->saved.tty.cursor.y;
+	keyboard->tty->cursor.x = keyboard->saved.tty.cursor.x;
+	keyboard->tty->cursor.y = keyboard->saved.tty.cursor.y;
 
 	// Workaround for [EXE] key.
 	size =
@@ -325,16 +324,16 @@ static void cursor_callback(struct keyboard_obj_s *keyboard)
 	{
 		// Geneate TTY buffer cursor position.
 		x = keyboard->buffer.cursor + keyboard->saved.tty.cursor.x;
-		y = x / tty.cursor.max.x;
-		x = x - (y * tty.cursor.max.x);
+		y = x / keyboard->tty->cursor.max.x;
+		x = x - (y * keyboard->tty->cursor.max.x);
 		y = y + keyboard->saved.tty.cursor.y;
 		
 		// Save current cursor position and
 		// resotre saved position.
-		int sttyx = tty.cursor.x;
-		int sttyy = tty.cursor.x;
-		tty.cursor.x = x;
-		tty.cursor.y = y;
+		int sttyx = keyboard->tty->cursor.x;
+		int sttyy = keyboard->tty->cursor.x;
+		keyboard->tty->cursor.x = x;
+		keyboard->tty->cursor.y = y;
 
 		// Get Display X and Y position.
 		tty_ioctl(NULL, TTY_IOCTL_GETDX, &x);
@@ -345,8 +344,8 @@ static void cursor_callback(struct keyboard_obj_s *keyboard)
 		kvram_display();
 
 		// Restore TTY cursor position
-		tty.cursor.x = sttyx;
-		tty.cursor.y = sttyy;
+		keyboard->tty->cursor.x = sttyx;
+		keyboard->tty->cursor.y = sttyy;
 
 	}
 	// Update cursor status.

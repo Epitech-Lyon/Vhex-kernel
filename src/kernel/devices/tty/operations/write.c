@@ -130,6 +130,9 @@ static void tty_display(struct tty_s *tty)
 		}
 	}
 
+	// clear screen
+	kvram_clear();
+
 	// Display "on-screen" string lines.
 	y = -1;
 	while (++y < line)
@@ -158,12 +161,18 @@ ssize_t tty_write(void *inode, const void *buffer, size_t count)
 {
 	ssize_t written;
 
+	// Start atomic operation.
+	atomic_start();
+
 	// Update internal buffer and display
 	// TTY on the screen.
 	written = tty_buffer_update(inode, buffer, count);
 
 	// TODO: Monotonic display ?
 	tty_display(inode);
+
+	// Stop atomic operation
+	atomic_stop();
 
 	// Return the number of char written into
 	// TTY's internal buffer.

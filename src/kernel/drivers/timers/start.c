@@ -1,4 +1,4 @@
-#include <kernel/util/timer.h>
+#include <kernel/drivers/timer.h>
 #include <kernel/hardware/tmu.h>
 #include <kernel/util/atomic.h>
 

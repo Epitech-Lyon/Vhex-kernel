@@ -1,4 +1,4 @@
-#include <kernel/util/timer.h>
+#include <kernel/drivers/timer.h>
 #include <kernel/hardware/tmu.h>
 #include <kernel/util/atomic.h>
 
@@ -15,6 +15,9 @@ struct timer_cache_s timercache[TIMER_NUMBER];
 __attribute__((constructor))
 void timer_constructor(void)
 {
+	// Start atomic operations
+	atomic_start();
+
 	// Initialise internal cache
 	for (int i = 0 ; i < TIMER_NUMBER ; i = i + 1)
 	{
@@ -22,9 +25,6 @@ void timer_constructor(void)
 		timercache[i].callback = NULL;
 		timercache[i].arg = NULL;
 	}
-
-	// Start atomic operations
-	atomic_start();
 
 	// Configure TMU
 	SH7305_TMU.TSTR.STR0 = 0;			// Stop timer 0

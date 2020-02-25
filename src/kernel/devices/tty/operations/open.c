@@ -1,5 +1,4 @@
 #include <kernel/devices/tty.h>
-#include <kernel/devices/display.h>
 #include <kernel/util/string.h>
 
 // Internal TTY object.

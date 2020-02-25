@@ -3,9 +3,9 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <kernel/devices/display.h>
-#include <kernel/devices/device.h>
+#include <kernel/drivers/screen.h>
 #include <kernel/util/types.h>
+#include <kernel/util/draw.h>
 
 // Define default buffer size.
 // TODO: remove me ?
@@ -54,6 +54,9 @@ struct keyboard_obj_s
 			} cursor;
 		} tty;
 	} saved;
+
+	// FIXME Dirty place, remove / move me !
+	struct tty_s *tty;
 };
 
 // primitives.

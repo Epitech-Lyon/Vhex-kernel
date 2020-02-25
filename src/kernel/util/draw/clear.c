@@ -1,5 +1,4 @@
 #include <kernel/util/draw.h>
-#include <kernel/devices/display.h>
 #include <kernel/util/atomic.h>
 
 // Internal Video RAM

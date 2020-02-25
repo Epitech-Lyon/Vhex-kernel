@@ -2,7 +2,7 @@
 #include <kernel/hardware/cpg.h>
 #include <kernel/hardware/tmu.h>
 #include <kernel/util/debug.h>
-#include <kernel/util/timer.h>
+#include <kernel/drivers/timer.h>
 
 // Internal data used by the scheduler handler
 uint32_t sched_timer_id = 0;

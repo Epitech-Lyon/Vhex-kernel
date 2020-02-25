@@ -27,8 +27,8 @@ typedef enum mpu_e
 } mpu_t;
 
 typedef int pid_t;
-
 typedef int16_t mode_t;
+typedef uint16_t dev_t;
 typedef uint16_t umode_t;
 
 // Force inline function.

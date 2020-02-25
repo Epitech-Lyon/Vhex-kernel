@@ -13,9 +13,7 @@
 	__attribute__((section(".device")))	\
 	static struct device name##_dev
 
-// Define dev_t
-typedef uint16_t dev_t;
-
+// Struct used to define device
 struct device
 {
 	dev_t major;

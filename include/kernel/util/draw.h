@@ -3,8 +3,9 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <kernel/drivers/screen.h>
 
-// Define font bitmap informations.
+// Define the (hardcoded) font bitmap informations.
 #define KERNEL_FONT_BITMAP_WIDTH	(127)	// Bitmap width
 #define KERNEL_FONT_BITMAP_HEIGHT	(23)	// Bitmap height
 #define KERNEL_FONT_BITMAP_CWIDTH	(4)	// Character width (bitmap)
@@ -14,12 +15,9 @@
 #define KERNEL_FONT_NB_CHAR_X		((KERNEL_FONT_BITMAP_WIDTH / KERNEL_FONT_BITMAP_CWIDTH) + 1)
 #define KERNEL_FONT_NB_CHAR_Y		((KERNEL_FONT_BITMAP_HEIGHT / KERNEL_FONT_BITMAP_CHEIGHT) + 1)
 
-// Define screen informations.
-#define DISPLAY_SCREEN_WIDTH		(128)
-#define DISPLAY_SCREEN_HEIGHT		(64)
-
 // Define Number of vertical lines
 // and horizontal lines.
+// TODO: move me to <kernel/drivers/screen.h> ?
 #define DISPLAY_VCHAR_MAX		(DISPLAY_SCREEN_HEIGHT / (KERNEL_FONT_REAL_HEIGHT + 1))
 #define DISPLAY_HCHAR_MAX		(DISPLAY_SCREEN_WIDTH / (KERNEL_FONT_REAL_WIDTH + 1))
 
