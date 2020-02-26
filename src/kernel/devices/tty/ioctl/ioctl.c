@@ -1,24 +1,29 @@
 #include <kernel/devices/tty.h>
+#include <kernel/util/atomic.h>
 #include <stdarg.h>
 
 void tty_ioctl(void *inode, uint32_t cmd, ...)
 {
-	extern struct tty_s tty;
+	struct tty_s *tty;
 	va_list ap;
 
+	// Start atomic operation
+	atomic_start();
+
+	tty = inode;
 	va_start(ap, cmd);
 	switch (cmd)
 	{
 		case TTY_IOCTL_GETDX:
 		{
 			int *dx = va_arg(ap, int*);
-			*dx = tty.cursor.x * (KERNEL_FONT_REAL_WIDTH + 1);
+			*dx = tty->cursor.x * (KERNEL_FONT_REAL_WIDTH + 1);
 			break;
 		}
 		case TTY_IOCTL_GETDY:
 		{
 			int *dy = va_arg(ap, int*);
-			int start = tty.cursor.y;
+			int start = tty->cursor.y;
 			int saved_start;
 			int line = -1;
 
@@ -26,10 +31,10 @@ void tty_ioctl(void *inode, uint32_t cmd, ...)
 			{
 				// Update check line.
 				saved_start = start;
-				start = (start - 1 < 0) ? tty.cursor.max.y : start - 1;
+				start = (start - 1 < 0) ? tty->cursor.max.y : start - 1;
 
-				// Check if the line existe.
-				if (tty.buffer[start][0] == '\0')
+				// Check if the line exist.
+				if (tty->buffer[start][0] == '\0')
 				{
 					start = saved_start;
 					break;
@@ -40,4 +45,7 @@ void tty_ioctl(void *inode, uint32_t cmd, ...)
 		}
 	}
 	va_end(ap);
+
+	// Stop atomic operation
+	atomic_stop();
 }

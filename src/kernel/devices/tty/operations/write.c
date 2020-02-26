@@ -7,9 +7,10 @@
 static void tty_vertical_update(struct tty_s *tty)
 {
 	// Get next line.
-	tty->cursor.y = 0;
 	if (tty->cursor.y + 1 <= tty->cursor.max.y)
 		tty->cursor.y = tty->cursor.y + 1;
+	else
+		tty->cursor.y = 0;
 
 	// Wipe new line.
 	memset(tty->buffer[tty->cursor.y], '\0', tty->cursor.max.x);

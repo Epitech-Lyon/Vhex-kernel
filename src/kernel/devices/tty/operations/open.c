@@ -2,7 +2,7 @@
 #include <kernel/util/string.h>
 
 // Internal TTY object.
-struct tty_s tty;
+static struct tty_s tty;
 
 //TODO: MULTIPLE OPEN !!!!
 //TODO: SHARED TTY DEVICE !!!!

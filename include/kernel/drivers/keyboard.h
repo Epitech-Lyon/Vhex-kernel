@@ -84,4 +84,7 @@ extern int keyboard_open(void);
 extern ssize_t keyboard_read(void *buffer, size_t count);
 extern int keyboard_close(void);
 
+// Helpers
+extern void keyboard_wait_event(void);
+
 #endif /*__KERNEL_DEVICES_KEYBOARD_H__*/

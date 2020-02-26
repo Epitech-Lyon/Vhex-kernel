@@ -52,11 +52,11 @@ int main(void)
 		input[cmd_size - 1] = '\0';
 
 		// Check buit-in.
-		if (check_builtin(input) != 0)
-		{
+		//if (check_builtin(input) != 0)
+		//{
 			write(fd, input, cmd_size - 1);
 			write(fd, ": command not found\n", 20);
-		}
+		//}
 	}
 	return (0);
 }

@@ -9,12 +9,11 @@
 #include <kernel/syscall.h>
 
 // Intenral functions
-static void wait_keyboard_event(void);
-static int check_special(struct keyboard_obj_s *keyboard, key_t key);
 static int check_signal(struct keyboard_obj_s *keyboard, key_t key);
-static void tty_buffer_display(struct keyboard_obj_s *keyboard);
+static int check_special(struct keyboard_obj_s *keyboard, key_t key);
 static int update_buffer(struct keyboard_obj_s *keyboard, key_t key);
 static int buffer_insert(struct keyboard_obj_s *keyboard, char n);
+static void tty_buffer_display(struct keyboard_obj_s *keyboard);
 static void cursor_callback(struct keyboard_obj_s *keyboard);
 
 //FIXME: this function is device-specifique !!
@@ -56,7 +55,7 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	while ((keyboard.mode & 0x04) == 0)
  	{
 		// Wait user interruption.
-		wait_keyboard_event();
+		keyboard_wait_event();
 
 		// Start atomic operations and check
 		// signal, special key then update
@@ -64,10 +63,9 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 		atomic_start();
 		keynode = keylist;
 		first_key = 0;
-		while (keynode != NULL && (keynode->counter == 1 ||
-					(first_key == 0 &&
-					 keynode->counter > 10 &&
-					 (keynode->counter & 1) == 0)))
+		while (keynode != NULL &&
+			(keynode->counter == 1 ||
+			(first_key == 0 && keynode->counter > 10 && (keynode->counter & 1) == 0)))
 		{
 			// Repeat key flags.
 			first_key = 1;
@@ -80,6 +78,8 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 			// Get next key.
 			keynode = keynode->next;
 		}
+
+		// Stop atomic operations
 		atomic_stop();
 
 		// Display buffer on TTY.
@@ -91,23 +91,6 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	
 	// Return the number of input char.
 	return (keyboard.buffer.clen);
-}
-
-//FIXME: function driver specific !
-static void wait_keyboard_event(void)
-{
-	extern volatile uint8_t keylist_isUpdate;
-
-	// Wait key list update.
-	// @note:
-	// 	To ensure reentrace and avoid data corruption
-	// we should wait kernel indication.
-	// TODO: explain correctly x)
-	while (keylist_isUpdate == 0)
-	{
-		__asm__ volatile ("sleep");
-	}
-	keylist_isUpdate = 0;
 }
 
 static int check_signal(struct keyboard_obj_s *keyboard, key_t key)
@@ -242,7 +225,7 @@ static void tty_buffer_display(struct keyboard_obj_s *keyboard)
 		: keyboard->buffer.clen;
 
 	// Write buffer.
-	tty_write(NULL, keyboard->buffer.addr, size);
+	tty_write(keyboard->tty, keyboard->buffer.addr, size);
 }
 
 static int update_buffer(struct keyboard_obj_s *keyboard, key_t key)
@@ -331,13 +314,14 @@ static void cursor_callback(struct keyboard_obj_s *keyboard)
 		// Save current cursor position and
 		// resotre saved position.
 		int sttyx = keyboard->tty->cursor.x;
-		int sttyy = keyboard->tty->cursor.x;
+		int sttyy = keyboard->tty->cursor.y;
 		keyboard->tty->cursor.x = x;
 		keyboard->tty->cursor.y = y;
 
 		// Get Display X and Y position.
-		tty_ioctl(NULL, TTY_IOCTL_GETDX, &x);
-		tty_ioctl(NULL, TTY_IOCTL_GETDY, &y);
+		// TODO: remove me / find better way !!
+		tty_ioctl(keyboard->tty, TTY_IOCTL_GETDX, &x);
+		tty_ioctl(keyboard->tty, TTY_IOCTL_GETDY, &y);
 
 		// Display cursor.
 		kvram_reverse(x, y, (KERNEL_FONT_REAL_WIDTH + 1), (KERNEL_FONT_REAL_HEIGHT + 1));
