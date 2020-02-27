@@ -14,7 +14,7 @@ include ../../global.mk
 HEADER		:= -I../../include
 BUILD		:= ../../build/kernel
 OUTPUT		:= ../../output
-DEBUG		:= ../../debug
+DEBUG		:= ../../debug_bin
 
 NAME		:= vhex
 EXEC		:= $(OUTPUT)/$(NAME).g1a

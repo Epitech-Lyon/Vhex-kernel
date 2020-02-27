@@ -11,7 +11,7 @@ include ../../../global.mk
 HEADER		:= -I../../../include -I../../../include/user
 LIBS		:= -L../../lib/ -l_unistd -l_stdio -l_string -l_display
 BUILD		:= ../../../build/user/test
-DEBUG		:= ../../../debug
+DEBUG		:= ../../../debug_bin
 OUTPUT		:= ../../../output
 
 NAME		:= test
