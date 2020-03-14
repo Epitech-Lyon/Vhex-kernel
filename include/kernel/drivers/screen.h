@@ -4,8 +4,15 @@
 #include <stddef.h>
 #include <stdint.h>
 
-// Define screen informations.
-#define DISPLAY_SCREEN_WIDTH		(128)
-#define DISPLAY_SCREEN_HEIGHT		(64)
+// Internal enumeration for the
+// screen getter
+typedef enum {
+	SCREEN_WIDTH,
+	SCREEN_HEIGHT
+} screen_getter_t;
+
+// Internal hardware abstract
+extern size_t screen_get(screen_getter_t getter);
+extern void (*screen_update)(void *vram);
 
 #endif /*__KERNEL_DRIVERS_SCREEN_H__*/

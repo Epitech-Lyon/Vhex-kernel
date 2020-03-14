@@ -20,6 +20,7 @@ NAME		:= vhex
 EXEC		:= $(OUTPUT)/$(NAME).g1a
 LDFLAG		:= -T $(NAME).ld
 MEMORY_MAP	:= $(DEBUG)/$(NAME).map
+LIBS		:= -L../lib -lgcc -lstring -ldisplay
 ICON		:= icon.bmp
 
 
@@ -46,10 +47,10 @@ OBJ	:= $(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(basename $(SRC))))
 ##---
 ##	General rules
 ##---
-all: | $(BUILD) $(DEBUG) $(OUTPUT) $(EXEC)
+all: $(OUTPUT) $(EXEC)
 
-$(EXEC): $(OBJ)
-	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf $(OBJ) $(HEADER) -lgcc -L../lib -l_display > $(MEMORY_MAP)
+$(EXEC): $(OBJ) | $(DEBUG)
+	$(CC) -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf $(OBJ) $(HEADER) $(LIBS) > $(MEMORY_MAP)
 	$(OBJCOPY) -R .comment -R .bss -O binary $(DEBUG)/$(NAME).elf $(DEBUG)/$(NAME).bin
 	$(WRAPPER) $(DEBUG)/$(NAME).bin -o $@ -i $(ICON)
 
@@ -84,7 +85,7 @@ sec:
 ##	  Automated rules
 ##---
 define rule-src
-$(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(basename $1))): $1
+$(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(basename $1))): $1 | $(BUILD)
 	@ printf "compiling $(white)$$<$(nocolor)..."
 	@ $(CC) $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
 	@ printf "$(green)[ok]$(nocolor)\n"

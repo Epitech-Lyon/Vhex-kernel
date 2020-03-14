@@ -1,6 +1,6 @@
 # Vhex Kernel
 
-Vhex is a kernel which provide development and retro ingenierie environment for fx9860g.
+Vhex is a kernel which provide retro ingenierie environment for the fx9860g.
 The Casio's OS code is not open-source, but we can read the binary for understand his working.
 There are in particular the syscalls, OS's functions that can be called as a library by the add-ins, which are a gold mine of clues about the functioning of the material.
 
@@ -9,6 +9,9 @@ There are in particular the syscalls, OS's functions that can be called as a lib
 * Loader ELF
 * Scheduler (not prehemptive yet)
 * Driver (EEPROM (read), screen, keyboard, timers)
+* Syscall
+* Virtual File System
+* File System Ext2 on RAM
 
 ## Building
 

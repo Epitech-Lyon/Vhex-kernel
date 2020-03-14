@@ -1,8 +1,8 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/memory.h>
-#include <kernel/util/debug.h>
-#include <kernel/util/string.h>
 #include <kernel/fs/stat.h>
+#include <kernel/devices/earlyterm.h>
+#include <lib/string.h>
 
 // Internal informations
 struct dentry *vfs_root_node = NULL;
@@ -31,6 +31,10 @@ int vfs_mount(const char *source, const char *target,
 		const char *filesystemtype, unsigned long mountflags,
 		const void *data)
 {
+	// TODO: handle source and data !!
+	(void)source;
+	(void)data;
+
 	// Check error.
 	if (filesystemtype == NULL)
 		return (-1);
@@ -53,28 +57,19 @@ int vfs_mount(const char *source, const char *target,
 			return (-1);
 		
 		// Try to mount the FS.
+		// TODO: add possibility to return to main menu
 		vfs_root_node->inode = filesystem->filesystem_operations.mount();
 		if (vfs_root_node->inode == NULL)
 		{
-			kvram_clear();
-			printk(0, 0, "VFS: Unable to mount ROOT inode !");
-			printk(0, 1, "VFS: Wait manual reset...");
-			kvram_display();
+			earlyterm_clear();
+			earlyterm_write("VFS: Unable to mount ROOT inode !");
+			earlyterm_write("Wait manual reset...");
 			while (1) { __asm__ volatile ("sleep"); }
 		}
 
 		// Get File System primitives
 		vfs_root_node->dentry_op.file_op = &filesystem->file_operations;
 		vfs_root_node->dentry_op.inode_op = &filesystem->inode_operations;
-
-		// Debug !
-		/*kvram_clear();
-		printk(0, 0, "vfs_root_node = %p", vfs_root_node);
-		printk(0, 1, "vfs_root_node = %s$", vfs_root_node->name);
-		printk(0, 2, "vfs_root_node = %p", vfs_root_node->child);
-		printk(0, 3, "vfs_root_node = %p", vfs_root_node->next);
-		kvram_display();
-		DBG_WAIT;*/
 		return (0);
 	}
 

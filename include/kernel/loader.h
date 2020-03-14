@@ -8,8 +8,8 @@
 #include <kernel/util/elf.h>
 
 // Function
-extern void *loader(const char *path, struct process *process);
+extern int loader(struct process *process, const char *path);
 extern int loader_get_header(FILE *file, Elf32_Ehdr *header);
-extern void *loader_load_image(FILE *file, Elf32_Ehdr *header, struct process *process);
+extern int loader_load_image(struct process *process, FILE *file, Elf32_Ehdr *header);
 
 #endif /*__KERNEL_LOADER_H__*/

@@ -7,7 +7,7 @@ DEVICE(tty) = {
 	.file_op = {
 		.read = (void *)&tty_read,
 		.write =(void *)&tty_write,
-		.ioctl = &tty_ioctl
+		.ioctl = NULL
 	},
 	.close = &tty_close
 };

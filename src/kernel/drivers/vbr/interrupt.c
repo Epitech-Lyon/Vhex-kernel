@@ -1,4 +1,4 @@
-#include <kernel/util/debug.h>
+#include <kernel/devices/earlyterm.h>
 
 // Handler prototype.
 extern void keysc_handler(void);
@@ -24,13 +24,12 @@ void interrupt_handler(void)
 	}
 
 	// Display error.
-	kvram_clear();
-	printk(0, 0,
+	earlyterm_clear();
+	earlyterm_write(
 		"Ho crap ! Interrupt error !\n"
 		"Interrupt ID (%#x)\n"
 		"Error: handler not foud !\n",
 		intevt
 	);
-	kvram_display();
 	while (1);
 }

@@ -58,3 +58,4 @@ build/
 .tests
 .old
 *.g1a
+debug_bin

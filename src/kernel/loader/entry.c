@@ -1,74 +1,43 @@
 #include <kernel/loader.h>
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/file.h>
-#include <kernel/util/debug.h>
 #include <kernel/util/elf.h>
+#include <kernel/devices/earlyterm.h>
 
-void *loader(const char *path, struct process *process)
+//
+// TODO: write doc
+//
+int loader(struct process *process, const char *path)
 {
 	Elf32_Ehdr header;
 	FILE file;
 
-	// Check error.
-	if (process == NULL)
+	// Check error and try to open the file.
+	if (process == NULL || vfs_open(&file, path, O_RDONLY) != 0)
 	{
-		kvram_clear();
-		printk(0, 0, "loader: Fault error !");
-		printk(0, 1, "path: %s$", path);
-		printk(0, 2, "process: %p", process);
-		kvram_display();
+		earlyterm_write("loader: Fault error !");
+		earlyterm_write("* path: %s$", path);
+		earlyterm_write("* process: %p", process);
 		DBG_WAIT;
-		return (NULL);
+		return (-1);
 	}
-
-	// TODO: use VFS !
-	if (vfs_open(&file, path, O_RDONLY) != 0)
-	{
-		kvram_clear();
-		printk(0, 0, "loader: File open error !");
-		printk(0, 1, "path: %s$", path);
-		kvram_display();
-		DBG_WAIT;
-		return (NULL);
-	}
-
-	// Debug !
-	kvram_clear();
-	printk(0, 0, "File found !!");
-	printk(0, 1, "inode = %p", file.private);
-	printk(0, 2, "path  = %s", path);
-	kvram_display();
-	DBG_WAIT;
 
 	//@NOTE: Only ELF supported !!!
-	//TODO: USE VFS !!
-	//
 	// Get / Check ELF header
+	// FIXME: return the file type (elf, g1a, bin, ...)
 	if (loader_get_header(&file, &header) != 0)
 	{
-		kvram_clear();
-		printk(0, 0, "loader: ELF file header error !");
-		kvram_display();
+		earlyterm_write("loader: ELF file header error !");
 		DBG_WAIT;
-		return (NULL);
+		return (-2);
 	}
 
 	// Get / Check program validity
-	void *entry = loader_load_image(&file, &header, process);
-	if (entry == NULL)
+	if (loader_load_image(process, &file, &header) != 0)
 	{
-		kvram_clear();
-		printk(0, 0, "loader: ELF file image error !");
-		kvram_display();
+		earlyterm_write("loader: ELF file image error !");
 		DBG_WAIT;
-		return (NULL);
+		return (-3);
 	}
-
-	// Success !
-	kvram_clear();
-	printk(0, 0, "loader: file loaded sucees !!");
-	printk(0, 1, "loader: Entry at %p", entry);
-	kvram_display();
-	DBG_WAIT;
-	return (entry);
+	return (0);
 }

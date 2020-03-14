@@ -1,8 +1,8 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/stat.h>
 #include <kernel/process.h>
-#include <kernel/util/debug.h>
-#include <kernel/util/string.h>
+#include <kernel/devices/earlyterm.h>
+#include <lib/string.h>
 
 static int get_name(int *name_lenght, const char *path, char *name)
 {
@@ -39,9 +39,7 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 	// Check VFS validity
 	if (vfs_root_node == NULL)
 	{
-		kvram_clear();
-		printk(0, 0, "VFS root  error !");
-		kvram_display();
+		earlyterm_write("VFS root  error !");
 		DBG_WAIT;
 		return (NULL);
 	}
@@ -107,13 +105,10 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 			next = vfs_dentry_find_next_sibling(next);
 			if (next == NULL)
 			{
-				// Debug !
-				kvram_clear();
-				printk(0, 0, "vfs_resolve(): sibling error !");
-				printk(0, 1, "old next: %s$", tmp->name);
-				printk(0, 2, "file: %s$", file->name);
-				printk(0, 3, "name: %s$", name);
-				kvram_display();
+				earlyterm_write("vfs_resolve(): sibling error !");
+				earlyterm_write("* old next: %s$", tmp->name);
+				earlyterm_write("* file: %s$", file->name);
+				earlyterm_write("* name: %s$", name);
 				DBG_WAIT;
 				return (NULL);
 			}
@@ -129,26 +124,13 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 			if ((file->mode & __S_IFDIR) == 0)
 			{
 				// Debug !
-				kvram_clear();
-				printk(0, 0, "vfs_resolve(): dir error !");
-				kvram_display();
+				earlyterm_write("vfs_resolve(): dir error !");
 				DBG_WAIT;
 				return (NULL);
 			}
 
 			// Try to find first child
 			next = vfs_dentry_find_first_child(next);
-			/*if (next != NULL)
-			{
-				// Debug !
-				kvram_clear();
-				printk(0, 0, "vfs_resolve(): child info !");
-				printk(0, 1, "file name: %s$", file->name);
-				printk(0, 2, "next name: %s$", next->name);
-				printk(0, 3, "name: %s$", name);
-				kvram_display();
-				DBG_WAIT;
-			}*/
 
 			// Update name lenght to skip '/' char
 			name_lenght = name_lenght + 1; 

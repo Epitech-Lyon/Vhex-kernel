@@ -2,11 +2,10 @@
 #include <kernel/drivers/keyboard.h>
 #include <kernel/drivers/timer.h>
 #include <kernel/util/atomic.h>
-#include <kernel/util/debug.h>
-#include <kernel/util/string.h>
 #include <kernel/util/casio.h>
 #include <kernel/context.h>
 #include <kernel/syscall.h>
+#include <lib/string.h>
 
 // Intenral functions
 static int check_signal(struct keyboard_obj_s *keyboard, key_t key);
@@ -20,8 +19,8 @@ static void cursor_callback(struct keyboard_obj_s *keyboard);
 ssize_t tty_read(void *inode, void *buffer, size_t count)
 {
 	extern struct keycache_s *keylist;
-	struct keycache_s *keynode;
 	struct keyboard_obj_s keyboard;
+	struct keycache_s *keynode;
 	int first_key;
 	int timer_fd;
 
@@ -29,8 +28,6 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	if (count < 2)
 		return (0);
 	
-	// get tty device
-
 	// Initialize internal struc.
 	memset(buffer, '\0', count);
 	keyboard.buffer.addr = buffer;
@@ -305,6 +302,9 @@ static void cursor_callback(struct keyboard_obj_s *keyboard)
 	// Draw cursor if needed
 	if (keyboard->cvisible == 0)
 	{
+		// Force atomic operation
+		atomic_start();
+
 		// Geneate TTY buffer cursor position.
 		x = keyboard->buffer.cursor + keyboard->saved.tty.cursor.x;
 		y = x / keyboard->tty->cursor.max.x;
@@ -318,19 +318,24 @@ static void cursor_callback(struct keyboard_obj_s *keyboard)
 		keyboard->tty->cursor.x = x;
 		keyboard->tty->cursor.y = y;
 
-		// Get Display X and Y position.
-		// TODO: remove me / find better way !!
-		tty_ioctl(keyboard->tty, TTY_IOCTL_GETDX, &x);
-		tty_ioctl(keyboard->tty, TTY_IOCTL_GETDY, &y);
+		// Get "real" X and Y position (pixel)
+		x = x * (keyboard->tty->disp.font->font.width + 1);
+		y = y * (keyboard->tty->disp.font->font.height + 1);
 
 		// Display cursor.
-		kvram_reverse(x, y, (KERNEL_FONT_REAL_WIDTH + 1), (KERNEL_FONT_REAL_HEIGHT + 1));
-		kvram_display();
+		dreverse(
+			&keyboard->tty->disp, x, y,
+			(keyboard->tty->disp.font->font.width + 1),
+			(keyboard->tty->disp.font->font.height + 1)
+		);
+		(*screen_update)(keyboard->tty->disp.vram);
 
 		// Restore TTY cursor position
 		keyboard->tty->cursor.x = sttyx;
 		keyboard->tty->cursor.y = sttyy;
 
+		// Stop atomic operations
+		atomic_stop();
 	}
 	// Update cursor status.
 	keyboard->cvisible = keyboard->cvisible ^ 1;

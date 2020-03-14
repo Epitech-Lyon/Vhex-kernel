@@ -9,7 +9,6 @@ include ../../../global.mk
 ##	Static variables
 ##--
 HEADER		:= -I../../../include -I../../../include/user
-LIBS		:= -L../../lib/ -l_unistd -l_stdio -l_string -l_display
 BUILD		:= ../../../build/user/shell
 DEBUG		:= ../../../debug_bin
 OUTPUT		:= ../../../output
@@ -18,6 +17,7 @@ NAME		:= shell
 EXEC		:= $(OUTPUT)/$(NAME).elf
 LDFLAG		:= -T $(NAME).ld
 MEMORY_MAP	:= $(DEBUG)/$(NAME).map
+LIBS		:= -L../../lib -lstring -ldisplay -lunistd -lgcc
 
 
 
@@ -42,10 +42,10 @@ OBJ	:= $(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))
 ##---
 ##	General rules
 ##---
-all: | $(BUILD) $(DEBUG) $(EXEC)
+all: $(EXEC)
 
-$(EXEC): $(OBJ)
-	$(CC) -fPIC -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf.big $(OBJ) $(HEADER) $(LIBS) -lgcc > $(MEMORY_MAP)
+$(EXEC): $(OBJ) | $(DEBUG)
+	$(CC) -fPIC -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf.big $(OBJ) $(HEADER) $(LIBS) > $(MEMORY_MAP)
 	$(OBJCOPY) -S $(DEBUG)/$(NAME).elf.big $@
 	rm -f $(DEBUG)/$(NAME).elf.big
 
@@ -75,7 +75,7 @@ sec:
 ##	  Automated rules
 ##---
 define rule-src
-$(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1
+$(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1 | $(BUILD)
 	@ printf "compiling $(white)$$<$(nocolor)..."
 	@ $(CC) -fPIC $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
 	@ printf "$(green)[ok]$(nocolor)\n"

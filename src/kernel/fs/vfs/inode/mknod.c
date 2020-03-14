@@ -1,6 +1,6 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/stat.h>
-#include <kernel/util/string.h>
+#include <lib/string.h>
 
 /* gevice_get() - Find internal device */
 struct device *device_get(dev_t major)
@@ -59,7 +59,6 @@ int vfs_mknod(const char *pathname, mode_t mode, dev_t dev)
 	file->inode = device->open(dev_get_major(dev), dev_get_minor(dev));
 	if (file->inode == NULL)
 		return (-4);
-
 
 	// Debug !
 	/*kvram_clear();

@@ -1,6 +1,6 @@
 #include <kernel/fs/gladfs.h>
 #include <kernel/util/atomic.h>
-#include <kernel/util/debug.h>
+#include <kernel/devices/earlyterm.h>
 
 /* gladfs_mount() - GladFS mount primitive (sync) */
 void *gladfs_mount(void)
@@ -18,9 +18,7 @@ void *gladfs_mount(void)
 		gladfs_superblock.root_inode = gladfs_superblock.super_op.alloc_inode("/", GLADFS_INODE_TYPE_ROOT);
 		if (gladfs_superblock.root_inode == NULL)
 		{
-			kvram_clear();
-			printk(0, 0, "GladFS: ROOT inode alloc error !");
-			kvram_display();
+			earlyterm_write("GladFS: ROOT inode alloc error !");
 			DBG_WAIT;
 		}
 	}

@@ -1,8 +1,8 @@
 #include <kernel/process.h>
 #include <kernel/util/unistd_32.h>
 #include <kernel/memory.h>
-#include <kernel/util/debug.h>
-#include <kernel/util/string.h>
+#include <kernel/devices/earlyterm.h>
+#include <lib/string.h>
 
 struct process *process_create(const char *name)
 {
@@ -19,9 +19,7 @@ struct process *process_create(const char *name)
 	process_pid = process_alloc(&process);
 	if (process == NULL)
 	{
-		kvram_clear();
-		printk(0, 0, "proc_error: alloc error !");
-		kvram_display();
+		earlyterm_write("proc_error: alloc error !");
 		DBG_WAIT;
 		return (NULL);
 	}
@@ -31,9 +29,7 @@ struct process *process_create(const char *name)
 	process->memory.stack.user = (uint32_t)pm_alloc(process->memory.stack.size.user);
 	if (process->memory.stack.user == 0x00000000)
 	{
-		kvram_clear();
-		printk(0, 0, "proc_error: user stack error !");
-		kvram_display();
+		earlyterm_write("proc_error: user stack error !");
 		DBG_WAIT;
 		process_free(process);
 		return (NULL);
@@ -45,9 +41,7 @@ struct process *process_create(const char *name)
 	process->memory.stack.kernel = (uint32_t)pm_alloc(process->memory.stack.size.kernel);
 	if (process->memory.stack.kernel == 0x00000000)
 	{
-		kvram_clear();
-		printk(0, 0, "proc_error: kernel stack error !");
-		kvram_display();
+		earlyterm_write("proc_error: kernel stack error !");
 		DBG_WAIT;
 		pm_free((void *)process->memory.stack.user);
 		process_free(process);
@@ -56,12 +50,14 @@ struct process *process_create(const char *name)
 	process->stack.kernel = process->memory.stack.kernel + process->memory.stack.size.kernel;
 
 	// initialize "exit" part.
-	uint8_t callexit[6] = {
+	// FIXME: add xor r4, r4
+	uint8_t callexit[8] = {
+		0b00100100, 0b01001010,	// xor r4, r4
 		0b11000011, __NR_exit,	// trapa #__NR_exit
 		0b10110000, 0b00000100,	// bsr PC + 2 - 4
 		0b00000000, 0b00001001	// nop
 	};
-	process->memory.exit.size = 6;
+	process->memory.exit.size = 8;
 	process->memory.exit.start = (uint32_t)(pm_alloc(process->memory.exit.size));
 	if (process->memory.exit.start == 0x00000000)
 	{
@@ -99,11 +95,9 @@ struct process *process_create(const char *name)
 	process->working_dir = vfs_root_node;
 
 	// DEBUG !
-	kvram_clear();
-	printk(0, 0, "proc_create: success !");
-	printk(0, 1, "user stack:   %p", process->context.reg[15]);
-	printk(0, 2, "kernel stack: %p", process->memory.stack.kernel);
-	kvram_display();
+	earlyterm_write("proc_create: success !\n");
+	earlyterm_write("* user stack:   %p\n", process->context.reg[15]);
+	earlyterm_write("* kernel stack: %p\n", process->memory.stack.kernel);
 	DBG_WAIT;
 
 	// Link new process with his parent.

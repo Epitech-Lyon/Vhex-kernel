@@ -28,7 +28,7 @@ $(foreach mod,$(TARGET-MODULES),$(eval 							\
 	target-$(mod)-obj	:= $$(subst /,_,$$(basename $$(target-$(mod)-src)))	$n\
 	target-$(mod)-obj	:= $$(patsubst %,$(BUILD)%.o,$$(target-$(mod)-obj))	$n\
 ))
-TARGET-LIBS	:= $(patsubst %,lib_%.a,$(TARGET-MODULES))
+TARGET-LIBS	:= $(patsubst %,lib%.a,$(TARGET-MODULES))
 
 
 
@@ -36,7 +36,7 @@ TARGET-LIBS	:= $(patsubst %,lib_%.a,$(TARGET-MODULES))
 #-------		--------#
 #	Generic rules		#
 #-------		--------#
-all: | $(BUILD) $(TARGET-LIBS)
+all: $(TARGET-LIBS)
 
 $(BUILD):
 	@ printf "Create $(blue)$@$(nocolor) directory\n"
@@ -56,13 +56,13 @@ debug:
 #	Rule functions		#
 #-------		--------#
 define rule-src
-$(patsubst %,$(BUILD)%.o,$(subst /,_,$(basename $1))): $1
+$(patsubst %,$(BUILD)%.o,$(subst /,_,$(basename $1))): $1 | $(BUILD) 
 	@ printf "compiling $(white)$$<$(nocolor)..."
 	@ $(CC) $(CFLAGS) -c $$< -o $$@ $(HEADER)
 	@ printf "$(green)[ok]$(nocolor)\n"
 endef
 define rule-link
-$(patsubst %,lib_%.a,$1): $2
+$(patsubst %,lib%.a,$1): $2
 	@ printf "Link $(green)$$@$(nocolor) lib\n"
 	$(AR) crs $$@ $$^
 endef

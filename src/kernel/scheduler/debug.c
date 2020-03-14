@@ -1,6 +1,6 @@
 #include <kernel/context.h>
 #include <kernel/hardware/tmu.h>
-#include <kernel/util/debug.h>
+#include <kernel/devices/earlyterm.h>
 
 // Test
 uint32_t counter = 0;
@@ -24,14 +24,13 @@ void sched_debug(common_context_t *context_current, common_context_t *context_ne
 	//SH7305_TMU.TIMER[1].TCR.UNF = 0;
 	//SH7305_TMU.TIMER[2].TCR.UNF = 0;
 
-	kvram_clear();
-	printk(0, 0, "Scheduler_schudele !");
-	printk(0, 1, "context current = %p", context_current);
-	printk(0, 2, "context next = %p", context_next);
-	printk(0, 3, "counter = %#x", counter++);
-	printk(0, 4, "TSTR: %#x", tstr);
-	printk(0, 5, "TCOR: %#x", tcor);
-	printk(0, 6, "TCNT: %#x", tcnt);
-	printk(0, 7, "TCR:  %#x", tcr);
-	kvram_display();
+	// Display internal data
+	earlyterm_write("Scheduler_schudele !");
+	earlyterm_write("context current = %p", context_current);
+	earlyterm_write("context next = %p", context_next);
+	earlyterm_write("counter = %#x", counter++);
+	earlyterm_write("TSTR: %#x", tstr);
+	earlyterm_write("TCOR: %#x", tcor);
+	earlyterm_write("TCNT: %#x", tcnt);
+	earlyterm_write("TCR:  %#x", tcr);
 }

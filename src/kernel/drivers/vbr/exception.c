@@ -1,4 +1,4 @@
-#include <kernel/util/debug.h>
+#include <kernel/devices/earlyterm.h>
 
 void exception_handler(void)
 {
@@ -18,8 +18,8 @@ void exception_handler(void)
 	);
 
 	// Write exception informations.
-	kvram_clear();
-	printk(0, 0,
+	earlyterm_clear();
+	earlyterm_write(
 		"Ho crap ! Exception !\n"
 		"tra:    %#x\n"
 		"expevt: %#x\n"
@@ -32,6 +32,5 @@ void exception_handler(void)
 		ssr,
 		sr
 	);
-	kvram_display();
 	while (1);
 }

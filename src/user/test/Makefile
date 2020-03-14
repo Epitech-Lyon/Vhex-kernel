@@ -9,7 +9,7 @@ include ../../../global.mk
 ##	Static variables
 ##--
 HEADER		:= -I../../../include -I../../../include/user
-LIBS		:= -L../../lib/ -l_unistd -l_stdio -l_string -l_display
+LIBS		:= -L../../lib/ -lunistd -lstdio -lstring -ldisplay -lgcc
 BUILD		:= ../../../build/user/test
 DEBUG		:= ../../../debug_bin
 OUTPUT		:= ../../../output
@@ -45,7 +45,7 @@ OBJ	:= $(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))
 all: | $(BUILD) $(DEBUG) $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CC) -fPIC -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf.big $(OBJ) $(HEADER) $(LIBS) -lgcc > $(MEMORY_MAP)
+	$(CC) -fPIC -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf.big $(OBJ) $(HEADER) $(LIBS) > $(MEMORY_MAP)
 	$(OBJCOPY) -S $(DEBUG)/$(NAME).elf.big $@
 	rm -f $(DEBUG)/$(NAME).elf.big
 

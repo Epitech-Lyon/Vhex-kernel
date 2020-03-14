@@ -1,7 +1,7 @@
 #include <kernel/fs/gladfs.h>
 #include <kernel/memory.h>
 #include <kernel/util/atomic.h>
-#include <kernel/util/string.h>
+#include <lib/string.h>
 
 /* gladfs_alloc_inode() - Superblock primitive to alloc "empty" inode (sync) */
 struct gladfs_inode_s *gladfs_alloc_inode(const char *name, mode_t mode)

@@ -1,20 +1,26 @@
 #include <stdint.h>
 #include <stddef.h>
+// Internal helpers
 #include <kernel/util/types.h>
 #include <kernel/util/atomic.h>
-#include <kernel/util/debug.h>
-#include <kernel/util/string.h>
 #include <kernel/util/casio.h>
+// Modules
 #include <kernel/context.h>
 #include <kernel/process.h>
 #include <kernel/syscall.h>
 #include <kernel/scheduler.h>
+#include <kernel/loader.h>
+// Devices
+#include <kernel/devices/tty.h>
+#include <kernel/devices/earlyterm.h>
+// File System
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/stat.h>
 #include <kernel/fs/smemfs.h>
 #include <kernel/fs/gladfs.h>
-#include <kernel/loader.h>
-#include <kernel/devices/tty.h>
+// Libs
+#include <lib/display.h>
+#include <lib/string.h>
 
 // Internal symbols
 mpu_t current_mpu = MPU_UNKNOWN;
@@ -78,7 +84,7 @@ static void rom_explore(volatile void *rom, int32_t size)
 /* section_execute() - Used to execute contructors and destructors */
 static void section_execute(void *bsection, void *esection)
 {
-	while ((uint32_t)bsection < (uint32_t)esection)
+	while ((uintptr_t)bsection < (uintptr_t)esection)
 	{
 		((void (*)(void))*((uint32_t*)bsection))();
 		bsection = (void*)((uint32_t)bsection + 4);
@@ -90,9 +96,6 @@ static void section_execute(void *bsection, void *esection)
 __attribute__((section(".pretext")))
 int start(void)
 {
-	extern uint32_t vram[256];
-	int error;
-
 	//--
 	//	Bootstrap part !
 	//--
@@ -120,6 +123,16 @@ int start(void)
 	// before switching the VBR.
 	rom_explore(&brom, (int32_t)&srom);
 
+	// Start early terminal device
+	// This device is used by the kernel to display
+	// some logs on screen
+	if (earlyterm_init() != 0)
+		return (-1);
+	earlyterm_clear();
+	earlyterm_write("Kernel initialisation...\n");
+
+
+
 	// Save Casio's hardware context and set
 	// Vhex hardware context.
 	// @note:
@@ -130,6 +143,7 @@ int start(void)
 	// And this is why between each `atomic_start`
 	// and `atomic_end()` the code *SHOULD* be
 	// exception safe.
+	earlyterm_write("Environment switch...\n");
 	atomic_start();
 	fx9860_context_save(&casio_context);
 	vhex_context_set();
@@ -140,14 +154,17 @@ int start(void)
 	//---
 
 	// Internal FS init !
+	earlyterm_write("Initialize File System...\n");
 	gladfs_initialize();
 	smemfs_initialize();
 
 	// Initilize Virtual File System
+	earlyterm_write("Init. Virtual File System...\n");
 	vfs_register_filesystem(&gladfs_filesystem);
 	vfs_register_filesystem(&smemfs_filesystem);
 
 	// Creat initial file tree
+	earlyterm_write("Create Filesystem Hierarchy...\n");
 	vfs_mount(NULL, NULL, "gladfs", VFS_MOUNT_ROOT, NULL);
 	vfs_mkdir("/dev", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	vfs_mkdir("/home", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
@@ -156,41 +173,43 @@ int start(void)
 	vfs_mount(NULL, "/mnt/smemfs", "smemfs", /*MS_RDONLY*/0, NULL);
 	
 	// Add devices
+	earlyterm_write("Add devices...\n");
 	vfs_mknod("/dev/tty", S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH,
 			dev_make_major(TTY_DEV_MAJOR));
 
 
-	// Test mode !
-	//extern void kernel_test(void);
-	//kernel_test();
-
 	//---
 	//	Start first process !
 	//---
-
+	
 	// Create first process: Vhex.
-	struct process *vhex_process = process_create("Vhex");
-	if (vhex_process == NULL)
+	//earlyterm_write("Create first process...\n");
+	//struct process *vhex_process = process_create("Vhex");
+	/*if (vhex_process == NULL)
 	{
-		kvram_clear();
-		printk(0, 0, "Vhex fatal error !");
-		printk(0, 1, "First process error !");
-		printk(0, 2, "Wait manual reset...");
-		kvram_display();
+		earlyterm_clear();
+		earlyterm_write("Vhex fatal error !\n");
+		earlyterm_write("First process error !\n");
+		earlyterm_write("Press [MENU] key...\n");
 		while (1) { __asm__ volatile ("sleep"); }
-	}
+	}*/
 
 	// Load programe.
-	//vhex_process->context.spc = (uint32_t)&kernel_test;
-	vhex_process->context.spc = (uint32_t)loader("/mnt/smemfs/VHEX/shell.elf", vhex_process);
-	if (vhex_process->context.spc == 0x00000000)
+	//vhex_process->context.spc = (uint32_t)loader("/mnt/smemfs/VHEX/shell.elf", vhex_process);
+	//if (vhex_process->context.spc == 0x00000000)
+	earlyterm_write("Create first process...\n");
+	struct process *vhex_process = process_create("Vhex");
+	if (vhex_process == NULL || loader(vhex_process, "/mnt/smemfs/VHEX/shell.elf") != 0)
 	{
 		// Display message.
-		kvram_clear();
-		printk(0, 0, "Vhex fatal error !");
-		printk(0, 1, "File \"VHEX/shell.elf\" not found !");
-		printk(0, 2, "Press [MENU key]...");
-		kvram_display();
+		earlyterm_clear();
+		earlyterm_write("Vhex fatal error !\n");
+		earlyterm_write("Unable to create the first process !\n");
+		if (vhex_process->context.spc == 0xffffffff)
+			earlyterm_write("process_create() error\n");
+		else
+			earlyterm_write("File \"VHEX/shell.elf\" not found !");
+		earlyterm_write("Press [MENU key]...");
 
 		// Restore Casio context.
 		fx9860_context_restore(&casio_context);
@@ -200,7 +219,8 @@ int start(void)
 		// @note: GetKey will call Bdisp_PutDD_VRAM(),
 		// so save the current internal Video RAM data into
 		// Casio's VRAM.
-		memcpy(casio_Bdisp_GetVRAM(), vram, 1024);
+		extern struct earlyterm earlyterm;
+		memcpy(casio_Bdisp_GetVRAM(), earlyterm.display.vram, 1024);
 
 		// Wait MENU key.
 		unsigned int key;
@@ -210,24 +230,16 @@ int start(void)
 		}
 	}
 
-	// DEBUG !
-	kvram_clear();
-	printk(0, 0, "Initialize scheduler !");
-	printk(0, 1, "Try to start sceduler...");
-	kvram_display();
-	DBG_WAIT;
 
-	// Initialize sheduler !!
+	//---
+	//	Initialize sheduler !!
+	//---
+	earlyterm_write("Initialize scheduler...\n");
 	sched_initialize();
 	sched_add_task(vhex_process);
 	sched_start();
 
 	// normally the kernel SHOULD / CAN not arrive here.
-	kvram_clear();
-	printk(0, 0, "Kernel job fini !");
-	kvram_display();
-	while (1)
-	{
-		__asm__ volatile ("sleep");
-	}
+	earlyterm_write("Kernel job fini !");
+	while (1) { __asm__ volatile ("sleep"); }
 }

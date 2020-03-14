@@ -1,11 +1,14 @@
 #include <kernel/scheduler.h>
-#include <kernel/util/debug.h>
+#include <kernel/devices/earlyterm.h>
 
 void sys_exit(int status)
 {
-	kvram_clear();
-	printk(0, 0, "PROCESS EXIT SYSCALL !!!!");
-	printk(0, 0, "Wait manual reset...");
-	kvram_display();
+	// TODO handle status
+	(void)status;
+
+	// Fow now, just wait manual reset...
+	earlyterm_clear();
+	earlyterm_write("PROCESS EXIT SYSCALL !!!!");
+	earlyterm_write("Wait manual reset...");
 	while (1);
 }

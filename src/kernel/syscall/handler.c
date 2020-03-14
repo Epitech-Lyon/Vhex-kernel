@@ -1,14 +1,14 @@
 #include <kernel/syscall.h>
-#include <kernel/util/debug.h>
+#include <kernel/devices/earlyterm.h>
 
 static void sys_test(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 {
-	kvram_clear();
-	printk(0, 0, "a = %#x", a);
-	printk(0, 1, "b = %#x", b);
-	printk(0, 2, "c = %#x", c);
-	printk(0, 3, "d = %#x", d);
-	kvram_display();
+	earlyterm_clear();
+	earlyterm_write("Syscall test entry:\n");
+	earlyterm_write("* a = %#x\n", a);
+	earlyterm_write("* b = %#x\n", b);
+	earlyterm_write("* c = %#x\n", c);
+	earlyterm_write("* d = %#x\n", d);
 	DBG_WAIT;
 }
 

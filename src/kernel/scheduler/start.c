@@ -1,7 +1,7 @@
 #include <kernel/scheduler.h>
 #include <kernel/hardware/cpg.h>
 #include <kernel/hardware/tmu.h>
-#include <kernel/util/debug.h>
+#include <kernel/devices/earlyterm.h>
 #include <kernel/drivers/timer.h>
 
 // Internal data used by the scheduler handler
@@ -28,13 +28,13 @@ uint32_t sched_timer_tstr_bit = 0;
 		return;
 
 	// Debug
-	//kvram_clear();
-	//printk(0, 0, "Scheduler_schudele !");
-	//printk(0, 1, "context current = %p", context_current);
-	//printk(0, 2, "context next = %p", context_next);
-	//kvram_display();
-	//printk(0, 3, "context switch !");
-	//kvram_display();
+	//dclear(&kdisplay);
+	//earlyterm_write(&kdisplay, 0, 0, "Scheduler_schudele !");
+	//earlyterm_write(&kdisplay, 0, 1, "context current = %p", context_current);
+	//earlyterm_write(&kdisplay, 0, 2, "context next = %p", context_next);
+	//(*screen_update)(kdisplay.vram);
+	//earlyterm_write(&kdisplay, 0, 3, "context switch !");
+	//(*screen_update)(kdisplay.vram);
 	//DBG_WAIT;
 
 	// Context switch	
@@ -71,20 +71,18 @@ void sched_start(void)
 	
 
 	// Debug
-	kvram_clear();
-	printk(0, 0,
-		"FLL freq: %d.%d Mhz\n"
-		"PLL freq: %d.%d Mhz\n"
-		"CPU freq: %d.%d Mhz\n"
-		"BUS freq: %d.%d Mhz\n"
-		"Per freq: %d.%d Mhz",
+	earlyterm_write(
+		"* FLL freq: %d.%d Mhz\n"
+		"* PLL freq: %d.%d Mhz\n"
+		"* CPU freq: %d.%d Mhz\n"
+		"* BUS freq: %d.%d Mhz\n"
+		"* Per freq: %d.%d Mhz\n",
 		fll_freq / 1000000, (((fll_freq - ((fll_freq / 1000000)) * 1000000)) + 999) / 1000,
 		pll_freq / 1000000, (((pll_freq - ((pll_freq / 1000000)) * 1000000)) + 999) / 1000,
 		cpu_freq / 1000000, (((cpu_freq - ((cpu_freq / 1000000)) * 1000000)) + 999) / 1000,
 		bus_freq / 1000000, (((bus_freq - ((bus_freq / 1000000)) * 1000000)) + 999) / 1000,
 		per_freq / 1000000, (((per_freq - ((per_freq / 1000000)) * 1000000)) + 999) / 1000
 	);
-	kvram_display();
 	DBG_WAIT;
 
 	// Register first process ! 
@@ -100,12 +98,10 @@ void sched_start(void)
 	sched_timer_tstr_bit = 1 << sched_timer_id;
 
 	// Debug
-	kvram_clear();
-	printk(0, 0, "timer ID:    %d", sched_timer_id);
-	printk(0, 1, "timer addr:  %#x", sched_timer_address);
-	printk(0, 2, "timer event: %#x", sched_timer_intevt);
-	printk(0, 3, "timer TSTR:  %#x", sched_timer_tstr_bit);
-	kvram_display();
+	earlyterm_write("* timer ID:    %d\n", sched_timer_id);
+	earlyterm_write("* timer addr:  %#x\n", sched_timer_address);
+	earlyterm_write("* timer event: %#x\n", sched_timer_intevt);
+	earlyterm_write("* timer TSTR:  %#x\n", sched_timer_tstr_bit);
 	DBG_WAIT;
 	
 

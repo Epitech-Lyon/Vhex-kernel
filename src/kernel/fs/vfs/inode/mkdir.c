@@ -1,7 +1,7 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/memory.h>
 #include <kernel/fs/stat.h>
-#include <kernel/util/string.h>
+#include <lib/string.h>
 
 /* vfs_mkdir() - Attempts to create a directory named pathname */
 int vfs_mkdir(const char *pathname, mode_t mode)

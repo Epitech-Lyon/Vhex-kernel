@@ -1,5 +1,5 @@
 #include <kernel/fs/vfs.h>
-#include <kernel/util/string.h>
+#include <lib/string.h>
 
 ssize_t vfs_read(FILE *file, void *buf, size_t count)
 {

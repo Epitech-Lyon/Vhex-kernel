@@ -23,7 +23,7 @@ int check_builtin(char *cmd)
 {
 
 	// Process test
-	dclear();
+/*	dclear();
 	dprint(0, 0, "Process Load Test !");
 
 	// Load process test
@@ -52,7 +52,7 @@ int check_builtin(char *cmd)
 	//int wstatus;
 	//pid_t pid;
 	//int i;
-
+*/
 	// Try to find builtin
 /*	for (int i = 0 ; i < 1 ; i++)
 	{
@@ -85,4 +85,4 @@ int check_builtin(char *cmd)
 	//	}
 	//	}
 	//	return (1);
-	}
+}

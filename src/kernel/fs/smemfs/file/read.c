@@ -1,7 +1,7 @@
 #include <kernel/fs/smemfs.h>
 #include <kernel/fs/file.h>
 #include <kernel/util/atomic.h>
-#include <kernel/util/string.h>
+#include <lib/string.h>
 
 /* casio_smem_data_base_address() - Generate the fragmented data address (0xa0000000 + offset) */
 static void *casio_smem_get_data_base_address(smemfs_fragdata_t *fragment)
@@ -17,7 +17,7 @@ static void *casio_smem_get_data_base_address(smemfs_fragdata_t *fragment)
 	}
 	if (block->info.id != fragment->data_block_id)
 		return (NULL);
-	return ((void *)(block->offset + fragment->data_offset));
+	return ((void *)(uint32_t)(block->offset + fragment->data_offset));
 }
 
 /* casio_smem_read() - Read the file data (based on internal cursor) */

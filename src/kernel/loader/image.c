@@ -1,10 +1,10 @@
 #include <kernel/loader.h>
 #include <kernel/fs/vfs.h>
 #include <kernel/memory.h>
-#include <kernel/util/string.h>
+#include <lib/string.h>
 
 /* loader_load_image() - Load the program into Virtual Memory */
-void *loader_load_image(FILE *file, Elf32_Ehdr *header, struct process *process)
+int loader_load_image(struct process *process, FILE *file, Elf32_Ehdr *header)
 {
 	Elf32_Phdr program;
 	uint32_t paddress;
@@ -19,11 +19,11 @@ void *loader_load_image(FILE *file, Elf32_Ehdr *header, struct process *process)
 		// Read programme header.
 		vfs_lseek(file, header->e_phoff + (sizeof(Elf32_Phdr) * i), SEEK_SET);
 		if (vfs_read(file, &program, sizeof(Elf32_Phdr)) != sizeof(Elf32_Phdr))
-			return (NULL);
+			return (-1);
 
 		// Check programe type.
 		if (program.p_type != PT_LOAD)
-			return (NULL);
+			return (-2);
 		
 		// Update program size
 		process->memory.program.size = process->memory.program.size + program.p_memsz;
@@ -33,7 +33,7 @@ void *loader_load_image(FILE *file, Elf32_Ehdr *header, struct process *process)
 	// physical memory.
 	process->memory.program.start = (uint32_t)pm_alloc(process->memory.program.size);
 	if (process->memory.program.start == 0x00000000)
-		return (NULL);
+		return (-3);
 
 	// Now, load all program section into
 	// physical memory.
@@ -57,5 +57,6 @@ void *loader_load_image(FILE *file, Elf32_Ehdr *header, struct process *process)
 	}
 
 	// Generate program entry address
-	return ((void*)(header->e_entry + process->memory.program.start));
+	process->context.spc = (uint32_t)(header->e_entry + (uint32_t)process->memory.program.start);
+	return ((process->context.spc == 0x00000000));
 }

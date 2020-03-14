@@ -1,7 +1,7 @@
 #include <kernel/devices/tty.h>
+#include <kernel/devices/earlyterm.h>
 #include <kernel/util/atomic.h>
-#include <kernel/util/debug.h>
-#include <kernel/util/string.h>
+#include <lib/string.h>
 
 /* tty_vertical_update() - Check / update TTY vertical cursor */
 static void tty_vertical_update(struct tty_s *tty)
@@ -13,7 +13,7 @@ static void tty_vertical_update(struct tty_s *tty)
 		tty->cursor.y = 0;
 
 	// Wipe new line.
-	memset(tty->buffer[tty->cursor.y], '\0', tty->cursor.max.x);
+	memset(tty->buffers.output[tty->cursor.y], '\0', tty->cursor.max.x);
 }
 
 /* tty_horizontal_update() - Check / update TTY horizotal cursor */
@@ -49,7 +49,7 @@ static ssize_t tty_buffer_update(struct tty_s *tty, const uint8_t *buffer, size_
 		{
 			if (tty->cursor.x > 0)
 				tty->cursor.x = tty->cursor.x - 1;
-			tty->buffer[tty->cursor.y][tty->cursor.x] = '\0';
+			tty->buffers.output[tty->cursor.y][tty->cursor.x] = '\0';
 			continue;
 		}
 
@@ -60,7 +60,7 @@ static ssize_t tty_buffer_update(struct tty_s *tty, const uint8_t *buffer, size_
 			offset = 5 - (tty->cursor.x - ((tty->cursor.x / 5) * 5));
 			if (tty->cursor.x + offset < tty->cursor.max.x)
 			{
-				memset(&tty->buffer[tty->cursor.y][tty->cursor.x], ' ', offset);
+				memset(&tty->buffers.output[tty->cursor.y][tty->cursor.x], ' ', offset);
 				tty->cursor.x = tty->cursor.x + offset;
 				continue;
 			}
@@ -86,7 +86,7 @@ static ssize_t tty_buffer_update(struct tty_s *tty, const uint8_t *buffer, size_
 		if (buffer[i] == '\f' || buffer[i] == '\v')
 		{
 			tty_vertical_update(tty);
-			memset(tty->buffer[tty->cursor.y], ' ', tty->cursor.x);
+			memset(tty->buffers.output[tty->cursor.y], ' ', tty->cursor.x);
 			continue;
 		}
 
@@ -94,7 +94,7 @@ static ssize_t tty_buffer_update(struct tty_s *tty, const uint8_t *buffer, size_
 		if (buffer[i] == '\r') { tty->cursor.x = 0; continue;}
 
 		// Update TTY buffer char.
-		tty->buffer[tty->cursor.y][tty->cursor.x] = buffer[i];
+		tty->buffers.output[tty->cursor.y][tty->cursor.x] = buffer[i];
 		tty_horizontal_update(tty);
 	}
 	return (i);
@@ -117,14 +117,14 @@ static void tty_display(struct tty_s *tty)
 	// @note: circular buffer.
 	line = 0;
 	start = tty->cursor.y;
-	while (++line < DISPLAY_VCHAR_MAX)
+	while (++line < tty->cursor.max.y)
 	{
 		// Update check line.
 		saved_start = start;
-		start = (start - 1 < 0) ? tty->cursor.max.y : start - 1;
+		start = (start - 1 < 0) ? tty->cursor.max.y - 1 : start - 1;
 
 		// Check if the line existe.
-		if (tty->buffer[start][0] == '\0')
+		if (tty->buffers.output[start][0] == '\0')
 		{
 			start = saved_start;
 			break;
@@ -132,26 +132,23 @@ static void tty_display(struct tty_s *tty)
 	}
 
 	// clear screen
-	kvram_clear();
+	dclear(&tty->disp);
 
 	// Display "on-screen" string lines.
 	y = -1;
 	while (++y < line)
 	{
-		// Get / check line lenght.
-		line_len = strnlen(tty->buffer[start], tty->cursor.max.x);
-		if (line_len == 0)
-			continue;
+		// Display line
+		line_len = -1;
+		while (tty->buffers.output[start][++line_len] != '\0')
+			dascii(&tty->disp, line_len, y, tty->buffers.output[start][line_len]);
 
-		// Display line.
-		kvram_print(0, y, tty->buffer[start], line_len);
-
-		// Get "next" line.
-		start = (start + 1 > tty->cursor.max.y) ? 0 : start + 1;
+		// Update row index
+		start = (start + 1 < tty->cursor.max.y) ? start + 1 : 0;
 	}
 
 	// Display on screen.
-	kvram_display();
+	(*screen_update)(tty->disp.vram);
 
 	// Stop atomic operation
 	atomic_stop();

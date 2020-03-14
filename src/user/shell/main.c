@@ -11,8 +11,8 @@ int main(void)
 {
 	char input[12];
 	int cmd_size;
-	char **argv;
-	int argc;
+	//char **argv;
+	//int argc;
 	int fd;
 
 	// Try to open TTY
@@ -24,10 +24,12 @@ int main(void)
 	if (fd < 0)
 	{
 		// Display error.
-		dclear();
-		dprint(0, 0, "User program fail to open TTY");
-		dprint(0, 1, "Wait user manual reset...");
-		dupdate();
+		display_t disp;
+		dopen(&disp, "default");
+		dclear(&disp);
+		dprint(&disp, 0, 0, "User program fail to open TTY");
+		dprint(&disp, 0, 1, "Wait user manual reset...");
+		dupdate(&disp);
 
 		// Wait user manual reset.
 		while (1)

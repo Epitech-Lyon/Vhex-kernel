@@ -1,4 +1,4 @@
-#include <kernel/util/debug.h>
+#include <kernel/devices/earlyterm.h>
 
 __attribute__((section(".vhex.tlb"), interrupt_handler))
 void tlb_handler(void)
@@ -19,8 +19,8 @@ void tlb_handler(void)
 	);
 
 	// Write exception informations.
-	kvram_clear();
-	printk(0, 0,
+	earlyterm_clear();
+	earlyterm_write(
 		"Ho crap ! TLB Exception !\n"
 		"tra:    %#x\n"
 		"expevt: %#x\n"
@@ -33,6 +33,5 @@ void tlb_handler(void)
 		ssr,
 		sr
 	);
-	kvram_display();
 	while (1);
 }

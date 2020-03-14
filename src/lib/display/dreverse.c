@@ -1,10 +1,8 @@
-#include <kernel/util/draw.h>
-#include <kernel/util/atomic.h>
+#include <lib/display.h>
 
-/* kvram_reverse() - Reverse Video RAM area */
-void kvram_reverse(int x, int y, int width, int height)
+/* dreverse() - Reverse Video RAM area */
+void dreverse(display_t *disp, int x, int y, int width, int height)
 {
-	extern uint32_t vram[256];
 	int vram_offset_y;
 	int j;
 
@@ -18,8 +16,8 @@ void kvram_reverse(int x, int y, int width, int height)
 		width = width + x;
 		x = 0;
 	} else {
-		if (x + width >= DISPLAY_SCREEN_WIDTH)
-			width = DISPLAY_SCREEN_WIDTH - x;
+		if (x + width >= (int)disp->display.width)
+			width = disp->display.width - x;
 	}
 
 	// Get "real" Y position and area height.
@@ -28,8 +26,8 @@ void kvram_reverse(int x, int y, int width, int height)
 		height = height + x;
 		y = 0;
 	} else {
-		if (y + height >= DISPLAY_SCREEN_HEIGHT)
-			height = DISPLAY_SCREEN_HEIGHT - x;
+		if (y + height >= (int)disp->display.height)
+			height = disp->display.height - x;
 	}
 
 	// Check potential error.
@@ -47,23 +45,14 @@ void kvram_reverse(int x, int y, int width, int height)
 	// this is why we use y << 2 because 2^2 = 4.
 	vram_offset_y = (y + height - 1) << 2;
 
-
-	// The Video RAM is sheared between each
-	// process and the kernel, so we should
-	// use atomic operation when we use it.
-	atomic_start();
-
 	// Reverse area
 	while (--height >= 0)
 	{
 		j = width + x;
 		while (--j >= x)
 		{
-			vram[(j >> 5) + vram_offset_y] ^= 0x80000000 >> (j & 31);
+			disp->vram[(j >> 5) + vram_offset_y] ^= 0x80000000 >> (j & 31);
 		}
 		vram_offset_y = vram_offset_y - 4;
 	}
-
-	// End of atomic operation
-	atomic_stop();
 }

@@ -4,12 +4,12 @@
 
 int builtin_proc(void)
 {
-	pid_t child;
+//	pid_t child;
 
 	// Debug
-	dclear();
-	dprint(0, 0, "Proc builtin !");
-	dupdate();
+//	dclear();
+//	dprint(0, 0, "Proc builtin !");
+//	dupdate();
 	for (int i = 0 ; i < 3000000 ; i++);
 
 	// Try to create first child

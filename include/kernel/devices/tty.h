@@ -5,19 +5,25 @@
 #include <stdint.h>
 #include <kernel/drivers/screen.h>
 #include <kernel/util/types.h>
-#include <kernel/util/draw.h>
+#include <lib/display.h>
 
 // Define default buffer size.
 // TODO: remove me ?
-#define TTY_BUFFER_LINES	(DISPLAY_VCHAR_MAX * 3)
-#define TTY_BUFFER_COLUMNS	(DISPLAY_HCHAR_MAX)
+//#define TTY_BUFFER_LINES	(DISPLAY_VCHAR_MAX * 3)
+//#define TTY_BUFFER_COLUMNS	(DISPLAY_HCHAR_MAX)
 
 // Define TTY major
 #define TTY_DEV_MAJOR		(4)
 
 struct tty_s
 {
-	char buffer[TTY_BUFFER_LINES + 1][TTY_BUFFER_COLUMNS + 1];
+	// Internal buffers
+	struct {
+		char input[256];
+		char **output;
+	} buffers;
+
+	// Cursor informations
 	struct {
 		int16_t x;
 		int16_t y;
@@ -27,10 +33,9 @@ struct tty_s
 		} max;
 	} cursor;
 
-	/*struct {
-		ssize_t (*write)(const void *buffer, size_t count);
-		ssize_t (*read)(void *buffer, size_t count);
-	} primitives;*/
+	// Object used by the drawing library.
+	// It's store video ram and font informations
+	display_t disp;
 };
 
 // internal strct used by the TTY read primitives
