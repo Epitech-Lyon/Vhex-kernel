@@ -1,4 +1,4 @@
-/*#include "builtin.h"
+#include "builtin.h"
 #include <lib/display.h>
 
 VHEX_BUILTIN(fxdb)
@@ -7,9 +7,9 @@ VHEX_BUILTIN(fxdb)
 	(void)argc;
 	(void)argv;
 
-	dclear();
-	dprint(0, 0, "FXDB - entry !!");
-	dupdate();
+	//dclear();
+	//dprint(0, 0, "FXDB - entry !!");
+	//dupdate();
 	for (int i = 0 ; i < 9000000 ; i = i + 1);
 	return (0);
 
@@ -32,5 +32,5 @@ VHEX_BUILTIN(fxdb)
 
 	// Power OFF UBC module.
 //	ubc_close();
-	return (0);
-}*/
+//	return (0);
+}

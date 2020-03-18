@@ -2,10 +2,6 @@
 #include <lib/unistd.h>
 #include "util.h"
 
-// @note
-// 	For now all kernel invocation is
-// made by the `unistd` library.
-
 //TODO: documentation.
 int main(void)
 {
@@ -40,7 +36,7 @@ int main(void)
 			__asm__ volatile ("sleep");
 		}
 	}
-	
+
 	// Shell main loop.
 	write(fd, "Boot Complete !\n", 16);
 	while (1)
@@ -54,11 +50,14 @@ int main(void)
 		input[cmd_size - 1] = '\0';
 
 		// Check buit-in.
-		//if (check_builtin(input) != 0)
-		//{
+		if (check_builtin(input) != 0)
+		{
 			write(fd, input, cmd_size - 1);
 			write(fd, ": command not found\n", 20);
-		//}
+		} else {
+			write(fd, input, cmd_size - 1);
+			write(fd, ": command found :D !\n", 21);
+		}
 	}
 	return (0);
 }

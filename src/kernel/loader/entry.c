@@ -39,5 +39,13 @@ int loader(struct process *process, const char *path)
 		DBG_WAIT;
 		return (-3);
 	}
+
+	// Relocalise sections / symbols
+	if (loader_reloc_sym(process, &file, &header) != 0)
+	{
+		earlyterm_write("loader: ELF relo error !");
+		DBG_WAIT;
+		return (-4);
+	}
 	return (0);
 }

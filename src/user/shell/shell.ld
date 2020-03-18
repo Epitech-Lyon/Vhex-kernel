@@ -1,5 +1,5 @@
+OUTPUT_FORMAT("elf32-sh", "elf32-sh", "elf32-sh")
 OUTPUT_ARCH(sh3)
-OUTPUT_FORMAT(elf32-sh)
 ENTRY(_main)
 
 /*
@@ -11,26 +11,57 @@ MEMORY
 	userram (WX) : o = 0x00000000, l = 256k
 }
 
-PHDRS
-{
-	text PT_LOAD ;
-	data PT_LOAD ;
-}
-
 SECTIONS
 {
+	/* Read-only sections */
 	.text : {
+		/* Code */
 		*(.text);
 		*(.text.*);
-	} : text
 
-	.rodata : {
+		/* Read-Only data */
 		*(.rodata);
 		*(.rodata.*);
-	}
 
+		/* Dynamic symbols */
+		*(.hash)
+		*(.dynsym)
+		*(.dynstr)
+		*(.dynbss)
+		*(.dynamic)
+
+		/*  Procedure Linkage Table */
+		*(.plt)
+
+		/* GLobal Offset Table */
+		*(.got.plt)
+		*(.got.*)
+		*(.got)
+
+		/* ???? */
+		*(.rofixup)
+
+		/* Internal builtin cache */
+		PROVIDE (_builtin_list = ALIGN(4));
+		*(.builtin)
+		*(.builtin.*)
+		PROVIDE (_builtin_list_end = . );
+	} > userram
+
+	/* Relocatable sections */
+	.rela.dyn : {
+		*(.rela.plt)
+		*(.rela.got)
+		*(.rela.got.*)
+		*(.rela.*)
+		*(.rela.text)
+		*(.real.data)
+	} > userram
+
+	/* readable / writable data */
 	.data ALIGN(4) : {
-		*(.plt);
+
+		/* Data sections */
 		*(.data);
 		*(.data.*);
 
@@ -38,18 +69,11 @@ SECTIONS
 		*(.bss);
 		*(.bss.*);
 		*(COMMON);
-	} : data
-
-
-	.relocgot : {
-		BRELOC_GOT = . ;
-		*(.got.plt)
-		*(.got)
-		ERELOC_GOT = . ;
-	}
+	} > userram
 
 	/* unwanted section */
 	/DISCARD/ : {
+		*(.gnu.*)
 		*(.debug_info)
 		*(.debug_abbrev)
 		*(.debug_loc)
@@ -61,5 +85,6 @@ SECTIONS
 		*(.eh_frame_hdr)
 		*(.eh_frame)
 		*(.comment)
+		*(.interp)
 	}
 }

@@ -11,5 +11,6 @@
 extern int loader(struct process *process, const char *path);
 extern int loader_get_header(FILE *file, Elf32_Ehdr *header);
 extern int loader_load_image(struct process *process, FILE *file, Elf32_Ehdr *header);
+extern int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header);
 
 #endif /*__KERNEL_LOADER_H__*/

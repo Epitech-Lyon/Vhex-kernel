@@ -45,9 +45,7 @@ OBJ	:= $(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))
 all: $(EXEC)
 
 $(EXEC): $(OBJ) | $(DEBUG)
-	$(CC) -fPIC -Wl,-M $(LDFLAG) $(CFLAGS) -o $(DEBUG)/$(NAME).elf.big $(OBJ) $(HEADER) $(LIBS) > $(MEMORY_MAP)
-	$(OBJCOPY) -S $(DEBUG)/$(NAME).elf.big $@
-	rm -f $(DEBUG)/$(NAME).elf.big
+	$(CC) -pie -Wl,-M $(LDFLAG) $(CFLAGS) -o $@ $(OBJ) $(HEADER) $(LIBS) > $(MEMORY_MAP)
 
 $(BUILD) $(DEBUG):
 	@ printf "Create $(blue)$@$(nocolor) directory\n"
@@ -77,7 +75,7 @@ sec:
 define rule-src
 $(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1 | $(BUILD)
 	@ printf "compiling $(white)$$<$(nocolor)..."
-	@ $(CC) -fPIC $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
+	@ $(CC) -pie $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
 	@ printf "$(green)[ok]$(nocolor)\n"
 endef
 

@@ -7,20 +7,46 @@
 // Internal builtin list
 // FIXME: due to PIE binary format, we can not
 // FIXME: use address of builtin_proc !!
-/*struct builtin_s list[1] = {
+struct builtin_s builtin[2] = {
 	{
 		.name = "proc",
-		.entry = (void*)&builtin_proc
+		.entry = NULL
 	},
-	//{
-	//	.name = "ram",
-	//	.entry = (void *)&builtin_ram
-	//}
-};*/
+	{
+		.name = "ram",
+		.entry = NULL
+	}
+};
+
+
 
 //TODO: use agc, argv.
 int check_builtin(char *cmd)
 {
+/*	extern struct builtin_s *builtin_list;
+	extern struct builtin_s *builtin_list_end;
+	int i;
+
+	// Try to find builtin
+	i = -1;
+	while (&builtin_list[++i] < builtin_list_end)
+	{
+		// Check builtin name
+		if (strcmp(builtin_list[i].name, cmd) != 0)
+			continue;
+
+		// Execute builtin
+		builtin_list[i].entry(0, NULL);
+		return (0);
+	}*/
+	for (int i = 0 ; i < 2 ; ++i) {
+		if (strcmp(builtin[i].name, cmd) != 0)
+			continue;
+		if (builtin[i].entry != NULL)
+			(*builtin[i].entry)(0, NULL);
+		return (0);
+	}
+	return (-1);
 
 	// Process test
 /*	dclear();
@@ -56,11 +82,11 @@ int check_builtin(char *cmd)
 	// Try to find builtin
 /*	for (int i = 0 ; i < 1 ; i++)
 	{
-		if (strcmp(list[i].name, cmd) != 0)
+		if (strcmp(builtin[i].name, cmd) != 0)
 			continue;
 
 		// Execute builtin
-		list[i].entry(0, NULL);
+		builtin[i].entry(0, NULL);
 		return (0);
 	}*/
 	return (-1);

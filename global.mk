@@ -3,6 +3,7 @@
 # Tools
 COMPILER	:= sh3eb-elf-
 CC		:= $(COMPILER)gcc
+LD		:= $(COMPILER)ld
 OBJCOPY		:= $(COMPILER)objcopy
 OBJDUMP		:= $(COMPILER)objdump
 WRAPPER		:= g1a-wrapper

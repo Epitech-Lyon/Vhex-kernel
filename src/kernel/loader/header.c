@@ -9,28 +9,28 @@ int loader_get_header(FILE *file, Elf32_Ehdr *header)
 		return (-1);
 
 	// Check magic number
-	if (header->e_ident[EI_MAG0] != 0x7f ||
-			header->e_ident[EI_MAG1] != 'E' ||
-			header->e_ident[EI_MAG2] != 'L' ||
-			header->e_ident[EI_MAG3] != 'F')
+	if (header->e_ident[EI_MAG0] != ELFMAG0 ||
+			header->e_ident[EI_MAG1] != ELFMAG1 ||
+			header->e_ident[EI_MAG2] != ELFMAG2 ||
+			header->e_ident[EI_MAG3] != ELFMAG3)
 		return (-2);
 
 	// Check class
-	if (header->e_ident[EI_CLASS] != 1)
+	if (header->e_ident[EI_CLASS] != ELFCLASS32)
 		return (-3);
 
 	//TODO: Check OSABI (?)
 
 	// Check ELF type.
-	if (header->e_type != ET_EXEC)
+	if (header->e_type != ET_DYN)
 		return (-4);
 
 	// Check ELF specifique instruction
-	if (header->e_machine != 0x2A)
+	if (header->e_machine != EM_SH)
 		return (-5);
 
 	// Check ELF version
-	if (header->e_version != 0x01)
+	if (header->e_version != EV_CURRENT)
 		return (-6);
 	return (0);
 }
