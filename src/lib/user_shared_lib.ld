@@ -1,6 +1,5 @@
 OUTPUT_FORMAT("elf32-sh", "elf32-sh", "elf32-sh")
 OUTPUT_ARCH(sh3)
-ENTRY(_main)
 
 /*
 ** Linker script for user executables.
@@ -13,12 +12,15 @@ MEMORY
 
 SECTIONS
 {
-	/* Read-only sections */
+	/* Code */
 	.text : {
-		/* Code */
 		*(.text);
 		*(.text.*);
 
+	} > userram
+
+	/* Read-only sections */
+	.rodata : {
 		/* Read-Only data */
 		*(.rodata);
 		*(.rodata.*);

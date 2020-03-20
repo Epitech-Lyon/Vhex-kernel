@@ -27,8 +27,8 @@ struct builtin_s
 };
 
 // Builtin list
-//extern int builtin_proc(void);
-//extern int builtin_ram(void);
+extern int builtin_proc(void);
+extern int builtin_ram(void);
 
 
 #endif /*__USER_BUILTIN_H__*/

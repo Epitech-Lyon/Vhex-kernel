@@ -9,15 +9,15 @@ int main(void)
 	int cmd_size;
 	//char **argv;
 	//int argc;
-	int fd;
+	//int STDOUT_FILENO;
 
 	// Try to open TTY
 	// @note:
 	// 	We use O_DIRECT to avoid cache
 	// generation because we do not have a
 	// lot of memory.
-	fd = open("/dev/tty", O_DIRECT);
-	if (fd < 0)
+	/*STDOUT_FILENO = open("/dev/tty", O_DIRECT);
+	if (STDOUT_FILENO < 0)
 	{
 		// Display error.
 		display_t disp;
@@ -35,15 +35,15 @@ int main(void)
 			// TODO: use sleep syscall !
 			__asm__ volatile ("sleep");
 		}
-	}
+	}*/
 
 	// Shell main loop.
-	write(fd, "Boot Complete !\n", 16);
+	write(STDOUT_FILENO, "Boot Complete !\n", 16);
 	while (1)
 	{
 		// Get user command.
-		write(fd, ">", 1);
-		cmd_size = read(fd, input, 12);
+		write(STDOUT_FILENO, ">", 1);
+		cmd_size = read(STDIN_FILENO, input, 12);
 
 		// Remove '\n' char.
 		// FIXME: create argc, argv !!
@@ -52,11 +52,11 @@ int main(void)
 		// Check buit-in.
 		if (check_builtin(input) != 0)
 		{
-			write(fd, input, cmd_size - 1);
-			write(fd, ": command not found\n", 20);
+			write(STDOUT_FILENO, input, cmd_size - 1);
+			write(STDOUT_FILENO, ": command not found\n", 20);
 		} else {
-			write(fd, input, cmd_size - 1);
-			write(fd, ": command found :D !\n", 21);
+			write(STDOUT_FILENO, input, cmd_size - 1);
+			write(STDOUT_FILENO, ": command found :D !\n", 21);
 		}
 	}
 	return (0);

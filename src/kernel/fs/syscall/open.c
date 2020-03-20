@@ -24,5 +24,9 @@ int sys_open(const char *pathname, int flags, ...)
 		return (-1);
 
 	// Return the file descriptor
-	return (fd);
+	// @note:
+	// * fd = 0 -> STDOUT_FILENO
+	// * fd = 1 -> STDERR_FILENO
+	// * fd = 2 -> STDIN_FILENO
+	return (fd + 3);
 }

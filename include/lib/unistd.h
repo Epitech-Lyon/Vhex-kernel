@@ -8,6 +8,10 @@
 // Define syscall LIST
 #include <kernel/util/unistd_32.h>
 
+// TODO: move me
+#define STDOUT_FILENO	0
+#define STDERR_FILENO	1
+#define STDIN_FILENO	2
 
 //TODO: move me
 #define WNOHANG		0

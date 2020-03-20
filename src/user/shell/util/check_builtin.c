@@ -10,7 +10,7 @@
 struct builtin_s builtin[2] = {
 	{
 		.name = "proc",
-		.entry = NULL
+		.entry = (void*)&builtin_proc
 	},
 	{
 		.name = "ram",

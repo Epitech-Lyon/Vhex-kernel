@@ -50,7 +50,6 @@ struct process *process_create(const char *name)
 	process->stack.kernel = process->memory.stack.kernel + process->memory.stack.size.kernel;
 
 	// initialize "exit" part.
-	// FIXME: add xor r4, r4
 	uint8_t callexit[8] = {
 		0b00100100, 0b01001010,	// xor r4, r4
 		0b11000011, __NR_exit,	// trapa #__NR_exit
@@ -93,12 +92,13 @@ struct process *process_create(const char *name)
 		process->opfile[i].file.cursor = 0;
 	}
 	process->working_dir = vfs_root_node;
+	process->tty.private = NULL;
 
 	// DEBUG !
-	earlyterm_write("proc_create: success !\n");
-	earlyterm_write("* user stack:   %p\n", process->context.reg[15]);
-	earlyterm_write("* kernel stack: %p\n", process->memory.stack.kernel);
-	DBG_WAIT;
+	//earlyterm_write("proc_create: success !\n");
+	//earlyterm_write("* user stack:   %p\n", process->context.reg[15]);
+	//earlyterm_write("* kernel stack: %p\n", process->memory.stack.kernel);
+	//DBG_WAIT;
 
 	// Link new process with his parent.
 	// @Note:

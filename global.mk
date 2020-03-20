@@ -1,7 +1,7 @@
 # Global option use in each Makefile
 
 # Tools
-COMPILER	:= sh3eb-elf-
+COMPILER	:= sh-elf-
 CC		:= $(COMPILER)gcc
 LD		:= $(COMPILER)ld
 OBJCOPY		:= $(COMPILER)objcopy

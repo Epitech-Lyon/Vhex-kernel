@@ -6,7 +6,16 @@
 #include <stdarg.h>
 
 /* vsprintf(), sprintf() - formatted output conversion. */
-int vsprintf(char *str, char const *format, va_list ap);
-void sprintf(char *str, char const *format, ...);
+extern int vsprintf(char *str, char const *format, va_list ap);
+extern int sprintf(char *str, char const *format, ...);
+
+/* dprintf(), printf() - display formatted output */
+extern int printf(const char *format, ...);
+extern int dprintf(int fd, const char *format, ...);
+extern int vdprintf(int fd, const char *format, va_list ap);
+
+/* putx() - display char / string */
+extern int putchar(int c);
+extern int puts(const char *s);
 
 #endif /*__LIB_STDIO_H__*/

@@ -18,19 +18,29 @@
 //TODO: signal !
 struct process
 {
+	//---
 	// Used when interrupt or exception occur
+	//---
 	struct {
 		uint32_t kernel;
 		uint32_t user;
 	} stack;
 
+	//---
 	// Context management
+	//---
 	common_context_t context;
 
-	// Process name.
+
+	//---
+	// Private data
+	//---
 	char name[PROCESS_NAME_LENGHT];
 
-	// Open file management
+
+	//---
+	// Shared (child / parent) data informations
+	//---
 	struct {
 		enum {
 			PROCESS_FILE_SLOT_UNUSED,
@@ -39,16 +49,22 @@ struct process
 		FILE file;
 	} opfile[PROCESS_NB_OPEN_FILE];
 	struct dentry *working_dir;
+	FILE tty;
 
-	// ignals management.
+	//---
+	// Signals management.
+	//---
 	//sighandler_t signal[NSIG];
 	
+
+	//---
 	// Virtual / Physical memory management.
+	//
 	// @note
-	// 	For now, we can not use the MMU
-	// so we just save all physical allocated
-	// space. This is an hardcode of each
-	// process memory management.
+	// For now, we can not use the MMU so we just
+	// save all physical allocated space. This is an
+	// hardcode of each process memory management.
+	//---
 	struct {
 		struct {
 			uint32_t user;
@@ -67,12 +83,16 @@ struct process
 			uint32_t size;
 		} exit;
 	} memory; 
-	
+
+
+	//---
 	// Other process management.
+	//---
 	struct process *parent;
 	struct process *child;
 	struct process *next;
 };
+
 
 // Internal struct used by the
 // static process stack
@@ -88,11 +108,13 @@ struct process_stack
 	struct process process;
 };
 
+
 // Functions.
 extern struct process *process_create(const char *name);
 extern struct process *process_get(pid_t pid);
 extern pid_t process_get_pid(struct process *process);
 extern int process_switch(pid_t pid);
+
 
 // Internal function.
 extern pid_t process_alloc(struct process **process);
