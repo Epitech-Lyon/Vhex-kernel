@@ -20,7 +20,7 @@ NAME		:= vhex
 EXEC		:= $(OUTPUT)/$(NAME).g1a
 LDFLAG		:= -T $(NAME).ld
 MEMORY_MAP	:= $(DEBUG)/$(NAME).map
-LIBS		:= -L../lib -lgcc -lstring -ldisplay
+LIBS		:= -L../lib -lgcc -llibc -ldisplay
 ICON		:= icon.bmp
 
 

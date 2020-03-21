@@ -1,7 +1,7 @@
 #include <lib/stdio.h>
 #include <lib/unistd.h>
 
-int printf(const char *format, ...)
+int printf(const char *restrict format, ...)
 {
 	va_list ap;
 	int ret;

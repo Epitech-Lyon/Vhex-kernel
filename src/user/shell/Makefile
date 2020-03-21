@@ -17,7 +17,7 @@ NAME		:= shell
 EXEC		:= $(OUTPUT)/$(NAME).elf
 LDFLAG		:= -T $(NAME).ld
 MEMORY_MAP	:= $(DEBUG)/$(NAME).map
-LIBS		:= -L../../lib -lstring -ldisplay -lunistd -lgcc
+LIBS		:= -L../../lib -llibc -lgcc
 
 
 

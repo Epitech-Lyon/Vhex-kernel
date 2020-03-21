@@ -13,7 +13,7 @@ CFLAGS		:= -Werror -Wall -W -Wextra -std=c18 -m3 -mb -mrenesas \
 			-ffreestanding -nostdlib -fstrict-volatile-bitfields \
 			-Wno-unused-const-variable -Wno-unused-function \
 			-Wno-unused-variable -Wno-unused-but-set-variable \
-			-Wno-unused-parameter
+			-Wno-unused-parameter -Wno-pointer-to-int-cast
 
 # Colors
 red		:= \033[1;31m

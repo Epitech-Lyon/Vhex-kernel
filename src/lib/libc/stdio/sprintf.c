@@ -1,12 +1,12 @@
 #include <lib/stdio.h>
 
-int sprintf(char *str, char const *format, ...)
+int sprintf(char *restrict str, const char *restrict format, ...)
 {
 	va_list ap;
-	int ret;
+	int size;
 
 	va_start(ap, format);
-	ret = vsprintf(str, format, ap);
+	size = vsnprintf(str, 65535, format, ap);
 	va_end(ap);
-	return (ret);
+	return (size);
 }
