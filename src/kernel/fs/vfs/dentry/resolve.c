@@ -39,7 +39,7 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 	// Check VFS validity
 	if (vfs_root_node == NULL)
 	{
-		earlyterm_write("VFS root  error !");
+		earlyterm_write("VFS root  error !\n");
 		DBG_WAIT;
 		return (NULL);
 	}
@@ -105,10 +105,10 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 			next = vfs_dentry_find_next_sibling(next);
 			if (next == NULL)
 			{
-				earlyterm_write("vfs_resolve(): sibling error !");
-				earlyterm_write("* old next: %s$", tmp->name);
-				earlyterm_write("* file: %s$", file->name);
-				earlyterm_write("* name: %s$", name);
+				earlyterm_write("vfs_resolve(): sibling error !\n");
+				earlyterm_write("* old next: %s$\n", tmp->name);
+				earlyterm_write("* file: %s$\n", file->name);
+				earlyterm_write("* name: %s$\n", name);
 				DBG_WAIT;
 				return (NULL);
 			}
@@ -124,7 +124,7 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 			if ((file->mode & __S_IFDIR) == 0)
 			{
 				// Debug !
-				earlyterm_write("vfs_resolve(): dir error !");
+				earlyterm_write("vfs_resolve(): dir error !\n");
 				DBG_WAIT;
 				return (NULL);
 			}

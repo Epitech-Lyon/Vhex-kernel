@@ -1,14 +1,20 @@
 #include <kernel/process.h>
 
+//TODO: free allocated proc ?
 int process_free(struct process *process)
 {
-	extern struct process_stack process_stack[PROCESS_MAX];
+	extern struct process *proc_table;
+	extern uint32_t proc_table_max;
+	uint32_t proc_table_idx;
+	struct process *proc;
 
-	for (int i = 0 ; i < PROCESS_MAX ; i = i + 1)
+	proc = proc_table;
+	proc_table_idx = 0;
+	while (proc != NULL && ++proc_table_idx < proc_table_max)
 	{
-		if (&process_stack[i].process == process)
+		if (proc == process)
 		{
-			process_stack[i].status = PROC_UNUSED;
+			proc->status = PROC_DEAD;
 			return (0);
 		}
 	}

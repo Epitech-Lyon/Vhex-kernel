@@ -1,4 +1,5 @@
 #include <kernel/syscall.h>
+#include <kernel/util/unistd_32.h>
 #include <kernel/devices/earlyterm.h>
 
 static void sys_test(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
@@ -12,7 +13,7 @@ static void sys_test(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 	DBG_WAIT;
 }
 
-static const void *sys_handler[9] = {
+static const void *sys_handler[__NR_MAX] = {
 	// Kernel Test
 	sys_test,		// test
 
@@ -20,6 +21,11 @@ static const void *sys_handler[9] = {
 	sys_exit,		// exit
 	sys_fexecve,		// fexecve
 	sys_waitpid,		// waitpid
+	sys_wait,		// wait
+	sys_getpid,		// getpid
+	sys_getppid,		// getppid
+	sys_getpgid,		// getpgid
+	sys_setpgid,		// setpgid
 
 	// VFS
 	sys_read,		// read
@@ -27,32 +33,18 @@ static const void *sys_handler[9] = {
 	sys_open,		// open
 	sys_close,		// close
 	sys_lseek,		// lseek
-
-	// Display
-/*	kvram_display,		// kvram_display
-	kvram_clear,		// kvram_clear
-	printk,			// printk
-	kvram_ascii,		// kvram_ascii
-	kvram_reverse,		// kvram_reverse
-	kvram_scroll,		// kvram_scroll
-	kvram_clr_str_area	// kvram_clr_str_area*/
 };
 
 void *sys_get_handler(int sysno)
 {
 	// Check sysno validity
-	if (sysno < 0 || sysno >= 9)
+	if (sysno < 0 || sysno >= __NR_MAX)
 		return (NULL);
 
 	// DEBUG
-	/*kvram_clear();
-	printk(0, 0, "TRAPA ABI pre_handler !");
-	printk(0, 1, "sysno   = %d", sysno);
-	printk(0, 2, "handler = %p", sys_handler[sysno]);
-	kvram_display();
-	DBG_WAIT;
-	DBG_WAIT;
-	DBG_WAIT;*/
+	//earlyterm_write("syscall (%d)!!\n", sysno);
+	//DBG_WAIT;
+	//DBG_WAIT;
 
 	// Return syscall 
 	return ((void *)sys_handler[sysno]);

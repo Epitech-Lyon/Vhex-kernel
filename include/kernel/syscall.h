@@ -5,15 +5,12 @@
 #include <stddef.h>
 #include <kernel/util/types.h>
 
-//---
-//
-//	Vhex part !!
-//
-//---
 // Process
-extern pid_t sys_fork(void);
 extern pid_t sys_getpid(void);
 extern pid_t sys_getppid(void);
+extern pid_t sys_getpgid(void);
+extern pid_t sys_wait(int *wstatus);
+extern int sys_setpgid(pid_t pid, pid_t pgid);
 extern pid_t sys_waitpid(pid_t pid, int *wstatus, int options);
 extern pid_t sys_fexecve(const char *pathname);
 extern void sys_exit(int status);

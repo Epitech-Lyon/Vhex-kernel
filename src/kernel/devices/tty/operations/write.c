@@ -7,7 +7,7 @@
 static void tty_vertical_update(struct tty_s *tty)
 {
 	// Get next line.
-	if (tty->cursor.y + 1 <= tty->cursor.max.y)
+	if (tty->cursor.y + 1 < tty->cursor.max.y)
 		tty->cursor.y = tty->cursor.y + 1;
 	else
 		tty->cursor.y = 0;
@@ -117,7 +117,7 @@ static void tty_display(struct tty_s *tty)
 	// @note: circular buffer.
 	line = 0;
 	start = tty->cursor.y;
-	while (++line < tty->cursor.max.y)
+	while (++line < tty->winsize.ws_row)
 	{
 		// Update check line.
 		saved_start = start;

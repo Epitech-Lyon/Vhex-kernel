@@ -9,21 +9,19 @@ int builtin_proc(void)
 	int wstatus;
 
 	puts("proc test entry :)\n");
-	printf("printf test:\n");
-	printf("0#10x: %0#10x\n", 0xabcdef);
-	printf("str: %s\n", "Oui le test oui ! :D");
-	printf("interger: %d\n", 12345);
-	printf("interger: %lld\n", 999999999999999999);
+	printf("  PPID   PID  PGID\n");
+	printf("%-6d%-6d%-6d\n", getppid(), getpid(), getpgid());
 
 	// Try to create first child
-	/*child = fexecve("/mnt/casio/VHEX/test.elf");
+	child = fexecve("/mnt/casio/VHEX/test.elf");
 	if (child == -1)
 	{
-		puts("fexecve fail :(\n");
+		printf("fexecve fail :(\n");
 		return (0);
 	}
 
 	// Wait child death
-	waitpid(child, &wstatus, WUNTRACED);
-*/	return (0);
+	waitpid(-1, &wstatus, 0);
+	printf("+++ exited with %d +++\n", WEXITSTATUS(wstatus));
+	return (0);
 }

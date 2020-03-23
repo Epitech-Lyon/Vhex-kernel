@@ -46,7 +46,7 @@ TARGET-LIBS-DYNAMIC	:= $(patsubst %,lib%_dyn.so,$(TARGET-MODULES))
 #-------		--------#
 all: $(TARGET-LIBS-STATIC) $(TARGET-LIBS-DYNAMIC)
 
-$(BUILD-STATIC) $(BUILD-DYNAMIC):
+$(BUILD-STATIC) $(BUILD-DYNAMIC) $(DEBUG-DYNLIB):
 	@ printf "Create $(blue)$@$(nocolor) directory\n"
 	@ mkdir -p $@
 
@@ -69,13 +69,13 @@ endef
 define rule-src-dynamic
 $(patsubst %,$(BUILD-DYNAMIC)/%.o,$(subst /,_,$(basename $1))): $1 | $(BUILD-DYNAMIC) 
 	@ printf "compiling $(white)$$<$(nocolor)..."
-	@ $(CC) -fPIC $(CFLAGS) -c $$< -o $$@ $(HEADER)
+	@ $(CC) -pie $(CFLAGS) -c $$< -o $$@ $(HEADER)
 	@ printf "$(green)[ok]$(nocolor)\n"
 endef
 define rule-link-dynamic
 $(patsubst %,lib%_dyn.so,$1): $2 | $(DEBUG-DYNLIB)
 	@ printf "Link $(green)$$@$(nocolor) lib\n"
-	$(CC) -shared -o $$@ $$^ -nostdlib -lgcc
+	$(CC) -T user_shared_lib.ld -Wl,-M -pie -o $$@ $$^ -nostdlib -lgcc > $(DEBUG-DYNLIB)/$$@.map
 endef
 
 

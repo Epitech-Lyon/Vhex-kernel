@@ -1,27 +1,38 @@
-#include <kernel/process.h>
+#include <kernel/scheduler.h>
+#include <kernel/util/atomic.h>
 
-struct process *process_get_proc(pid_t pid)
+struct process *process_get(pid_t pid)
 {
-	extern struct process_stack process_stack[PROCESS_MAX];
+	extern struct process *proc_table;
+	struct process *proc;
 
 	// Check error
-	if (pid < 0 || pid >= PROCESS_MAX)
+	if (pid <= 0)
 		return (NULL);
 
-	// Return process.
-	return (&process_stack[pid].process);
-}
+	// Start atomic operation
+	atomic_start();
 
-pid_t process_get_pid(struct process *target)
-{
-	extern struct process_stack process_stack[PROCESS_MAX];
-	int i;
-
-	i = -1;
-	while (++i < PROCESS_MAX)
+	// Proess table walk
+	proc = proc_table;
+	while (proc != NULL)
 	{
-		if (&process_stack[i].process == target)
-			return (i);
+		// Check target process
+		if (proc->pid != pid) {
+			proc = proc->next;
+			continue;
+		}
+		
+		// Check if the process is alive
+		if (proc->status == PROC_DEAD)
+			proc = NULL;
+
+		// Stop atomic operations
+		atomic_stop();
+		return (proc);
 	}
-	return (-1);
+
+	// Stop atomic operation
+	atomic_stop();
+	return (NULL);
 }

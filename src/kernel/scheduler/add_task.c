@@ -35,6 +35,9 @@ int sched_add_task(struct process *process)
 		return (-2);
 	}
 
+	// Change process status
+	process->status = PROC_RUNNING;
+	
 	// Initialize new task
 	// TODO: update quantum ticks management
 	sched_slot->priority._static = SCHED_QUANTUM_TICKS;

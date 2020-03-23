@@ -19,18 +19,20 @@ int loader_get_header(FILE *file, Elf32_Ehdr *header)
 	if (header->e_ident[EI_CLASS] != ELFCLASS32)
 		return (-3);
 
-	//TODO: Check OSABI (?)
+	// Check data encoding
+	if (header->e_ident[EI_DATA] != ELFDATA2MSB)
+		return (-4);
 
 	// Check ELF type.
 	if (header->e_type != ET_DYN)
-		return (-4);
+		return (-5);
 
 	// Check ELF specifique instruction
 	if (header->e_machine != EM_SH)
-		return (-5);
+		return (-6);
 
 	// Check ELF version
 	if (header->e_version != EV_CURRENT)
-		return (-6);
+		return (-7);
 	return (0);
 }

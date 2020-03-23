@@ -17,6 +17,16 @@
 #define WNOHANG		0
 #define WUNTRACED	1
 #define WCONTINUED	2
+
+//TODO: move me
+#define	__W_EXITCODE(ret, sig)	((ret) << 8 | (sig))
+#define	__WEXITSTATUS(status)	(((status) & 0xff00) >> 8)
+#define WEXITSTATUS(status)	__WEXITSTATUS(status)
+
+extern pid_t getpid(void);
+extern pid_t getpgid(void);
+extern pid_t getppid(void);
+extern int setpgid(pid_t pid, pid_t pgid);
 extern pid_t waitpid(pid_t pid, int *wstatus, int options);
 extern pid_t fexecve(const char *pathname);
 

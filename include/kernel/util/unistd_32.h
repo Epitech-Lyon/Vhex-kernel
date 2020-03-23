@@ -1,6 +1,9 @@
 #ifndef __KERNEL_UNISTD_32_H__
 # define __KERNEL_UNISTD_32_H__
 
+// Define the number of syscall
+#define __NR_MAX		14
+
 // Kernel Test
 #define __NR_test_syscall	0
 
@@ -8,27 +11,17 @@
 #define __NR_exit 		1
 #define __NR_fexecve 		2
 #define __NR_waitpid 		3
+#define __NR_wait 		4
+#define __NR_getpid 		5
+#define __NR_getppid 		6
+#define __NR_getpgid 		7
+#define __NR_setpgid 		8
 
 // VFS
-#define __NR_read 		4
-#define __NR_write		5
-#define __NR_open 		6
-#define __NR_close 		7
-#define __NR_lseek 		8
-
-//--
-//	Custom !
-//--
-
-// Display
-#define __NR_kvram_display	9
-#define __NR_kvram_clear	10
-#define __NR_kvram_print	11
-#define __NR_kvram_ascii	12
-#define __NR_kvram_reverse	13
-#define __NR_kvram_scroll	14
-#define __NR_kvram_clr_str_area	15
-
-//TODO: keyboard
+#define __NR_read 		9
+#define __NR_write		10
+#define __NR_open 		11
+#define __NR_close 		12
+#define __NR_lseek 		13
 
 #endif /*__KERNEL_UNISTD_32_H__*/

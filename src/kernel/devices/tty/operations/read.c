@@ -90,6 +90,7 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	return (keyboard.buffer.clen);
 }
 
+//TODO: move me
 static int check_signal(struct keyboard_obj_s *keyboard, key_t key)
 {
 	//TODO
@@ -98,111 +99,103 @@ static int check_signal(struct keyboard_obj_s *keyboard, key_t key)
 	return (0);
 }
 
+// TODO: move me
+// TODO: update me
 static int check_special(struct keyboard_obj_s *keyboard, key_t key)
 {
 	extern fx9860_context_t casio_context;
 	extern fx9860_context_t vhex_context;
 
-	switch (key)
-	{
 		// Check MAJ.
-		case KEY_ALPHA:
-		{
-			keyboard->mode = keyboard->mode ^ 0x02;
-			return (1);
-		}
+	if (key == KEY_ALPHA) {
+		keyboard->mode = keyboard->mode ^ 0x02;
+		return (1);
+	}
 
-		// Check Alpha / num mode. 
-		case KEY_SHIFT:
-		{
-			keyboard->mode = keyboard->mode ^ 0x01;
-			return (1);
-		}
+	// Check Alpha / num mode. 
+	if (key == KEY_SHIFT) {
+		keyboard->mode = keyboard->mode ^ 0x01;
+		return (1);
+	}
 
 		// Check DEL key.
-		case KEY_DEL:
-		{
-			// Check potential error.
-			if (keyboard->buffer.cursor <= 0)
-				return (1);
-
-			// Move seconde part.
-			memcpy(
-				&keyboard->buffer.addr[keyboard->buffer.cursor - 1],
-				&keyboard->buffer.addr[keyboard->buffer.cursor],
-				keyboard->buffer.clen - keyboard->buffer.cursor
-			);
-
-			// Add null char and update clen.
-			keyboard->buffer.clen = keyboard->buffer.clen - 1;
-			keyboard->buffer.addr[keyboard->buffer.clen] = '\0';
-			keyboard->buffer.cursor = keyboard->buffer.cursor - 1;
+	if (key == KEY_DEL)
+	{
+		// Check potential error.
+		if (keyboard->buffer.cursor <= 0)
 			return (1);
-		}
+		// Move seconde part.
+		memcpy(
+			&keyboard->buffer.addr[keyboard->buffer.cursor - 1],
+			&keyboard->buffer.addr[keyboard->buffer.cursor],
+			keyboard->buffer.clen - keyboard->buffer.cursor
+		);
 
-		// Check MENU key.
-		// TODO: fix me !
-		case KEY_MENU:
-		{
-			// Save current Vhex context and restore Casio's context.
-			atomic_start();
-			fx9860_context_save(&vhex_context);
-			fx9860_context_restore(&casio_context);
-			atomic_stop();
+		// Add null char and update clen.
+		keyboard->buffer.clen = keyboard->buffer.clen - 1;
+		keyboard->buffer.addr[keyboard->buffer.clen] = '\0';
+		keyboard->buffer.cursor = keyboard->buffer.cursor - 1;
+		return (1);
+	}
 
-			// Inject MENU key and call GetKey().
-			// TODO !!!
-			//int row = 0;
-			//int column = 0;
-			//uint16_t keymatrix = 0x0308;
-			//casio_Bkey_PutKeymatrix(&keymatrix);
-			//casio_GetKeyWait(&row, &column, 0, 0, 0, &key);
-			casio_GetKey(&key);
+	// Check MENU key.
+	// TODO: fix me !
+	if (key == KEY_MENU)
+	{
+		// Save current Vhex context and restore Casio's context.
+		atomic_start();
+		fx9860_context_save(&vhex_context);
+		fx9860_context_restore(&casio_context);
+		atomic_stop();
+
+		// Inject MENU key and call GetKey().
+		// TODO !!!
+		//casio_GetKeyWait(&row, &column, 0, 0, 0, &key);
+		casio_GetKey(&key);
 			
-			// Save current Casio's context and restore Vhex's context.
-			atomic_start();
-			fx9860_context_save(&casio_context);
-			fx9860_context_restore(&vhex_context);
-			atomic_stop();
-			return (1);
-		}
+		// Save current Casio's context and restore Vhex's context.
+		atomic_start();
+		fx9860_context_save(&casio_context);
+		fx9860_context_restore(&vhex_context);
+		atomic_stop();
+		return (1);
+	}
 
-		// Check EXE key.
-		case KEY_EXE:
-		{
-			// Add new line character.
-			keyboard->buffer.addr[keyboard->buffer.clen] = '\n';
-			keyboard->buffer.clen = keyboard->buffer.clen + 1;
-			keyboard->buffer.addr[keyboard->buffer.clen] = '\0';
+	// Check EXE key.
+	if (key == KEY_EXE)
+	{
+		// Add new line character.
+		keyboard->buffer.addr[keyboard->buffer.clen] = '\n';
+		keyboard->buffer.clen = keyboard->buffer.clen + 1;
+		keyboard->buffer.addr[keyboard->buffer.clen] = '\0';
 			
-			// indicate that the EXE has been pressed.
-			keyboard->mode = keyboard->mode | 0x04;
+		// indicate that the EXE has been pressed.
+		keyboard->mode = keyboard->mode | 0x04;
+		return (1);
+	}
+
+	// Check LEFT key.
+	if (key == KEY_LEFT)
+	{
+		// Check potential error.
+		if (keyboard->buffer.cursor <= 0)
 			return (1);
-		}
 
-		// Check LEFT key.
-		case KEY_LEFT:
-		{
-			// Check potential error.
-			if (keyboard->buffer.cursor <= 0)
-				return (1);
+		// Move cursor.
+		keyboard->buffer.cursor = keyboard->buffer.cursor - 1;
+		return (1);
+	}
 
-			// Move cursor.
-			keyboard->buffer.cursor = keyboard->buffer.cursor - 1;
+	// Check RIGHT key.
+	if (key == KEY_RIGHT)
+	{
+		// Check limit
+		if (keyboard->buffer.cursor >= keyboard->buffer.clen)
 			return (1);
-		}
-
-		// Check RIGHT key.
-		case KEY_RIGHT:
-		{
-			if (keyboard->buffer.cursor >= keyboard->buffer.clen)
-				return (1);
 		
-			// Move cursor.
-			keyboard->buffer.cursor = keyboard->buffer.cursor + 1;
-			return (1);
-		}
-		default: break;
+		// Move cursor.
+		keyboard->buffer.cursor = keyboard->buffer.cursor + 1;
+		return (1);
 	}
 	return (0);
 }
@@ -323,12 +316,13 @@ static void cursor_callback(struct keyboard_obj_s *keyboard)
 		y = y * (keyboard->tty->disp.font->font.height + 1);
 
 		// Display cursor.
-		dreverse(
+	/*	dreverse(
 			&keyboard->tty->disp, x, y,
 			(keyboard->tty->disp.font->font.width + 1),
 			(keyboard->tty->disp.font->font.height + 1)
 		);
 		(*screen_update)(keyboard->tty->disp.vram);
+*/
 
 		// Restore TTY cursor position
 		keyboard->tty->cursor.x = sttyx;

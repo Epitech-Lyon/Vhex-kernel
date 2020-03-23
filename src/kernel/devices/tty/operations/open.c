@@ -26,6 +26,12 @@ void *tty_open(dev_t major, dev_t minor)
 		return (NULL);
 	}
 
+	// Generate "visible" informations for the write primitive
+	tty->winsize.ws_xpixel = screen_get(SCREEN_WIDTH);
+	tty->winsize.ws_ypixel = screen_get(SCREEN_HEIGHT);
+	tty->winsize.ws_col = tty->winsize.ws_xpixel / (tty->disp.font->font.width + 1);
+	tty->winsize.ws_row = tty->winsize.ws_ypixel / (tty->disp.font->font.height + 1);
+	
 	// Generate formated output buffer indicator
 	tty->cursor.max.x = screen_get(SCREEN_WIDTH) / (tty->disp.font->font.width + 1);
 	tty->cursor.max.y = screen_get(SCREEN_HEIGHT) / (tty->disp.font->font.height + 1);

@@ -23,6 +23,14 @@ struct tty_s
 		char **output;
 	} buffers;
 
+	// Window size informations used by the write primitive
+	struct {
+		unsigned short ws_col;
+		unsigned short ws_row;
+		unsigned short ws_xpixel;
+		unsigned short ws_ypixel;
+	} winsize;
+
 	// Cursor informations
 	struct {
 		int16_t x;

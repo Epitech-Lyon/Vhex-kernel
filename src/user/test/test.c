@@ -1,19 +1,11 @@
-#include <lib/display.h>
+#include <lib/stdio.h>
+#include <lib/unistd.h>
 
 int main(void)
 {
-	uint32_t counter = 0;
-	while (1)
-	{
-		// Display data
-//		dclr_str_area(0, 2, 20, 1);
-//		dprint(0, 2, "C process: %d", counter);
-//		dupdate();
-
-		// Update counter and "wait"
-		counter = counter + 1;
-		if (counter >= 100)
-			counter = 0;
-		for (int i = 0 ; i < 300000 ; ++i);
-	}
+	setpgid(0, 12);
+	printf("%-6d%-6d%-6d\n", getppid(), getpid(), getpgid());
+	printf("child proc fini...try to exit\n");
+	for(int i = 0 ; i < 3000000 ; ++i);
+	return (84);
 }

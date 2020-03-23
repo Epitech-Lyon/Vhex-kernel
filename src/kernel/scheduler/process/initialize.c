@@ -1,15 +1,17 @@
 #include <kernel/process.h>
 
-// Create all internal global
-// used to handle process.
-struct process_stack process_stack[PROCESS_MAX];
+// Internal symbols
+struct process *proc_table;
+uint32_t proc_table_max;
 
 __attribute__((constructor))
 void process_constructor(void)
 {
-	// Set all process to idle state.
-	for (int i = 0 ; i < PROCESS_MAX ; i = i + 1)
-	{
-		process_stack[i].status = PROC_UNUSED;
-	}
+	// Initialise dynamic process list
+	// TODO:
+	// get the scheduler timing and set the maximal
+	// number of processes which can be running in the
+	// same time.
+	proc_table = NULL;
+	proc_table_max = PROCESS_MAX;
 }

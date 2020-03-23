@@ -4,19 +4,14 @@
 #include <kernel/devices/earlyterm.h>
 #include <lib/string.h>
 
-struct process *process_create(const char *name)
+struct process *process_create(void)
 {
 	extern struct process *process_current;
 	extern struct dentry *vfs_root_node;
 	struct process *process;
-	pid_t process_pid;
-
-	// Check error
-	if (name == NULL)
-		return (NULL);
 
 	// Try to find free slot.
-	process_pid = process_alloc(&process);
+	process = process_alloc();
 	if (process == NULL)
 	{
 		earlyterm_write("proc_error: alloc error !");
@@ -26,7 +21,7 @@ struct process *process_create(const char *name)
 
 	// Initialize user stack
 	process->memory.stack.size.user = PROCESS_USER_STACK_SIZE;
-	process->memory.stack.user = (uint32_t)pm_alloc(process->memory.stack.size.user);
+	process->memory.stack.user = (void *)pm_alloc(process->memory.stack.size.user);
 	if (process->memory.stack.user == 0x00000000)
 	{
 		earlyterm_write("proc_error: user stack error !");
@@ -34,11 +29,11 @@ struct process *process_create(const char *name)
 		process_free(process);
 		return (NULL);
 	}
-	process->context.reg[15] = process->memory.stack.user + process->memory.stack.size.user;
+	process->context.reg[15] = (uint32_t)process->memory.stack.user + process->memory.stack.size.user;
 
 	// Initialize kernel stack
 	process->memory.stack.size.kernel = PROCESS_KERNEL_STACK_SIZE;
-	process->memory.stack.kernel = (uint32_t)pm_alloc(process->memory.stack.size.kernel);
+	process->memory.stack.kernel = (void *)pm_alloc(process->memory.stack.size.kernel);
 	if (process->memory.stack.kernel == 0x00000000)
 	{
 		earlyterm_write("proc_error: kernel stack error !");
@@ -51,25 +46,22 @@ struct process *process_create(const char *name)
 
 	// initialize "exit" part.
 	uint8_t callexit[8] = {
-		0b00100100, 0b01001010,	// xor r4, r4
+		0b01100100, 0b00000011,	// mov r0, r4
 		0b11000011, __NR_exit,	// trapa #__NR_exit
 		0b10110000, 0b00000100,	// bsr PC + 2 - 4
 		0b00000000, 0b00001001	// nop
 	};
 	process->memory.exit.size = 8;
-	process->memory.exit.start = (uint32_t)(pm_alloc(process->memory.exit.size));
+	process->memory.exit.start = (void *)pm_alloc(process->memory.exit.size);
 	if (process->memory.exit.start == 0x00000000)
 	{
-		pm_free((void *)process->memory.stack.user);
-		pm_free((void *)process->memory.stack.kernel);
+		pm_free(process->memory.stack.user);
+		pm_free(process->memory.stack.kernel);
 		process_free(process);
 		return (NULL);
 	}
-	process->context.pr = process->memory.exit.start;
+	process->context.pr = (uint32_t)process->memory.exit.start;
 	memcpy((void *)process->memory.exit.start, callexit, 6);
-
-	// Set process name.
-	strncpy(process->name, name, PROCESS_NAME_LENGHT);
 
 	// Initialize context.
 	for (int i = 0 ; i < 15 ; i = i + 1)
@@ -107,7 +99,7 @@ struct process *process_create(const char *name)
 	// The new process will be visible only
 	// when it is registered by the sheduler.
 	process->parent = process_current;
+	process->sibling = NULL;
 	process->child = NULL;
-	process->next = NULL;
 	return (process);
 }

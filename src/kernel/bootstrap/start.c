@@ -76,18 +76,18 @@ static void rom_explore(volatile void *rom, int32_t size)
 	while (size >= 0)
 	{
 		unused = *(volatile uint8_t*)rom;
-		rom = (void*)((uint32_t)rom + 1024);
 		size = size - 1024;
+		rom = rom + 1024;
 	}
 }
 
 /* section_execute() - Used to execute contructors and destructors */
 static void section_execute(void *bsection, void *esection)
 {
-	while ((uintptr_t)bsection < (uintptr_t)esection)
+	while (bsection < esection)
 	{
-		((void (*)(void))*((uint32_t*)bsection))();
-		bsection = (void*)((uint32_t)bsection + 4);
+		((void (*)(void))*((void**)bsection))();
+		bsection = bsection + sizeof(void (*)(void));
 	}
 }
 
@@ -107,9 +107,7 @@ int start(void)
 	// Check MPU hardware.
 	current_mpu = mpu_get();
 	if (current_mpu != MPU_SH7305)
-	{
 		return (0);
-	}
 
 	// Execute constructor.
 	section_execute(&bctors, &ectors);
@@ -169,8 +167,8 @@ int start(void)
 	vfs_mkdir("/dev", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	vfs_mkdir("/home", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	vfs_mkdir("/mnt", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-	vfs_mkdir("/mnt/smemfs", S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-	vfs_mount(NULL, "/mnt/smemfs", "smemfs", /*MS_RDONLY*/0, NULL);
+	vfs_mkdir("/mnt/casio", S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	vfs_mount(NULL, "/mnt/casio", "smemfs", /*MS_RDONLY*/0, NULL);
 	
 	// Add devices
 	earlyterm_write("Add devices...\n");
@@ -182,24 +180,10 @@ int start(void)
 	//	Start first process !
 	//---
 	
-	// Create first process: Vhex.
-	//earlyterm_write("Create first process...\n");
-	//struct process *vhex_process = process_create("Vhex");
-	/*if (vhex_process == NULL)
-	{
-		earlyterm_clear();
-		earlyterm_write("Vhex fatal error !\n");
-		earlyterm_write("First process error !\n");
-		earlyterm_write("Press [MENU] key...\n");
-		while (1) { __asm__ volatile ("sleep"); }
-	}*/
-
 	// Load programe.
-	//vhex_process->context.spc = (uint32_t)loader("/mnt/smemfs/VHEX/shell.elf", vhex_process);
-	//if (vhex_process->context.spc == 0x00000000)
 	earlyterm_write("Create first process...\n");
-	struct process *vhex_process = process_create("Vhex");
-	if (vhex_process == NULL || loader(vhex_process, "/mnt/smemfs/VHEX/shell.elf") != 0)
+	struct process *vhex_process = process_create();
+	if (vhex_process == NULL || loader(vhex_process, "/mnt/casio/VHEX/shell.elf") != 0)
 	{
 		// Display message.
 		earlyterm_clear();
@@ -208,8 +192,8 @@ int start(void)
 		if (vhex_process->context.spc == 0xffffffff)
 			earlyterm_write("process_create() error\n");
 		else
-			earlyterm_write("File \"VHEX/shell.elf\" not found !");
-		earlyterm_write("Press [MENU key]...");
+			earlyterm_write("File \"VHEX/shell.elf\" not found !\n");
+		earlyterm_write("Press [MENU key]...\n");
 
 		// Restore Casio context.
 		fx9860_context_restore(&casio_context);

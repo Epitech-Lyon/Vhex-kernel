@@ -19,7 +19,7 @@ void sched_initialize(void)
 	}
 
 	// Initialize internal process informations
-	// @note:
+	// TODO ?
 	// * process_sched_current	Used by the kernel to handle
 	// 				interrupt / exception
 	// * process_user_current	Used by the kernel to allow

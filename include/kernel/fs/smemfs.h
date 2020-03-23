@@ -64,7 +64,8 @@ struct casio_smem_fragment_s
 	uint16_t data_block_id;		// ID of blocks containing data for this fragment
 	uint16_t data_offset;		// offset of fragment data in the given block
 
-	// WARNING : the size is (real_size-1), so *do not forget* to add 1 to
+	// WARNING :
+	// The size is (real_size-1), so *do not forget* to add 1 to
 	// have the real size of data!
 	uint16_t data_size;		// size of this fragment data
 
@@ -75,6 +76,7 @@ struct casio_smem_fragment_s
 typedef struct casio_smem_block_s smemfs_sector_t;
 typedef struct casio_smem_header_s smemfs_inode_t;
 typedef struct casio_smem_fragment_s smemfs_fragdata_t;
+typedef struct casio_smem_header_s smemfs_header_t;
 
 
 // Define internal superblock

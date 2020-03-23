@@ -22,20 +22,15 @@ struct process
 	// Used when interrupt or exception occur
 	//---
 	struct {
-		uint32_t kernel;
-		uint32_t user;
+		void *kernel;
+		void *user;
 	} stack;
+
 
 	//---
 	// Context management
 	//---
 	common_context_t context;
-
-
-	//---
-	// Private data
-	//---
-	char name[PROCESS_NAME_LENGHT];
 
 
 	//---
@@ -51,11 +46,12 @@ struct process
 	struct dentry *working_dir;
 	FILE tty;
 
+
 	//---
 	// Signals management.
 	//---
 	//sighandler_t signal[NSIG];
-	
+
 
 	//---
 	// Virtual / Physical memory management.
@@ -67,20 +63,20 @@ struct process
 	//---
 	struct {
 		struct {
-			uint32_t user;
-			uint32_t kernel;
+			void *user;
+			void *kernel;
 			struct {
-				uint32_t user;
-				uint32_t kernel;
+				size_t user;
+				size_t kernel;
 			} size;
 		} stack;
 		struct {
-			uint32_t start;
-			uint32_t size;
+			void *start;
+			size_t size;
 		} program;
 		struct {
-			uint32_t start;
-			uint32_t size;
+			void *start;
+			size_t size;
 		} exit;
 	} memory; 
 
@@ -89,35 +85,43 @@ struct process
 	// Other process management.
 	//---
 	struct process *parent;
+	struct process *sibling;
 	struct process *child;
+
+
+	//---
+	// Private data
+	//---
+	// Process ID
+	pid_t pid;
+	pid_t pgid;
+
+	// Indicate process status
+	enum {
+		PROC_INIT,
+		PROC_RUNNING,
+		PROC_SLEEP,
+		PROC_STOP,
+		PROC_ZOMBIE,
+		PROC_DEAD
+	} status;
+
+	// Used to by the _exit() syscall
+	uint32_t __stat_loc;
+
+	// Used by the allocator
 	struct process *next;
 };
 
 
-// Internal struct used by the
-// static process stack
-struct process_stack
-{
-	// Indicate process slot status
-	enum {
-		PROC_USED,
-		PROC_UNUSED
-	} status;
-
-	// Internal process data
-	struct process process;
-};
-
-
 // Functions.
-extern struct process *process_create(const char *name);
-extern struct process *process_get(pid_t pid);
-extern pid_t process_get_pid(struct process *process);
+extern struct process *process_create(void);
 extern int process_switch(pid_t pid);
 
 
-// Internal function.
-extern pid_t process_alloc(struct process **process);
+// Internals
+extern struct process *process_alloc(void);
+extern struct process *process_get(pid_t pid);
 extern int process_free(struct process *process);
 
 #endif /*__KERNEL_PROCESS_H__*/

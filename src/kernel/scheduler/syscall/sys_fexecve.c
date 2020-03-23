@@ -5,6 +5,9 @@
 #include <kernel/devices/earlyterm.h>
 #include <lib/string.h>
 
+//TODO
+//TODO COPY-ON-WRITE !!
+//TODO
 static void proc_dump_shared(struct process *child, struct process *parent)
 {
 	// Dump all opened file
@@ -18,17 +21,20 @@ static void proc_dump_shared(struct process *child, struct process *parent)
 	memcpy(&child->tty, &parent->tty, sizeof(FILE));
 }
 
+//TODO
+//TODO Return EAGAIN if no proc can be created !!
+//TODO Return ENOMEM if no memories can be allocated !!
+//TODO
 pid_t sys_fexecve(const char *pathname)
 {
 	extern struct process *process_current;
 	struct process *proc;
-	pid_t child_pid;
 
 	// Start atomic operation
 	atomic_start();
 
 	// Try create new process
-	proc = process_create(pathname);
+	proc = process_create();
 	if (proc == NULL)
 	{
 		earlyterm_write("sys_fexecve: process_create error !\n");
@@ -51,6 +57,10 @@ pid_t sys_fexecve(const char *pathname)
 		return (-1);
 	}
 
+	// Release child process
+	proc->sibling = process_current->child;
+	process_current->child = proc;
+
 	// Add new process into task queue
 	if (sched_add_task(proc))
 	{
@@ -61,15 +71,12 @@ pid_t sys_fexecve(const char *pathname)
 		return (-1);
 	}
 
-	// Get child process PID
-	child_pid = process_get_pid(proc);
-
 	// Debug
-	earlyterm_write("New proc sched added !");
-	earlyterm_write("New proc PID = %#x !", child_pid);
-	DBG_WAIT;
+	//earlyterm_write("New proc sched added !\n");
+	///earlyterm_write("New proc PID = %#x !\n", proc->pid);
+	//DBG_WAIT;
 
 	// Stop atomic operations
 	atomic_stop();
-	return (child_pid);
+	return (proc->pid);
 }

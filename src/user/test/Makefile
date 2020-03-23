@@ -9,7 +9,7 @@ include ../../../global.mk
 ##	Static variables
 ##--
 HEADER		:= -I../../../include -I../../../include/user
-LIBS		:= -L../../lib/ -lunistd -lstdio -lstring -ldisplay -lgcc
+LIBS		:= -L../../lib/ -llibc -ldisplay -lgcc
 BUILD		:= ../../../build/user/test
 DEBUG		:= ../../../debug_bin
 OUTPUT		:= ../../../output
