@@ -10,12 +10,14 @@ static void *casio_smem_get_data_base_address(smemfs_fragdata_t *fragment)
 	extern struct smemfs_superblock_s smemfs_superblock;
 	struct casio_smem_block_s *block;
 
+	// Find the appropriate block
 	block = smemfs_superblock.sector_table;
 	while (block->magic_start == CASIO_SMEM_BLOCK_ENTRY_MAGIC &&
 		block->info.id != fragment->data_block_id)
 	{
 		block = &block[1];
 	}
+	// If the block ID is missing, return error
 	if (block->info.id != fragment->data_block_id)
 		return (NULL);
 	return ((void *)(block->offset + fragment->data_offset));
@@ -48,7 +50,7 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 
 	// Get the current data fragment.
 	current_size = 0;
-	fragment = inode + sizeof(struct casio_smem_header_s);
+	fragment = (void *)&header[1];
 	while (fragment->magic == CASIO_SMEM_FRAGMENT_MAGIC &&
 			fragment->info == CASIO_SMEM_FRAGMENT_INFO_EXIST &&
 			(off_t)(current_size + fragment->data_size + 1) < pos)
@@ -63,6 +65,10 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 	{
 		atomic_stop();
 		earlyterm_write("smemfs: fragment error !\n");
+		earlyterm_write("* current_size = %d\n", current_size);
+		earlyterm_write("* pos = %#x\n", pos);
+		earlyterm_write("* frag magic   = 0x%x\n", fragment->magic);
+		earlyterm_write("* frag info    = 0x%x\n", fragment->info);
 		return (-1);
 	}
 
@@ -84,8 +90,7 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 			break;
 
 		// Handle fragment data offset.
-		if (fragment_data_offset != 0)
-		{
+		if (fragment_data_offset != 0) {
 			data_base_addr = data_base_addr + fragment_data_offset;
 			fragment_data_offset = 0;
 		}

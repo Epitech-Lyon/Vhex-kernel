@@ -1,4 +1,5 @@
 #include <kernel/devices/tty.h>
+#include <kernel/devices/earlyterm.h>
 #include <kernel/drivers/keyboard.h>
 #include <kernel/drivers/timer.h>
 #include <kernel/util/atomic.h>
@@ -289,8 +290,7 @@ static int buffer_insert(struct keyboard_obj_s *keyboard, char n)
 
 static void cursor_callback(struct keyboard_obj_s *keyboard)
 {
-	int x;
-	int y;
+//	static int test = 0;
 
 	// Draw cursor if needed
 	if (keyboard->cvisible == 0)
@@ -299,34 +299,46 @@ static void cursor_callback(struct keyboard_obj_s *keyboard)
 		atomic_start();
 
 		// Geneate TTY buffer cursor position.
-		x = keyboard->buffer.cursor + keyboard->saved.tty.cursor.x;
-		y = x / keyboard->tty->cursor.max.x;
+		int x = keyboard->buffer.cursor + keyboard->saved.tty.cursor.x;
+		int y = x / keyboard->tty->cursor.max.x;
 		x = x - (y * keyboard->tty->cursor.max.x);
 		y = y + keyboard->saved.tty.cursor.y;
 		
-		// Save current cursor position and
-		// resotre saved position.
-		int sttyx = keyboard->tty->cursor.x;
-		int sttyy = keyboard->tty->cursor.y;
-		keyboard->tty->cursor.x = x;
-		keyboard->tty->cursor.y = y;
+		// Check circular limit
+		if (y >= keyboard->tty->cursor.max.y)
+			y = y - keyboard->tty->cursor.max.y;
+		
+		// Get window row
+		int line = -1;
+		while (++line < keyboard->tty->winsize.ws_row - 1)
+		{
+			// Update row cursor.
+			if (--y < 0)
+				y = keyboard->tty->cursor.max.y - 1;
+
+			// Check if the line existe.
+			if (keyboard->tty->buffers.output[y][0] == '\0')
+				break;
+		}
+
+		//if (line != test) {
+		//	earlyterm_write("line = %d - %d\n", line, keyboard->tty->winsize.ws_row);
+		//	test = line;
+		//	DBG_WAIT;
+		//}
 
 		// Get "real" X and Y position (pixel)
 		x = x * (keyboard->tty->disp.font->font.width + 1);
-		y = y * (keyboard->tty->disp.font->font.height + 1);
-
+		y = line * (keyboard->tty->disp.font->font.height + 1);
+		
 		// Display cursor.
-	/*	dreverse(
+		dreverse(
 			&keyboard->tty->disp, x, y,
 			(keyboard->tty->disp.font->font.width + 1),
 			(keyboard->tty->disp.font->font.height + 1)
 		);
 		(*screen_update)(keyboard->tty->disp.vram);
-*/
 
-		// Restore TTY cursor position
-		keyboard->tty->cursor.x = sttyx;
-		keyboard->tty->cursor.y = sttyy;
 
 		// Stop atomic operations
 		atomic_stop();

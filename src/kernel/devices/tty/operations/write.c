@@ -104,10 +104,10 @@ static ssize_t tty_buffer_update(struct tty_s *tty, const uint8_t *buffer, size_
 // TODO: Update me ?
 static void tty_display(struct tty_s *tty)
 {
-	int saved_start;
+	int test_row;
 	int line_len;
-	int line;
 	int start;
+	int line;
 	int y;
 
 	// Start atomic operation.
@@ -115,20 +115,18 @@ static void tty_display(struct tty_s *tty)
 
 	// Get the "first" line and number of line.
 	// @note: circular buffer.
-	line = 0;
-	start = tty->cursor.y;
+	line = -1;
+	test_row = tty->cursor.y;
 	while (++line < tty->winsize.ws_row)
 	{
 		// Update check line.
-		saved_start = start;
-		start = (start - 1 < 0) ? tty->cursor.max.y - 1 : start - 1;
+		start = test_row;
+		if (--test_row < 0)
+			test_row = tty->cursor.max.y - 1;
 
 		// Check if the line existe.
-		if (tty->buffers.output[start][0] == '\0')
-		{
-			start = saved_start;
+		if (tty->buffers.output[test_row][0] == '\0')
 			break;
-		}
 	}
 
 	// clear screen
@@ -136,7 +134,7 @@ static void tty_display(struct tty_s *tty)
 
 	// Display "on-screen" string lines.
 	y = -1;
-	while (++y < line)
+	while (++y <= line)
 	{
 		// Display line
 		line_len = -1;
@@ -144,7 +142,8 @@ static void tty_display(struct tty_s *tty)
 			dascii(&tty->disp, line_len, y, tty->buffers.output[start][line_len]);
 
 		// Update row index
-		start = (start + 1 < tty->cursor.max.y) ? start + 1 : 0;
+		if (++start >= tty->cursor.max.y)
+			start = 0;
 	}
 
 	// Display on screen.

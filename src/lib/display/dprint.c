@@ -1,4 +1,4 @@
-#include <lib/display.h>
+/*#include <lib/display.h>
 #include <stdarg.h>
 
 // Structure used to store
@@ -34,14 +34,14 @@ void (*actions_list[26])(struct dintern_s *intern, char spec) = {
 };
 
 
-/* dchar() - display only one char */
+// dchar() - display only one char //
 static void dchar(struct dintern_s *intern, char spec)
 {
 	(void)spec;
 	disp_char(intern, (char)va_arg(intern->ap, int));
 }
 
-/* dstr() - display string */
+// dstr() - display string //
 static void dstr(struct dintern_s *intern, char spec)
 {
 	char *str;
@@ -55,7 +55,7 @@ static void dstr(struct dintern_s *intern, char spec)
 	}
 }
 
-/* dint() - Display unsigned interger */
+// dint() - Display unsigned interger //
 static void duint(struct dintern_s *intern, char spec)
 {
 	const char hexa[] = "0123456789abcdef";
@@ -81,7 +81,7 @@ static void duint(struct dintern_s *intern, char spec)
 	}
 }
 
-/* dptr() - Display pointer address */
+// dptr() - Display pointer address //
 static void dptr(struct dintern_s *intern, char spec)
 {
 	const char hexa[] = "0123456789abcdef";
@@ -111,7 +111,7 @@ static void dptr(struct dintern_s *intern, char spec)
 	}
 }
 
-/* dint() - Display signed number (base 10) */
+// dint() - Display signed number (base 10) //
 static void dint(struct dintern_s *intern, char spec)
 {
 	char buffer[32];
@@ -142,7 +142,7 @@ static void dint(struct dintern_s *intern, char spec)
 	}
 }
 
-/* line_discipline() - small line discipline */
+// line_discipline() - small line discipline //
 static int line_discipline(struct dintern_s *intern, char n)
 {
 	// New line
@@ -164,7 +164,7 @@ static int line_discipline(struct dintern_s *intern, char n)
 
 }
 
-/* disp_char() - display on character and update internal data */
+// disp_char() - display on character and update internal data //
 static void disp_char(struct dintern_s *intern, char n)
 {
 	dascii(intern->disp, intern->x, intern->y, n);
@@ -173,7 +173,7 @@ static void disp_char(struct dintern_s *intern, char n)
 	intern->force = intern->force - 1;
 }
 
-/* dprint() - printf wrapper */
+// dprint() - printf wrapper //
 size_t dprint(display_t *disp, int x, int y, const char *format, ...)
 {
 	void (*action)(struct dintern_s *intern, char spec);
@@ -234,4 +234,4 @@ size_t dprint(display_t *disp, int x, int y, const char *format, ...)
 		(*action)(&intern, *format);
 	}
 	return (intern.counter);
-}
+}*/

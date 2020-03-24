@@ -9,14 +9,10 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 	char *shstrtab;
 
 	// Get sections string header tables
-	earlyterm_write(
-			"off_t = %#x\noff_t = %#x\n",
-			header->e_shoff + (header->e_shstrndx * sizeof(Elf32_Shdr)),
-			vfs_lseek(file, header->e_shoff + (header->e_shstrndx * sizeof(Elf32_Shdr)), SEEK_SET)
-	);;
+	vfs_lseek(file, header->e_shoff + (header->e_shstrndx * sizeof(Elf32_Shdr)), SEEK_SET);
 	if (vfs_read(file, &shdr, sizeof(Elf32_Shdr)) != sizeof(Elf32_Shdr))
 	{
-		earlyterm_write("relo_sym: section header table error\n");
+		earlyterm_write("relo_sym: shdr size\n");
 		return (NULL);
 	}
 
@@ -24,7 +20,7 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 	shstrtab = (char*)pm_alloc(shdr.sh_size);
 	if (shstrtab == NULL)
 	{
-		earlyterm_write("relo_sym: mem error (%d)\n", shdr.sh_size);
+		earlyterm_write("relo_sym:mem (%d)\n", shdr.sh_size);
 		return (NULL);
 	}
 
@@ -69,9 +65,6 @@ int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header)
 	Elf32_Shdr shdr;
 	char *shstrtab;
 
-	//TODO
-	(void)process;
-	
 	// DEBUG
 	earlyterm_write("e_shoff    = %d\n", header->e_shoff);
 	earlyterm_write("e_shnum    = %d\n", header->e_shnum);
@@ -109,8 +102,8 @@ int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header)
 	}
 	pm_free(shstrtab);
 	//earlyterm_write("start = %p\n", process->memory.program.start);
-	DBG_WAIT;
-	DBG_WAIT;
+	//DBG_WAIT;
+	//DBG_WAIT;
 	//DBG_WAIT;
 	return (0);
 }

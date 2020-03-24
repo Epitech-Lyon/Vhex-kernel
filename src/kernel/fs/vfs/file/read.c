@@ -1,4 +1,5 @@
 #include <kernel/fs/vfs.h>
+#include <kernel/devices/earlyterm.h>
 #include <lib/string.h>
 
 ssize_t vfs_read(FILE *file, void *buf, size_t count)
@@ -18,7 +19,7 @@ ssize_t vfs_read(FILE *file, void *buf, size_t count)
 	// Read with FS specifique primitive and return the numbe of reading bytes.
 	memset(buf, 0x00, count);
 	ssize_t read = file->file_op->read(((struct dentry*)file->private)->inode, buf, count, file->cursor);
-	if (read != -1)
+	if (read > 0)
 		file->cursor = file->cursor + read;
 	return (read);
 }
