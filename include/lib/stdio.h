@@ -7,6 +7,7 @@
 
 /* *printf() familly - formatted output conversion. */
 extern int printf(const char *restrict format, ...);
+extern int dprintf(int fd, const char *restrict format, ...);
 extern int sprintf(char *restrict str, const char *restrict format, ...);
 extern int snprintf(char *restrict str, size_t size, const char *restrict format, ...);
 

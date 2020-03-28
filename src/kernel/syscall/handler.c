@@ -33,6 +33,12 @@ static const void *sys_handler[__NR_MAX] = {
 	sys_open,		// open
 	sys_close,		// close
 	sys_lseek,		// lseek
+	sys_pread,		// pread
+	sys_pwrite,		// pwrite
+
+	// Memory
+	sys_mmap,		// mmap
+	NULL//sys_munmap		// munmap
 };
 
 void *sys_get_handler(int sysno)

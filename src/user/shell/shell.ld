@@ -8,7 +8,7 @@ ENTRY(_main)
 MEMORY
 {
 	/* virtual memory, read-write segment */
-	userram (WX) : o = 0x00000000, l = 256k
+	userram (rwx) : o = 0x00000000, l = 256k
 }
 
 SECTIONS

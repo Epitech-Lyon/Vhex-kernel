@@ -7,16 +7,18 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 {
 	Elf32_Shdr shdr;
 	char *shstrtab;
+	off_t offset;
 
 	// Get sections string header tables
-	vfs_lseek(file, header->e_shoff + (header->e_shstrndx * sizeof(Elf32_Shdr)), SEEK_SET);
-	if (vfs_read(file, &shdr, sizeof(Elf32_Shdr)) != sizeof(Elf32_Shdr))
+	offset = header->e_shoff + (header->e_shstrndx * sizeof(Elf32_Shdr));
+	if (vfs_pread(file, &shdr, sizeof(Elf32_Shdr), offset) != sizeof(Elf32_Shdr))
 	{
 		earlyterm_write("relo_sym: shdr size\n");
 		return (NULL);
 	}
 
 	// Allocate dump area
+	earlyterm_write("Try to alloc strtab (%do)\n", shdr.sh_size);
 	shstrtab = (char*)pm_alloc(shdr.sh_size);
 	if (shstrtab == NULL)
 	{
@@ -25,8 +27,7 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 	}
 
 	// Get string tables
-	vfs_lseek(file, shdr.sh_offset, SEEK_SET);
-	if (vfs_read(file, shstrtab, shdr.sh_size) != (ssize_t)shdr.sh_size)
+	if (vfs_pread(file, shstrtab, shdr.sh_size, shdr.sh_offset) != (ssize_t)shdr.sh_size)
 	{
 		earlyterm_write("relo_sym: shstrtab size error\n");
 		pm_free(shstrtab);
@@ -39,14 +40,15 @@ static int reloc_section(struct process *process, FILE *file, Elf32_Shdr *shdr)
 {
 	Elf32_Rela rela;
 	uint32_t *prog;
+	off_t offset;
 
 	// List symbols
 	prog = (void*)process->memory.program.start;
 	for (uint32_t i = 0 ; i < shdr->sh_size / shdr->sh_entsize ; ++i)
 	{
 		// Get relocatable entry
-		vfs_lseek(file, shdr->sh_offset + (i * sizeof(Elf32_Rela)), SEEK_SET);
-		if (vfs_read(file, &rela, sizeof(Elf32_Rela)) != sizeof(Elf32_Rela))
+		offset = shdr->sh_offset + (i * sizeof(Elf32_Rela));
+		if (vfs_pread(file, &rela, sizeof(Elf32_Rela), offset) != sizeof(Elf32_Rela))
 		{
 			earlyterm_write("relo_sym: reloc section size error\n");
 			return (-1);
@@ -64,13 +66,13 @@ int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header)
 {
 	Elf32_Shdr shdr;
 	char *shstrtab;
+	off_t offset;
 
 	// DEBUG
 	earlyterm_write("e_shoff    = %d\n", header->e_shoff);
 	earlyterm_write("e_shnum    = %d\n", header->e_shnum);
 	earlyterm_write("e_shstrndx = %d\n", header->e_shstrndx);
 	//DBG_WAIT;
-
 
 	// Get the shstrtab
 	shstrtab = get_shstrtab(file, header);
@@ -81,13 +83,13 @@ int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header)
 	for (int i = 1 ; i < header->e_shnum ; ++i)
 	{
 		// Get next section header
-		vfs_lseek(file, header->e_shoff + (i * sizeof(Elf32_Shdr)), SEEK_SET);
-		if (vfs_read(file, &shdr, sizeof(Elf32_Shdr)) != sizeof(Elf32_Shdr))
+		offset = header->e_shoff + (i * sizeof(Elf32_Shdr));
+		if (vfs_pread(file, &shdr, sizeof(Elf32_Shdr), offset) != sizeof(Elf32_Shdr))
 		{
 			earlyterm_write("loader_reloc_sym: section header\n");
 			earlyterm_write("loader_reloc_sym: shoff = %#x\n", header->e_shoff);
 			earlyterm_write("loader_reloc_sym: shnum = %#x\n", header->e_shnum);
-			earlyterm_write("loader_reloc_sym: off = %#x\n", header->e_shoff + (i * sizeof(Elf32_Shdr)));
+			earlyterm_write("loader_reloc_sym: off = %#x\n", offset);
 			return (-2);
 		}
 
@@ -101,9 +103,5 @@ int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header)
 			return (-3);
 	}
 	pm_free(shstrtab);
-	//earlyterm_write("start = %p\n", process->memory.program.start);
-	//DBG_WAIT;
-	//DBG_WAIT;
-	//DBG_WAIT;
 	return (0);
 }

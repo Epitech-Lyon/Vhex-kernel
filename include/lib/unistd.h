@@ -9,9 +9,9 @@
 #include <kernel/util/unistd_32.h>
 
 // TODO: move me
-#define STDOUT_FILENO	0
-#define STDERR_FILENO	1
-#define STDIN_FILENO	2
+#define STDIN_FILENO	0
+#define STDOUT_FILENO	1
+#define STDERR_FILENO	2
 
 //TODO: move me
 #define WNOHANG		0
@@ -31,10 +31,23 @@ extern pid_t waitpid(pid_t pid, int *wstatus, int options);
 extern pid_t fexecve(const char *pathname);
 
 // File syscall
-#define O_DIRECT	0
+// TODO: move me 
+// FIXME: find real value
+#ifndef __FILE_H__
+# define O_DIRECT	0
+# define O_DIRECTORY	1
+# define O_RDONLY	2
+# define O_WRONLY	4
+# define O_RDWR 	8
+
+# define SEEK_SET	0
+# define SEEK_CUR	1
+# define SEEK_END	2
+#endif
 extern int open(const char *pathname, int flags, ...);
 extern ssize_t write(int fd, const void *buf, size_t count);
 extern ssize_t read(int fd, void *buf, size_t count);
+extern off_t lseek(int fd, off_t offset, int whence);
 extern int close(int fd);
 
 #endif /*__LIB_UNISTD_H__*/

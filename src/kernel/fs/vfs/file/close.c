@@ -9,6 +9,6 @@ int vfs_close(FILE *file)
 	//TODO: call close primitive for device !
 
 	// Update internal dentry counter
-	((struct dentry*)file->private)->counter += 1;
+	((struct dentry*)file->private)->counter -= 1;
 	return (0);
 }

@@ -1,4 +1,5 @@
 #include <kernel/fs/gladfs.h>
+#include <kernel/util/atomic.h>
 #include <kernel/fs/filesystem.h>
 #include <kernel/memory.h>
 
@@ -46,15 +47,22 @@ struct gladfs_superblock_s gladfs_superblock;
 // Contructor for the superBlock
 void gladfs_initialize(void)
 {
+	// Start atomic operations
+	atomic_start();
+
 	// initilaize ROOT inode
 	gladfs_superblock.root_inode = NULL;
 
 	// Initialize device informations
-	gladfs_superblock.block_size = PM_BLOCK_SIZE;
+	// FIXME: find better page size
+	gladfs_superblock.block_size = 64;
 
 	// Iniitlaize superblock openrations
 	gladfs_superblock.super_op.alloc_inode = &gladfs_alloc_inode;
 	gladfs_superblock.super_op.destroy_inode = &gladfs_destroy_inode;
 	gladfs_superblock.super_op.alloc_fragdata = &gladfs_alloc_fragdata;
 	gladfs_superblock.super_op.destroy_fragdata = &gladfs_destroy_fragdata;
+
+	// Stop atomic operations
+	atomic_stop();
 }

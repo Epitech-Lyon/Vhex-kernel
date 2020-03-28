@@ -1,6 +1,7 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/memory.h>
 #include <kernel/fs/stat.h>
+#include <kernel/util/atomic.h>
 #include <lib/string.h>
 
 /* vfs_mkdir() - Attempts to create a directory named pathname */
@@ -15,23 +16,31 @@ int vfs_mkdir(const char *pathname, mode_t mode)
 	name = strrchr(pathname, '/');
 	name = (name == NULL) ? (void *)pathname : &name[1];
 
+	// Start atomic operations
+	atomic_start();
+
 	// Get parent dentry
 	parent_dentry = vfs_dentry_resolve(pathname, VFS_DENTRY_RESOLVE_FLAG_PATHNAME);
 	
 	// Check parent dentry and FS primitives
-	if (parent_dentry == NULL || parent_dentry->dentry_op.inode_op->mkdir == NULL)
+	if (parent_dentry == NULL || parent_dentry->dentry_op.inode_op->mkdir == NULL) {
+		atomic_stop();
 		return (-1);
+	}
 
 	// Try to create new dentry
 	folder = vfs_dentry_alloc(name, mode | __S_IFDIR);
-	if (folder == NULL)
+	if (folder == NULL) {
+		atomic_stop();
 		return (-2);
+	}
 
 	// Try to request new folder
 	folder->inode = parent_dentry->dentry_op.inode_op->mkdir(parent_dentry->inode, name, mode);
 	if (folder->inode == NULL)
 	{
 		vfs_dentry_free(folder);
+		atomic_stop();
 		return (-3);
 	}
 
@@ -43,5 +52,6 @@ int vfs_mkdir(const char *pathname, mode_t mode)
 	folder->parent = parent_dentry;
 	folder->next = parent_dentry->child;
 	parent_dentry->child = folder;
+	atomic_stop();
 	return (0);
 }

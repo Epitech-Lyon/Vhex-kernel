@@ -14,8 +14,8 @@ int vfs_open(FILE *file, char const *pathname, int flags)
 	dentry = vfs_dentry_resolve(pathname, 0);
 	if (dentry == NULL)
 	{
-		earlyterm_write("VFS_open() error !");
-		earlyterm_write("* path error '%s'", pathname);
+		earlyterm_write("VFS_open() error !\n");
+		earlyterm_write("* path error '%s'\n", pathname);
 		DBG_WAIT;
 		return (-1);
 	}
@@ -23,7 +23,7 @@ int vfs_open(FILE *file, char const *pathname, int flags)
 	// Check directory.
 	if ((dentry->mode & __S_IFDIR) != 0)
 	{
-		earlyterm_write("VFS_open(): file type error '%s'", pathname);
+		earlyterm_write("VFS_open(): file type error '%s'\n", pathname);
 		DBG_WAIT;
 		return (-2);
 	}

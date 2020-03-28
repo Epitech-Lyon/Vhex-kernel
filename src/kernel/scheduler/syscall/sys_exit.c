@@ -18,13 +18,14 @@ void sys_exit(int status)
 	atomic_start();
 
 	// Generate stat_loc
+	// TODO: signal
 	process_current->__stat_loc = __W_EXITCODE(status, 0); 
 
 	// Frre'd all allocated space
-	pm_free(process_current->memory.stack.user);
-	pm_free(process_current->memory.stack.kernel);
-	pm_free(process_current->memory.program.start);
-	pm_free(process_current->memory.exit.start);
+	pm_pages_free(process_current->memory.stack.user);
+	pm_pages_free(process_current->memory.stack.kernel);
+	pm_pages_free(process_current->memory.program.start);
+	pm_pages_free(process_current->memory.exit.start);
 
 	// Change process state
 	process_current->status = PROC_ZOMBIE;

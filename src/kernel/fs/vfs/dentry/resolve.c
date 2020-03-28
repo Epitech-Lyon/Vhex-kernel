@@ -39,7 +39,7 @@ struct dentry *vfs_dentry_resolve(const char *path, int mode)
 	// Check VFS validity
 	if (vfs_root_node == NULL)
 	{
-		earlyterm_write("VFS root  error !\n");
+		earlyterm_write("VFS root error !\n");
 		DBG_WAIT;
 		return (NULL);
 	}

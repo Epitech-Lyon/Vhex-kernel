@@ -8,6 +8,7 @@ int loader_load_image(struct process *process, FILE *file, Elf32_Ehdr *header)
 {
 	Elf32_Phdr program;
 	void *paddress;
+	off_t offset;
 	uint16_t i;
 
 	// Walk one time to get program size and
@@ -17,8 +18,8 @@ int loader_load_image(struct process *process, FILE *file, Elf32_Ehdr *header)
 	while (++i < header->e_phnum)
 	{
 		// Read programme header.
-		vfs_lseek(file, header->e_phoff + (sizeof(Elf32_Phdr) * i), SEEK_SET);
-		if (vfs_read(file, &program, sizeof(Elf32_Phdr)) != sizeof(Elf32_Phdr))
+		offset = header->e_phoff + (i * sizeof(Elf32_Phdr));
+		if (vfs_pread(file, &program, sizeof(Elf32_Phdr), offset) != sizeof(Elf32_Phdr))
 			return (-1);
 
 		// Check programe type.
@@ -29,10 +30,11 @@ int loader_load_image(struct process *process, FILE *file, Elf32_Ehdr *header)
 		process->memory.program.size = process->memory.program.size + program.p_memsz;
 	}
 
-	// Allocate programe space into
-	// physical memory.
-	process->memory.program.start = (void *)pm_alloc(process->memory.program.size);
-	if (process->memory.program.start == 0x00000000)
+	// Allocate programe space into physical memory.
+	// @note: we use page allocator to avoid kernel
+	// heap grow up
+	process->memory.program.start = pm_pages_alloc(PM_SIZE_TO_PAGES(process->memory.program.size));
+	if (process->memory.program.start == NULL)
 		return (-3);
 
 	// Now, load all program section into
@@ -41,8 +43,8 @@ int loader_load_image(struct process *process, FILE *file, Elf32_Ehdr *header)
 	while (++i < header->e_phnum)
 	{
 		// Read programme header.
-		vfs_lseek(file, header->e_phoff + (sizeof(Elf32_Phdr) * i), SEEK_SET);
-		vfs_read(file, &program, sizeof(Elf32_Phdr));
+		offset = header->e_phoff + (i * sizeof(Elf32_Phdr));
+		vfs_pread(file, &program, sizeof(Elf32_Phdr), offset);
 
 		// Generate physical address
 		paddress = program.p_vaddr + process->memory.program.start;
@@ -52,8 +54,7 @@ int loader_load_image(struct process *process, FILE *file, Elf32_Ehdr *header)
 		memset(paddress, 0, program.p_memsz);
 
 		// Dump the program. 
-		vfs_lseek(file, program.p_offset, SEEK_SET);
-		vfs_read(file, paddress, program.p_filesz);
+		vfs_pread(file, paddress, program.p_filesz, program.p_offset);
 	}
 
 	// Generate program entry address

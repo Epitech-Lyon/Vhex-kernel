@@ -1,21 +1,22 @@
 #include <kernel/memory.h>
+#include <kernel/util/atomic.h>
 #include <kernel/devices/earlyterm.h>
 
-void pm_free(void *ptr)
+void pm_pages_free(void *ptr)
 {
-	extern struct memory_info_s pmemory;
-	struct pm_block_cache_s **head;
-	uint32_t block_entry;
+	extern struct memory_info pmemory;
+	uint16_t page_entry_id;
+	struct pm_page **head;
 	uint32_t sptr;
 
 	// Save address for error message.
 	sptr = (uint32_t)ptr;
 
 	// Get the "real" physical space.
-	ptr = (void*)(ptr - pmemory.start);
+	ptr = (void*)(ptr - pmemory.cache.pages.base_addr);
 
 	// Check misaligned pointer.
-	if (((uint32_t)ptr % PM_BLOCK_SIZE) != 0)
+	if (((uint32_t)ptr % PM_PAGE_SIZE) != 0)
 	{
 		earlyterm_write(
 			"pm_free: Warning, you try to free misaligned"
@@ -26,23 +27,27 @@ void pm_free(void *ptr)
 	}
 
 	// Get block entry.
-	block_entry = (uint32_t)ptr / PM_BLOCK_SIZE;
+	page_entry_id = (uint32_t)ptr / PM_PAGE_SIZE;
+
+	// Start atomic operations
+	atomic_start();
 
 	// Walk into "head" cache and try to find 
 	// the allocated block.
-	head = &pmemory.head;
+	head = &pmemory.cache.delta;
 	while (*head != NULL)
 	{
 		// Check the allocated block.
-		if ((*head)->start != block_entry)
+		if ((*head)->id.start != page_entry_id)
 		{
 			head = &(*head)->next;
 			continue;
 		}
 
 		// Free the block and return
-		(*head)->status = UNUSED;
+		(*head)->status = PAGE_UNUSED;
 		*head = (*head)->next;
+		atomic_stop();
 		return;
 	}
 
@@ -52,4 +57,7 @@ void pm_free(void *ptr)
 		"allocated memory (%p)", sptr
 	);
 	DBG_WAIT;
+
+	// Stop atomic operations
+	atomic_stop();
 }

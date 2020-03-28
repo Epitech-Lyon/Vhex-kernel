@@ -78,6 +78,7 @@ struct process
 			void *start;
 			size_t size;
 		} exit;
+		struct heap *heap;
 	} memory; 
 
 

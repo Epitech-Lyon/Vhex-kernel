@@ -10,13 +10,16 @@
 # define FILE_OPEN_NUMBER   4
 #endif
 
-#define O_RDONLY	0x00
-#define O_WRONLY	0x01
-#define O_RDWR		0x02
+// TODO: fix me
+#ifndef __LIB_UNISTD_H__
+# define O_RDONLY	0x00
+# define O_WRONLY	0x01
+# define O_RDWR		0x02
 
-#define SEEK_SET	0
-#define SEEK_CUR	1
-#define SEEK_END	2
+# define SEEK_SET	0
+# define SEEK_CUR	1
+# define SEEK_END	2
+#endif
 
 struct file_s
 {

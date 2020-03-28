@@ -5,7 +5,7 @@
 int loader_get_header(FILE *file, Elf32_Ehdr *header)
 {
 	// Read ELF header.
-	if (vfs_read(file, header, sizeof(Elf32_Ehdr)) != sizeof(Elf32_Ehdr))
+	if (vfs_pread(file, header, sizeof(Elf32_Ehdr), 0) != sizeof(Elf32_Ehdr))
 		return (-1);
 
 	// Check magic number

@@ -109,9 +109,6 @@ int start(void)
 	if (current_mpu != MPU_SH7305)
 		return (0);
 
-	// Execute constructor.
-	section_execute(&bctors, &ectors);
-
 	// Load UBC / VBR space.
 	memcpy(&bubc_ram, &bubc_rom, (size_t)&subc);
 	memcpy(&bvhex_ram, &bvhex_rom, (size_t)&svhex);
@@ -121,6 +118,10 @@ int start(void)
 	// before switching the VBR.
 	rom_explore(&brom, (int32_t)&srom);
 
+	// TODO: load driver on-the-fly
+	extern void screen_driver_load(void);
+	screen_driver_load();
+
 	// Start early terminal device
 	// This device is used by the kernel to display
 	// some logs on screen
@@ -128,6 +129,9 @@ int start(void)
 		return (-1);
 	earlyterm_clear();
 	earlyterm_write("Kernel initialisation...\n");
+
+	// Execute constructor.
+	section_execute(&bctors, &ectors);
 
 
 

@@ -20,6 +20,13 @@ extern int sys_open(const char *pathname, int flags, ...);
 extern ssize_t sys_write(int fd, const void *buf, size_t count);
 extern ssize_t sys_read(int fd, void *buf, size_t count);
 extern off_t sys_lseek(int fd, off_t offset, int whence);
+extern ssize_t sys_pwrite(int fd, const void *buf, size_t count, off_t offset);
+extern ssize_t sys_pread(int fd, void *buf, size_t count, off_t offset);
 extern int sys_close(int fd);
+
+// Memory
+extern void *sys_mmap(void *addr, size_t length,
+			int prot, int flags, int fd, off_t offset);
+extern int sys_munmap(void *addr, size_t length);
 
 #endif /*__SYSCALL_H__*/

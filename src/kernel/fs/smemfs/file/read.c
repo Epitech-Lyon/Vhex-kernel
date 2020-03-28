@@ -69,6 +69,9 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 		earlyterm_write("* pos = %#x\n", pos);
 		earlyterm_write("* frag magic   = 0x%x\n", fragment->magic);
 		earlyterm_write("* frag info    = 0x%x\n", fragment->info);
+		DBG_WAIT;
+		DBG_WAIT;
+		DBG_WAIT;
 		return (-1);
 	}
 

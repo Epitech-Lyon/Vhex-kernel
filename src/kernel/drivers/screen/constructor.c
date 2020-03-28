@@ -8,7 +8,7 @@ extern void t6k11_lcd_driver(void *vram);
 void (*screen_update)(void *vram);
 
 __attribute__((constructor))
-static void screen_constructor(void)
+void screen_driver_load(void)
 {
 	// Check T6K11 variant which appear during
 	// the OS >= 03.00.0000

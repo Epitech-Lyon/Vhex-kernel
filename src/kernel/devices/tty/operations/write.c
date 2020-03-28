@@ -7,9 +7,8 @@
 static void tty_vertical_update(struct tty_s *tty)
 {
 	// Get next line.
-	if (tty->cursor.y + 1 < tty->cursor.max.y)
-		tty->cursor.y = tty->cursor.y + 1;
-	else
+	tty->cursor.y = tty->cursor.y + 1;
+	if (tty->cursor.y >= tty->cursor.max.y)
 		tty->cursor.y = 0;
 
 	// Wipe new line.
@@ -75,6 +74,7 @@ static ssize_t tty_buffer_update(struct tty_s *tty, const uint8_t *buffer, size_
 		// Check new line char.
 		if (buffer[i] == '\n')
 		{
+			tty->buffers.output[tty->cursor.y][tty->cursor.x] = '\n';
 			tty->cursor.x = 0;
 			tty_vertical_update(tty);
 			continue;
@@ -97,6 +97,8 @@ static ssize_t tty_buffer_update(struct tty_s *tty, const uint8_t *buffer, size_
 		tty->buffers.output[tty->cursor.y][tty->cursor.x] = buffer[i];
 		tty_horizontal_update(tty);
 	}
+
+	tty->buffers.output[tty->cursor.y][tty->cursor.x] = '\0';
 	return (i);
 }
 
@@ -129,17 +131,24 @@ static void tty_display(struct tty_s *tty)
 			break;
 	}
 
+	//TODO
+	//TODO Display only the new char !
+	//TODO Use scroll drawing function to avoid draw time !
+	//TODO
+
 	// clear screen
 	dclear(&tty->disp);
 
 	// Display "on-screen" string lines.
 	y = -1;
-	while (++y <= line)
+	while (++y <= line && y < tty->winsize.ws_row)
 	{
 		// Display line
 		line_len = -1;
-		while (tty->buffers.output[start][++line_len] != '\0')
-			dascii(&tty->disp, line_len, y, tty->buffers.output[start][line_len]);
+		while (tty->buffers.output[start][++line_len] != '\0') {
+			if (tty->buffers.output[start][line_len] != '\n')
+				dascii(&tty->disp, line_len, y, tty->buffers.output[start][line_len]);
+		}
 
 		// Update row index
 		if (++start >= tty->cursor.max.y)

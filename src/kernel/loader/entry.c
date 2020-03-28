@@ -66,5 +66,6 @@ int loader(struct process *process, const char *path)
 		DBG_WAIT;
 		return (-4);
 	}
+	vfs_close(&file);
 	return (0);
 }

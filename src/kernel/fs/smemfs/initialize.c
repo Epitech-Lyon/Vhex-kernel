@@ -1,6 +1,7 @@
 #include <kernel/fs/smemfs.h>
 #include <kernel/fs/filesystem.h>
 #include <kernel/devices/earlyterm.h>
+#include <kernel/util/atomic.h>
 
 // Kernel FS block
 struct file_system_type smemfs_filesystem =
@@ -44,25 +45,31 @@ struct smemfs_superblock_s smemfs_superblock;
 
 void smemfs_initialize(void)
 {
+	// Start atomic operations
+	atomic_start();
+
 	// Get / check Casio SMEM sector table
 	// @note:
 	// 	Casio SMEM sector table start
 	// always (?) at 0xa0270000 (tested with OS 1.00.0000).
 	// TODO: return error !!
 	smemfs_superblock.sector_table = (void *)0xa0270000;
-	if (smemfs_superblock.sector_table->magic_start != 0x4200)
+	if (smemfs_superblock.sector_table->magic_start != CASIO_SMEM_BLOCK_ENTRY_MAGIC)
 	{
 		earlyterm_clear();
 		earlyterm_write("SMEMFS: Casio sector table error !");
 		earlyterm_write("Wait manual reset...");
+		atomic_stop();
 		while (1){ __asm__ volatile ("sleep"); }
 	}
 
-	// Casio SMEM inode table start always at the end of the sector table.
-	// Normaly start at 0xa0270320 but not always (?)
-	// TODO: return error !!
+	// Try to find Casio SMEM inode table start always at the end of
+	// the sector table. Normaly start at 0xa0270320 but not always (?)
 	int i = -1;
 	while (smemfs_superblock.sector_table[++i].magic_start == CASIO_SMEM_BLOCK_ENTRY_MAGIC);
+
+	// Get the inode table
+	// TODO: return error !!
 	smemfs_superblock.inode_table = (void *)&smemfs_superblock.sector_table[i];
 	if ((smemfs_superblock.inode_table->info != 0x51 &&
 			smemfs_superblock.inode_table->info != 0x01) ||
@@ -72,6 +79,10 @@ void smemfs_initialize(void)
 		earlyterm_clear();
 		earlyterm_write("SMEMFS: Casio inode table error !");
 		earlyterm_write("Wait manual reset...");
+		atomic_stop();
 		while (1){ __asm__ volatile ("sleep"); }
 	}
+
+	// Stop atomic operations
+	atomic_stop();
 }

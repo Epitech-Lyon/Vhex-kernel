@@ -33,6 +33,8 @@ extern int vfs_open(FILE *file, const char *pathname, int flags);
 extern ssize_t vfs_read(FILE *file, void *buf, size_t count);
 extern ssize_t vfs_write(FILE *file, const void *buf, size_t count);
 extern off_t vfs_lseek(FILE *file, off_t offset, int whence);
+extern ssize_t vfs_pread(FILE *file, void *buf, size_t count, off_t offset);
+extern ssize_t vfs_pwrite(FILE *file, const void *buf, size_t count, off_t offset);
 extern int vfs_close(FILE *file);
 
 // Dentry opeations

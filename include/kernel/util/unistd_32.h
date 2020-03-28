@@ -2,7 +2,7 @@
 # define __KERNEL_UNISTD_32_H__
 
 // Define the number of syscall
-#define __NR_MAX		14
+#define __NR_MAX		18
 
 // Kernel Test
 #define __NR_test_syscall	0
@@ -23,5 +23,11 @@
 #define __NR_open 		11
 #define __NR_close 		12
 #define __NR_lseek 		13
+#define __NR_pread 		14
+#define __NR_pwrite		15
+
+// Memory
+#define __NR_mmap		16
+#define __NR_munmap		17
 
 #endif /*__KERNEL_UNISTD_32_H__*/

@@ -21,8 +21,8 @@ struct process *process_create(void)
 
 	// Initialize user stack
 	process->memory.stack.size.user = PROCESS_USER_STACK_SIZE;
-	process->memory.stack.user = (void *)pm_alloc(process->memory.stack.size.user);
-	if (process->memory.stack.user == 0x00000000)
+	process->memory.stack.user = pm_pages_alloc(PM_SIZE_TO_PAGES(process->memory.stack.size.user));
+	if (process->memory.stack.user == NULL)
 	{
 		earlyterm_write("proc_error: user stack error !");
 		DBG_WAIT;
@@ -33,8 +33,8 @@ struct process *process_create(void)
 
 	// Initialize kernel stack
 	process->memory.stack.size.kernel = PROCESS_KERNEL_STACK_SIZE;
-	process->memory.stack.kernel = (void *)pm_alloc(process->memory.stack.size.kernel);
-	if (process->memory.stack.kernel == 0x00000000)
+	process->memory.stack.kernel = pm_pages_alloc(PM_SIZE_TO_PAGES(process->memory.stack.size.kernel));
+	if (process->memory.stack.kernel == NULL)
 	{
 		earlyterm_write("proc_error: kernel stack error !");
 		DBG_WAIT;
@@ -45,6 +45,7 @@ struct process *process_create(void)
 	process->stack.kernel = process->memory.stack.kernel + process->memory.stack.size.kernel;
 
 	// initialize "exit" part.
+	// TODO: generate errno global address
 	uint8_t callexit[8] = {
 		0b01100100, 0b00000011,	// mov r0, r4
 		0b11000011, __NR_exit,	// trapa #__NR_exit
@@ -52,8 +53,8 @@ struct process *process_create(void)
 		0b00000000, 0b00001001	// nop
 	};
 	process->memory.exit.size = 8;
-	process->memory.exit.start = (void *)pm_alloc(process->memory.exit.size);
-	if (process->memory.exit.start == 0x00000000)
+	process->memory.exit.start = pm_pages_alloc(PM_SIZE_TO_PAGES(process->memory.exit.size));
+	if (process->memory.exit.start == NULL)
 	{
 		pm_free(process->memory.stack.user);
 		pm_free(process->memory.stack.kernel);
@@ -61,9 +62,10 @@ struct process *process_create(void)
 		return (NULL);
 	}
 	process->context.pr = (uint32_t)process->memory.exit.start;
-	memcpy((void *)process->memory.exit.start, callexit, 6);
+	memcpy(process->memory.exit.start, callexit, 6);
 
 	// Initialize context.
+	// TODO:arguments
 	for (int i = 0 ; i < 15 ; i = i + 1)
 		process->context.reg[i] = 0x00000000;
 
