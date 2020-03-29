@@ -1,5 +1,6 @@
-#include <lib/stdio.h>
-#include <lib/unistd.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 /*static int tree(const char *pathname)
 {
@@ -28,12 +29,18 @@
 	return (0);
 }*/
 
-int main(void)
+int main(int argc, char **argv)
 {
 	char c[1024];
 	int ret;
 	int fd;
 
+	// Check parameters
+	for (int i = 0 ; i < argc ; i++)
+		printf("argv[%d]: %s\n", i, argv[i]);
+	for(int i = 0 ; i < 3000000 ; ++i);
+
+	// Read test
 	fd = open("/mnt/casio/VHEX/text.txt", O_RDONLY);
 	if (fd < 0) {
 		dprintf(STDERR_FILENO, "unable to open test file\n");

@@ -1,4 +1,4 @@
-#include <lib/stdio.h>
+#include <stdio.h>
 
 static int get_flags(struct printf_opt *opt, const char *restrict format)
 {

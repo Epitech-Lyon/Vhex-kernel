@@ -1,4 +1,4 @@
-#include <lib/display.h>
+#include <display.h>
 
 /* dscroll() - Scroll up the Video RAM */
 //FIXME: This part is hardware specific (128x64px)!!

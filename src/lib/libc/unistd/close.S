@@ -1,4 +1,4 @@
-#include <kernel/util/unistd_32.h>
+#include <asm/unistd_32.h>
 .text
 .global	_close
 .type	_close, @function

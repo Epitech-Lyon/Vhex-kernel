@@ -1,4 +1,4 @@
-#include <lib/stdio.h>
+#include <stdio.h>
 
 int sprintf(char *restrict str, const char *restrict format, ...)
 {

@@ -119,7 +119,13 @@ static int check_special(struct keyboard_obj_s *keyboard, key_t key)
 		return (1);
 	}
 
-		// Check DEL key.
+	// Check space key
+	if (key == KEY_DOT && (keyboard->mode & 1) == 0) {
+		buffer_insert(keyboard, ' ');
+		return (1);
+	}
+
+	// Check DEL key.
 	if (key == KEY_DEL)
 	{
 		// Check potential error.

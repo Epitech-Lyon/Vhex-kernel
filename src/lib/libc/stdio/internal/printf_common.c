@@ -1,4 +1,4 @@
-#include <lib/stdio.h>
+#include <stdio.h>
 
 //TODO: precision handling
 int printf_common(struct printf_opt *opt, const char *restrict format)

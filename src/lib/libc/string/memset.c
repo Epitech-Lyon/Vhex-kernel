@@ -1,4 +1,4 @@
-#include <lib/string.h>
+#include <string.h>
 
 //TODO: update me :(
 void *memset(void *s, int c, size_t n)

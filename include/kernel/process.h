@@ -6,7 +6,7 @@
 #include <kernel/fs/file.h>
 #include <kernel/fs/filesystem.h>
 #include <kernel/context.h>
-#include <kernel/util/types.h>
+#include <asm/types.h>
 
 #define PROCESS_NB_OPEN_FILE		(4)
 #define PROCESS_USER_STACK_SIZE		(2 * 1024)
@@ -78,7 +78,7 @@ struct process
 			void *start;
 			size_t size;
 		} exit;
-		struct heap *heap;
+		struct pm_heap_page *heap;
 	} memory; 
 
 
@@ -120,7 +120,7 @@ extern struct process *process_create(void);
 extern int process_switch(pid_t pid);
 
 
-// Internals
+// Internals (kernel only)
 extern struct process *process_alloc(void);
 extern struct process *process_get(pid_t pid);
 extern int process_free(struct process *process);

@@ -1,5 +1,6 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/process.h>
+#include <fcntl.h>
 
 ssize_t sys_write(int fd, const void *buf, size_t count)
 {

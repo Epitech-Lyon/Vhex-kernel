@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <kernel/util/types.h>
+#include <asm/types.h>
 
 // FS flags
 #define FS_RDWR		(0x01)

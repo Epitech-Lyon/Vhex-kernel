@@ -1,5 +1,5 @@
 #include <kernel/fs/gladfs.h>
-#include <kernel/memory.h>
+#include <kernel/util/kmem.h>
 #include <kernel/util/atomic.h>
 #include <lib/string.h>
 
@@ -12,7 +12,7 @@ struct gladfs_inode_s *gladfs_alloc_inode(const char *name, mode_t mode)
 	atomic_start();
 
 	// alloc memory
-	inode = pm_alloc(sizeof(struct gladfs_inode_s));
+	inode = kmem_alloc(sizeof(struct gladfs_inode_s));
 	if (inode == NULL)
 	{
 		atomic_stop();

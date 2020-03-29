@@ -1,11 +1,10 @@
 #include <kernel/memory.h>
 #include <kernel/devices/earlyterm.h>
 
-void pm_debug(void)
+void pm_heap_debug(struct pm_heap_page *page)
 {
 	extern struct memory_info pmemory;
 	struct pm_heap_block *block;
-	struct pm_heap_page *page;
 
 	page = pmemory.kheap;
 	while (page != NULL)

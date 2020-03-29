@@ -1,8 +1,8 @@
-#ifndef __KERNEL_UNISTD_32_H__
-# define __KERNEL_UNISTD_32_H__
+#ifndef __ASM_UNISTD_32_H__
+# define __ASM_UNISTD_32_H__
 
 // Define the number of syscall
-#define __NR_MAX		18
+#define __NR_MAX		21
 
 // Kernel Test
 #define __NR_test_syscall	0
@@ -29,5 +29,8 @@
 // Memory
 #define __NR_mmap		16
 #define __NR_munmap		17
+#define __NR_proc_heap_alloc	18
+#define __NR_proc_heap_free	19
+#define __NR_proc_heap_realloc	20
 
-#endif /*__KERNEL_UNISTD_32_H__*/
+#endif /*__ASM_UNISTD_32_H__*/

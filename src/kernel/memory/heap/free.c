@@ -2,33 +2,6 @@
 #include <kernel/util/atomic.h>
 #include <kernel/devices/earlyterm.h>
 
-static void pm_block_backmerge(struct pm_heap_block **block,
-		struct pm_heap_block *parent)
-{
-	// Check back-merge possibility
-	if (parent == NULL || parent->status != 0)
-		return;
-
-	// Absorb current block
-	parent->size += (*block)->size + sizeof(struct pm_heap_block);
-
-	// Switch current block
-	*block = parent;
-}
-
-static void pm_block_frontmerge(struct pm_heap_block *block, void *brk)
-{
-	struct pm_heap_block *block_front;
-
-	// Check front-merge possibility
-	block_front = (void*)&block[1] + block->size;
-	if ((void*)block_front >= brk || block_front->status != 0)
-		return;
-
-	// Absorb front block
-	block->size += block_front->size + sizeof(struct pm_heap_block);
-}
-
 static int pm_block_free(struct pm_heap_page *page, void *ptr)
 {
 	struct pm_heap_block *block_parent;
@@ -57,16 +30,12 @@ static int pm_block_free(struct pm_heap_page *page, void *ptr)
 	return (-1);
 }
 
-void pm_free(void *ptr)
+void pm_heap_free(struct pm_heap_page *page, void *ptr)
 {
-	extern struct memory_info pmemory;
-	struct pm_heap_page *page;
-
 	// Start atomic operations
 	atomic_start();
 
 	// Try to find the page
-	page = pmemory.kheap;
 	while (page != NULL)
 	{
 		// If is the page is found

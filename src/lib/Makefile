@@ -11,7 +11,7 @@ include ../../global.mk
 #-------		--------#
 #	Generic variables	#
 #-------		--------#
-HEADER			:= -I../../include
+HEADER			:= -I../../include/lib
 BUILD-STATIC		:= ../../build/lib/static
 BUILD-DYNAMIC		:= ../../build/lib/dynamic
 TARGET-MODULES		:= libc display

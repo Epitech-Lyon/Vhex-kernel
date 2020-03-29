@@ -1,5 +1,5 @@
-#include <lib/stdio.h>
-#include <lib/unistd.h>
+#include <stdio.h>
+#include <unistd.h>
 
 int putc(int c)
 {

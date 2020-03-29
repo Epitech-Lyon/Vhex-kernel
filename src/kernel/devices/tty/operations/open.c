@@ -1,7 +1,7 @@
 #include <kernel/devices/tty.h>
 #include <kernel/devices/earlyterm.h>
 #include <kernel/drivers/screen.h>
-#include <kernel/memory.h>
+#include <kernel/util/kmem.h>
 #include <lib/display.h>
 #include <lib/string.h>
 
@@ -15,14 +15,14 @@ void *tty_open(dev_t major, dev_t minor)
 	(void)minor;
 	
 	// Try to allocate tty object
-	tty = (struct tty_s*)pm_alloc(sizeof(struct tty_s));
+	tty = (struct tty_s*)kmem_alloc(sizeof(struct tty_s));
 	if (tty == NULL)
 		return (NULL);
 
 	// Get the font used by the tty.
 	if (dopen(&tty->disp, "default") != 0)
 	{
-		pm_free(tty);
+		kmem_free(tty);
 		return (NULL);
 	}
 
@@ -38,10 +38,10 @@ void *tty_open(dev_t major, dev_t minor)
 	tty->cursor.max.y = tty->cursor.max.y * 4;
 
 	// Try to alloc new tty output buffer
-	tty->buffers.output = (char **)pm_alloc(sizeof(char *) * tty->cursor.max.y);
+	tty->buffers.output = (char **)kmem_alloc(sizeof(char *) * tty->cursor.max.y);
 	if (tty->buffers.output == NULL)
 	{
-		pm_free(tty);
+		kmem_free(tty);
 		return (NULL);
 	}
 
@@ -50,16 +50,16 @@ void *tty_open(dev_t major, dev_t minor)
 	while (--line >= 0)
 	{
 		// Try to alloc the line
-		tty->buffers.output[line] = (char*)pm_alloc(tty->cursor.max.x);
+		tty->buffers.output[line] = (char*)kmem_alloc(tty->cursor.max.x);
 		if (tty->buffers.output[line] != NULL) {
 			memset(tty->buffers.output[line], '\0', tty->cursor.max.x);
 			continue;
 		}
 		// Release all allocated space and return NULL
 		while (++line < tty->cursor.max.y)
-			pm_free(tty->buffers.output[line]);
-		pm_free(tty->buffers.output);
-		pm_free(tty);
+			kmem_free(tty->buffers.output[line]);
+		kmem_free(tty->buffers.output);
+		kmem_free(tty);
 		return (NULL);
 	}
 

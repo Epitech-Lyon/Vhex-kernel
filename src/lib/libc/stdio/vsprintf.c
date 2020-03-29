@@ -1,4 +1,4 @@
-#include <lib/stdio.h>
+#include <stdio.h>
 
 int vsprintf(char *restrict str, const char *restrict format, va_list ap)
 {

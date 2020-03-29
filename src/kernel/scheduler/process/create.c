@@ -1,5 +1,5 @@
 #include <kernel/process.h>
-#include <kernel/util/unistd_32.h>
+#include <asm/unistd_32.h>
 #include <kernel/memory.h>
 #include <kernel/devices/earlyterm.h>
 #include <lib/string.h>
@@ -38,7 +38,7 @@ struct process *process_create(void)
 	{
 		earlyterm_write("proc_error: kernel stack error !");
 		DBG_WAIT;
-		pm_free((void *)process->memory.stack.user);
+		pm_pages_free((void *)process->memory.stack.user);
 		process_free(process);
 		return (NULL);
 	}
@@ -56,8 +56,8 @@ struct process *process_create(void)
 	process->memory.exit.start = pm_pages_alloc(PM_SIZE_TO_PAGES(process->memory.exit.size));
 	if (process->memory.exit.start == NULL)
 	{
-		pm_free(process->memory.stack.user);
-		pm_free(process->memory.stack.kernel);
+		pm_pages_free(process->memory.stack.user);
+		pm_pages_free(process->memory.stack.kernel);
 		process_free(process);
 		return (NULL);
 	}
@@ -87,6 +87,9 @@ struct process *process_create(void)
 	}
 	process->working_dir = vfs_root_node;
 	process->tty.private = NULL;
+
+	// Initialize heap
+	process->memory.heap = NULL;
 
 	// DEBUG !
 	//earlyterm_write("proc_create: success !\n");

@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <lib/display.h>
+#include <display.h>
 
 // Wait for debug (dirty)
 // TODO: use earlyterm_read() to wait key event ?

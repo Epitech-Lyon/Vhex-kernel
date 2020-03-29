@@ -105,14 +105,20 @@ struct memory_info
 
 };
 
-// Function
-extern void *pm_alloc(size_t size);
-extern void pm_free(void *ptr);
-extern void pm_debug(void);
+
+// "user" function
+extern void *pm_heap_alloc(struct pm_heap_page **page, size_t size);
+extern void *pm_heap_realloc(struct pm_heap_page **page, void *ptr, size_t size);
+extern void pm_heap_debug(struct pm_heap_page *page);
+extern void pm_heap_free(struct pm_heap_page *page, void *ptr);
 
 // Page allocator
 extern void *pm_pages_alloc(int nb_pages);
 extern void pm_pages_free(void *addr);
 
+// Internal helpers
+extern void *pm_block_split(struct pm_heap_block *block, size_t size);
+extern void pm_block_frontmerge(struct pm_heap_block *block, void *brk);
+extern void pm_block_backmerge(struct pm_heap_block **block, struct pm_heap_block *parent);
 
 #endif /*__KERNEL_MEMORY_H__*/

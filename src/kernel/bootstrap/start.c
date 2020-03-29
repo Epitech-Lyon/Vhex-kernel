@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stddef.h>
 // Internal helpers
-#include <kernel/util/types.h>
+#include <asm/types.h>
 #include <kernel/util/atomic.h>
 #include <kernel/util/casio.h>
 // Modules

@@ -1,4 +1,4 @@
-#include <lib/stdio.h>
+#include <stdio.h>
 
 static void disp_char(struct printf_opt *opt, char n)
 {

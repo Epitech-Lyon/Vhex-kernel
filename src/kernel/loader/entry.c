@@ -3,6 +3,7 @@
 #include <kernel/fs/file.h>
 #include <kernel/util/elf.h>
 #include <kernel/devices/earlyterm.h>
+#include <fcntl.h>
 
 //
 // TODO: write doc

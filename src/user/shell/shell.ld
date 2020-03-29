@@ -40,12 +40,6 @@ SECTIONS
 
 		/* ???? */
 		*(.rofixup)
-
-		/* Internal builtin cache */
-		PROVIDE (_builtin_list = ALIGN(4));
-		*(.builtin)
-		*(.builtin.*)
-		PROVIDE (_builtin_list_end = . );
 	} > userram
 
 	/* Relocatable sections */

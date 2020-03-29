@@ -1,4 +1,4 @@
-#include <lib/string.h>
+#include <string.h>
 
 char *strcat(char *dest, char const *src)
 {

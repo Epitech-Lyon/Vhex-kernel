@@ -11,7 +11,7 @@ include ../../global.mk
 ##---
 ##	Static variables
 ##--
-HEADER		:= -I../../include
+HEADER		:= -I../../include -I../../include/lib
 BUILD		:= ../../build/kernel
 OUTPUT		:= ../../output
 DEBUG		:= ../../debug_bin

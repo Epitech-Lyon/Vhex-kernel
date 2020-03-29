@@ -1,4 +1,4 @@
-#include <lib/display.h>
+#include <display.h>
 
 /* dclear() - Wipe the Video RAM */
 void dclear(display_t *disp)

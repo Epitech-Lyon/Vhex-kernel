@@ -8,7 +8,7 @@ include ../../../global.mk
 ##---
 ##	Static variables
 ##--
-HEADER		:= -I../../../include -I../../../include/user
+HEADER		:= -I../../../include/lib -I../../../include/user/shell
 BUILD		:= ../../../build/user/shell
 DEBUG		:= ../../../debug_bin
 OUTPUT		:= ../../../output

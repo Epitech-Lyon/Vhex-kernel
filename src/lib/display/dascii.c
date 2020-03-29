@@ -1,5 +1,4 @@
-#include <lib/display.h>
-#include <kernel/drivers/screen.h>
+#include <display.h>
 
 static void font_draw_core(uint32_t *vram, struct font_s *font, struct font_block_s *fblock)
 {

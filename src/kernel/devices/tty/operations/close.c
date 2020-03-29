@@ -1,5 +1,5 @@
 #include <kernel/devices/tty.h>
-#include <kernel/memory.h>
+#include <kernel/util/kmem.h>
 
 int tty_close(void *inode)
 {
@@ -13,10 +13,10 @@ int tty_close(void *inode)
 	// output buffer
 	line = tty->cursor.max.y;
 	while (line >= 0)
-		pm_free(tty->buffers.output[line]);
-	pm_free(tty->buffers.output);
+		kmem_free(tty->buffers.output[line]);
+	kmem_free(tty->buffers.output);
 
 	// Free'd tty object
-	pm_free(tty);
+	kmem_free(tty);
 	return (0);
 }

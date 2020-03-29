@@ -1,4 +1,4 @@
-#include <lib/display.h>
+#include <display.h>
 
 // Define the (hardcoded) font bitmap informations.
 #define DEFAULT_FONT_BITMAP_WIDTH	(127)	// Bitmap width

@@ -26,4 +26,7 @@ extern size_t strlen(char const *str);
 /* strrchr() - find the last occurent of a byte */
 extern char *strrchr(const char *s, int c);
 
+/* strdup() - dump string */
+extern char *strdup(const char *s);
+
 #endif /*__STRING_H__*/

@@ -3,24 +3,14 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/util/types.h>
+#include <asm/types.h>
 #include <kernel/fs/filesystem.h>
 
 #ifndef FILE_OPEN_NUMBER
 # define FILE_OPEN_NUMBER   4
 #endif
 
-// TODO: fix me
-#ifndef __LIB_UNISTD_H__
-# define O_RDONLY	0x00
-# define O_WRONLY	0x01
-# define O_RDWR		0x02
-
-# define SEEK_SET	0
-# define SEEK_CUR	1
-# define SEEK_END	2
-#endif
-
+// FILE type
 struct file_s
 {
     void *private;

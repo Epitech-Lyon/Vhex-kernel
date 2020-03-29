@@ -1,4 +1,4 @@
-#include <lib/stdio.h>
+#include <stdio.h>
 
 // Define all actions
 static void action_str(struct printf_opt *op, char n);

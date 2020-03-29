@@ -1,6 +1,6 @@
-#include <lib/stdio.h>
-#include <lib/string.h>
-#include <lib/unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 int puts(const char *s)
 {

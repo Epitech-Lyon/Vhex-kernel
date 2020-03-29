@@ -1,5 +1,5 @@
 #include <kernel/fs/vfs.h>
-#include <kernel/memory.h>
+#include <kernel/util/kmem.h>
 #include <lib/string.h>
 
 /* vfs_dentry_alloc() - Allocate new "empty" dentry */
@@ -8,7 +8,7 @@ struct dentry *vfs_dentry_alloc(const char *name, mode_t mode)
 	struct dentry *node;
 
 	// Try to create new dentry
-	node = pm_alloc(sizeof(struct dentry));
+	node = kmem_alloc(sizeof(struct dentry));
 	if (node == NULL)
 		return (NULL);
 

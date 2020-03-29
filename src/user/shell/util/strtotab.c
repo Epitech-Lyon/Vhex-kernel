@@ -1,10 +1,9 @@
-/*# include <lib/stdlib.h>
-# include <lib/stdio.h>
-# include <lib/string.h>
-
-// Internal prototypes.
-extern int strtotab(int *argc, char ***argv, char const *str);
-extern void strtotab_quit(int *argc, char ***argv);
+#include "util.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <asm/types.h>
+#include <errno.h>
 
 //
 // parser_get_word()
@@ -143,4 +142,4 @@ void strtotab_quit(int *argc, char ***argv)
 	// Secure
 	*argv = NULL;
 	*argc = 0;
-}*/
+}

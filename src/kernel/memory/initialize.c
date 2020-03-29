@@ -1,5 +1,6 @@
 #include <kernel/memory.h>
 #include <kernel/devices/earlyterm.h>
+#include <kernel/util/kmem.h>
 
 // Internal data.
 struct memory_info pmemory;
@@ -49,19 +50,34 @@ void memory_init(void)
 	}
 
 	// TEST part
-/*	void *test0 = pm_alloc(16);
-	void *test1 = pm_alloc(128);
-	void *test2 = pm_alloc(80);
+/*	void *test0 = kmem_alloc(16);
+	void *test1 = kmem_alloc(128);
+	void *test2 = kmem_alloc(80);
 	earlyterm_write("test0 = %p\n", test0);
 	earlyterm_write("test1 = %p\n", test1);
 	earlyterm_write("test2 = %p\n", test2);
-	pm_free(test2);
-	pm_free(test0);
-	pm_heap_debug();
+	kmem_free(test1);
+	//kmem_debug();
+	//DBG_WAIT;
+	test1 = kmem_realloc(NULL, 16);
+	//earlyterm_write("test1 = %p\n", test1);
+	//kmem_debug();
+	//DBG_WAIT;
+	test1 = kmem_realloc(test1, 32);
+	earlyterm_write("test1 = %p\n", test1);
+	kmem_debug();
 	DBG_WAIT;
-	pm_free(test1);
-	pm_debug();
-	pm_free((void*)0xa0000000);
+	//test1 = kmem_realloc(test1, 10);
+	//earlyterm_write("test1 = %p\n", test1);
+	//kmem_debug();
+	//DBG_WAIT;
+	test1 = kmem_realloc(test1, 128);
+	earlyterm_write("test1 = %p\n", test1);
+	kmem_debug();
+	DBG_WAIT;
+	test1 = kmem_realloc(test1, 200);
+	earlyterm_write("test1 = %p\n", test1);
+	kmem_debug();
 	DBG_WAIT;
 	while (1);*/
 }

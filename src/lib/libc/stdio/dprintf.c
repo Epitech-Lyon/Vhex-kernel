@@ -1,4 +1,4 @@
-#include <lib/stdio.h>
+#include <stdio.h>
 
 int dprintf(int fd, const char *restrict format, ...)
 {

@@ -3,9 +3,9 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <asm/types.h>
 #include <kernel/drivers/screen.h>
-#include <kernel/util/types.h>
-#include <lib/display.h>
+#include <display.h>
 
 // Define default buffer size.
 // TODO: remove me ?

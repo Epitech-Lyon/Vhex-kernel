@@ -1,5 +1,6 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/fs/file.h>
+#include <fcntl.h>
 
 /* vfs_lseek() - File cursor management */
 off_t vfs_lseek(FILE *file, off_t offset, int whence)

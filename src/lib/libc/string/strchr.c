@@ -1,4 +1,4 @@
-#include <lib/string.h>
+#include <string.h>
 
 //TODO: asm ?
 char *strchr(const char *s1, int c)

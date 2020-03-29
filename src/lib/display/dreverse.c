@@ -1,4 +1,4 @@
-#include <lib/display.h>
+#include <display.h>
 
 /* dreverse() - Reverse Video RAM area */
 void dreverse(display_t *disp, int x, int y, int width, int height)

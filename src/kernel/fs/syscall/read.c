@@ -1,5 +1,6 @@
 #include <kernel/fs/vfs.h>
 #include <kernel/process.h>
+#include <fcntl.h>
 
 ssize_t sys_read(int fd, void *buf, size_t count)
 {

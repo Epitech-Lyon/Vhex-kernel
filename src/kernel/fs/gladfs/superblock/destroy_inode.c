@@ -1,5 +1,5 @@
 #include <kernel/fs/gladfs.h>
-#include <kernel/memory.h>
+#include <kernel/util/kmem.h>
 #include <kernel/util/atomic.h>
 
 /* gladfs_destroy_inode() - Free'd allocated inode (sync) */
@@ -29,7 +29,7 @@ int gladfs_destroy_inode(struct gladfs_inode_s *inode)
 	}
 
 	// Free inode
-	pm_free(inode);
+	kmem_free(inode);
 
 	// Stop atomic operations
 	atomic_stop();

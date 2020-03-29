@@ -1,7 +1,6 @@
 #include "builtin.h"
-#include <lib/display.h>
 
-VHEX_BUILTIN(fxdb)
+int builtin_fxdb(int argc, char **argv)
 {
 	//TODO: handle parameter.
 	(void)argc;

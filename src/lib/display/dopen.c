@@ -1,4 +1,4 @@
-#include <lib/display.h>
+#include <display.h>
 
 int dopen(display_t *disp, const char *fontname)
 {

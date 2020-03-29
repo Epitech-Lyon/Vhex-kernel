@@ -1,7 +1,7 @@
 #include <kernel/process.h>
 #include <kernel/devices/earlyterm.h>
 #include <kernel/util/atomic.h>
-#include <kernel/memory.h>
+#include <kernel/util/kmem.h>
 
 // TODO: return EAGAIN !!
 // TODO: return ENOMEM !!
@@ -42,7 +42,7 @@ struct process *process_alloc(void)
 	}
 
 	// Alloc new process manually
-	*proc = (struct process *)pm_alloc(sizeof(struct process));
+	*proc = (struct process *)kmem_alloc(sizeof(struct process));
 	if (*proc == NULL) {
 		earlyterm_write("proc_alloc: ENOMEM !\n");
 		atomic_stop();

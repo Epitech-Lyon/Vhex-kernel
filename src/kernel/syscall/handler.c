@@ -1,6 +1,6 @@
 #include <kernel/syscall.h>
-#include <kernel/util/unistd_32.h>
 #include <kernel/devices/earlyterm.h>
+#include <asm/unistd_32.h>
 
 static void sys_test(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 {
@@ -38,7 +38,10 @@ static const void *sys_handler[__NR_MAX] = {
 
 	// Memory
 	sys_mmap,		// mmap
-	NULL//sys_munmap		// munmap
+	NULL,			// munmap
+	sys_proc_heap_alloc,	// (custom) process heap alloc
+	sys_proc_heap_free,	// (custom) process heap free
+	sys_proc_heap_realloc	// (custom) process heap realloc
 };
 
 void *sys_get_handler(int sysno)

@@ -2,35 +2,6 @@
 #include <kernel/util/atomic.h>
 #include <kernel/devices/earlyterm.h>
 
-static void *pm_block_split(struct pm_heap_block *block, size_t size)
-{
-	size_t rest_size;
-	void *ret;
-	
-	// Check size
-	if (block->size < size)
-		return (NULL);
-
-	// Change current block status
-	block->status = 1;
-
-	// Check if we can not split
-	rest_size = block->size - (size + sizeof(struct pm_heap_block));
-	if (rest_size < PM_HEAP_BLOCK_MIN)
-		return (&block[1]);
-
-	// Update current block size and get the
-	// returned value
-	block->size = size;
-	ret = &block[1];
-
-	// Initialize seconde block
-	block = (void *)&block[1] + block->size;
-	block->status = 0;
-	block->size = rest_size;
-	return (ret);
-}
-
 static void *new_pages(struct pm_heap_page **page, size_t size)
 {
 	int nb_page;
@@ -57,7 +28,7 @@ static void *new_pages(struct pm_heap_page **page, size_t size)
 	return (pm_block_split(&(*page)->heap, size));
 }
 
-static void *pm_heap_alloc(struct pm_heap_page *page, size_t size)
+static void *pm_heap_page_check(struct pm_heap_page *page, size_t size)
 {
 	struct pm_heap_block *block;
 	size_t rest_size;
@@ -85,10 +56,8 @@ static void *pm_heap_alloc(struct pm_heap_page *page, size_t size)
 }
 
 // Kernel malloc wrapper
-void *pm_alloc(size_t size)
+void *pm_heap_alloc(struct pm_heap_page **page, size_t size)
 {
-	extern struct memory_info pmemory;
-	struct pm_heap_page **page;
 	void *ret;
 
 	// Force 4-align
@@ -98,7 +67,6 @@ void *pm_alloc(size_t size)
 	atomic_start();
 
 	// Walk into each pages x_x
-	page = &pmemory.kheap;
 	while (*page != NULL)
 	{
 		// Check "page" size
@@ -108,7 +76,7 @@ void *pm_alloc(size_t size)
 		}
 
 		// Try to find free space in the page
-		ret = pm_heap_alloc(*page, size);
+		ret = pm_heap_page_check(*page, size);
 		if (ret != NULL) {
 			atomic_stop();
 			return (ret);

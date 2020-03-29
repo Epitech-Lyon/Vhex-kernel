@@ -1,5 +1,6 @@
 #include <kernel/loader.h>
 #include <kernel/devices/earlyterm.h>
+#include <kernel/util/kmem.h>
 #include <kernel/memory.h>
 #include <kernel/fs/vfs.h>
 
@@ -19,7 +20,7 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 
 	// Allocate dump area
 	earlyterm_write("Try to alloc strtab (%do)\n", shdr.sh_size);
-	shstrtab = (char*)pm_alloc(shdr.sh_size);
+	shstrtab = (char*)kmem_alloc(shdr.sh_size);
 	if (shstrtab == NULL)
 	{
 		earlyterm_write("relo_sym:mem (%d)\n", shdr.sh_size);
@@ -30,7 +31,7 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 	if (vfs_pread(file, shstrtab, shdr.sh_size, shdr.sh_offset) != (ssize_t)shdr.sh_size)
 	{
 		earlyterm_write("relo_sym: shstrtab size error\n");
-		pm_free(shstrtab);
+		kmem_free(shstrtab);
 		return (NULL);
 	}
 	return (shstrtab);
@@ -102,6 +103,6 @@ int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header)
 		if (reloc_section(process, file, &shdr) != 0)
 			return (-3);
 	}
-	pm_free(shstrtab);
+	kmem_free(shstrtab);
 	return (0);
 }

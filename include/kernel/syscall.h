@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/util/types.h>
+#include <asm/types.h>
 
 // Process
 extern pid_t sys_getpid(void);
@@ -12,7 +12,7 @@ extern pid_t sys_getpgid(void);
 extern pid_t sys_wait(int *wstatus);
 extern int sys_setpgid(pid_t pid, pid_t pgid);
 extern pid_t sys_waitpid(pid_t pid, int *wstatus, int options);
-extern pid_t sys_fexecve(const char *pathname);
+extern pid_t sys_fexecve(const char *pathname, char **argv, char **envp);
 extern void sys_exit(int status);
 
 // File
@@ -28,5 +28,8 @@ extern int sys_close(int fd);
 extern void *sys_mmap(void *addr, size_t length,
 			int prot, int flags, int fd, off_t offset);
 extern int sys_munmap(void *addr, size_t length);
+extern void *sys_proc_heap_alloc(size_t size);
+extern void *sys_proc_heap_realloc(void *ptr, size_t size);
+extern void sys_proc_heap_free(void *ptr);
 
 #endif /*__SYSCALL_H__*/

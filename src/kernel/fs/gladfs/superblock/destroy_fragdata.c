@@ -1,5 +1,5 @@
 #include <kernel/fs/gladfs.h>
-#include <kernel/memory.h>
+#include <kernel/util/kmem.h>
 #include <kernel/util/atomic.h>
 
 /* gladfs_destroy_fragdata() - Free'd allocated fragmented data (sync) */
@@ -14,7 +14,7 @@ int gladfs_destroy_fragdata(struct gladfs_fragment_data_s *fragment)
 	atomic_start();
 
 	// Free'd allocated space
-	pm_free(fragment);
+	kmem_free(fragment);
 
 	// Stop atomic operation
 	atomic_stop();
