@@ -3,7 +3,7 @@
 #include <kernel/devices/earlyterm.h>
 #include <kernel/memory.h>
 // TODO: remove / move me ?
-#include <lib/unistd.h>
+#include <sys/wait.h>
 
 void sys_exit(int status)
 {

@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <asm/types.h>
+#include <sys/types.h>
 #include <kernel/drivers/screen.h>
 #include <display.h>
 

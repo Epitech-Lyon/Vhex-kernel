@@ -35,7 +35,7 @@ static void *pm_block_realloc(struct pm_heap_page **page, void *ptr, size_t size
 
 	block_parent = NULL;
 	block = &(*page)->heap;
-	while ((void*)block < (*page)->brk)
+	while ((void*)&block[1] < (*page)->brk)
 	{
 		// check block validity
 		if ((void*)&block[1] != ptr)
@@ -72,6 +72,10 @@ void *pm_heap_realloc(struct pm_heap_page **page, void *ptr, size_t size)
 {
 	void *ret;
 
+	// Check error
+	if (ptr == NULL)
+		return (NULL);
+
 	// Force 4-align
 	size = (size + 3) >> 2 << 2;
 
@@ -79,10 +83,10 @@ void *pm_heap_realloc(struct pm_heap_page **page, void *ptr, size_t size)
 	atomic_start();
 
 	// Try to find the page
-	while (page != NULL)
+	while (*page != NULL)
 	{
 		// If is the page is found
-		if (ptr > (void*)page && ptr < (*page)->brk)
+		if (ptr > (void*)*page && ptr < (*page)->brk)
 		{
 			// Check if the block is not found
 			ret = pm_block_realloc(page, ptr, size);
@@ -97,8 +101,8 @@ void *pm_heap_realloc(struct pm_heap_page **page, void *ptr, size_t size)
 	
 	// No block found, display error.
 	earlyterm_write(
-		"pm_free: Warning, you try to realloc"
-		"unused or allocated memory (%p)", ptr
+		"pm_free: Warning, you try to realloc an "
+		"unused or allocated memory (%p)\n", ptr
 	);
 	DBG_WAIT;
 

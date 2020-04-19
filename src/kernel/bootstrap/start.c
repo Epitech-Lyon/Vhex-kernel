@@ -1,7 +1,9 @@
 #include <stdint.h>
 #include <stddef.h>
+#include <sys/types.h>
+// Hardware
+#include <kernel/hardware/mpu.h>
 // Internal helpers
-#include <asm/types.h>
 #include <kernel/util/atomic.h>
 #include <kernel/util/casio.h>
 // Modules

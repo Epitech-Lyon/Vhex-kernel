@@ -11,8 +11,9 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 	off_t offset;
 
 	// Get sections string header tables
-	offset = header->e_shoff + (header->e_shstrndx * sizeof(Elf32_Shdr));
-	if (vfs_pread(file, &shdr, sizeof(Elf32_Shdr), offset) != sizeof(Elf32_Shdr))
+	offset = header->e_shoff + (header->e_shstrndx * header->e_shentsize);
+	earlyterm_write("pos = %#x\n", offset);
+	if (vfs_pread(file, &shdr, header->e_shentsize, offset) != header->e_shentsize)
 	{
 		earlyterm_write("relo_sym: shdr size\n");
 		return (NULL);
@@ -28,6 +29,7 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 	}
 
 	// Get string tables
+	earlyterm_write("pos = %#x\n", shdr.sh_offset);
 	if (vfs_pread(file, shstrtab, shdr.sh_size, shdr.sh_offset) != (ssize_t)shdr.sh_size)
 	{
 		earlyterm_write("relo_sym: shstrtab size error\n");
@@ -48,8 +50,9 @@ static int reloc_section(struct process *process, FILE *file, Elf32_Shdr *shdr)
 	for (uint32_t i = 0 ; i < shdr->sh_size / shdr->sh_entsize ; ++i)
 	{
 		// Get relocatable entry
-		offset = shdr->sh_offset + (i * sizeof(Elf32_Rela));
-		if (vfs_pread(file, &rela, sizeof(Elf32_Rela), offset) != sizeof(Elf32_Rela))
+		offset = shdr->sh_offset + (i * shdr->sh_entsize);
+		earlyterm_write("rela\npos = %#x\n", offset);
+		if (vfs_pread(file, &rela, shdr->sh_entsize, offset) != (ssize_t)shdr->sh_entsize)
 		{
 			earlyterm_write("relo_sym: reloc section size error\n");
 			return (-1);
@@ -84,8 +87,8 @@ int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header)
 	for (int i = 1 ; i < header->e_shnum ; ++i)
 	{
 		// Get next section header
-		offset = header->e_shoff + (i * sizeof(Elf32_Shdr));
-		if (vfs_pread(file, &shdr, sizeof(Elf32_Shdr), offset) != sizeof(Elf32_Shdr))
+		offset = header->e_shoff + (i * header->e_shentsize);
+		if (vfs_pread(file, &shdr, header->e_shentsize, offset) != header->e_shentsize)
 		{
 			earlyterm_write("loader_reloc_sym: section header\n");
 			earlyterm_write("loader_reloc_sym: shoff = %#x\n", header->e_shoff);

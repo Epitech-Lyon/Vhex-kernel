@@ -1,9 +1,6 @@
 #ifndef __KERNEL_FS_STAT_H__
 # define __KERNEL_FS_STAT_H__
 
-#include <stddef.h>
-#include <stdint.h>
-
 /* File types.  */
 #define	__S_IFMT	0170000	/* These bits determine file type.  */
 #define	__S_IFDIR	0040000	/* Directory.  */

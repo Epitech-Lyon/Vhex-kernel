@@ -1,4 +1,5 @@
-#include <asm/types.h>
+#include <stdint.h>
+#include <kernel/hardware/mpu.h>
 
 /* check_sh3 - Detecting sh3-based MPU */
 static mpu_t check_sh3(uint16_t tplcr)

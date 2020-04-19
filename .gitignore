@@ -55,7 +55,9 @@ dkms.conf
 # Other
 *.txt
 build/
-.tests
 .old
 *.g1a
 debug_bin
+output
+gcc.cfg
+.tests

@@ -3,23 +3,52 @@
 ##	Project: Vhex - On-calc debugger
 ##	Author: yann.magnin@epitech.eu
 ## ---
-include ../../../global.mk
+
+##---
+##	Build configuration
+##---
+CONFIG := gcc.cfg
+ifeq "$(wildcard $(CONFIG))" ""
+$(error "config file $(CONFIG) does not exist")
+endif
+include $(CONFIG)
+
 
 ##---
 ##	Static variables
 ##--
-HEADER		:= -I../../../include/lib -I../../../include/user/shell
-BUILD		:= ../../../build/user/shell
-DEBUG		:= ../../../debug_bin
-OUTPUT		:= ../../../output
+header 		:= -I../../../include/lib -I../../../include/user/shell
+build		:= ../../../build/user/shell/$(CONFIG.ARCH)
+debug		:= ../../../debug_bin/$(CONFIG.ARCH)
+output		:= ../../../output
 
-NAME		:= shell
-EXEC		:= $(OUTPUT)/$(NAME).elf
-LDFLAG		:= -T $(NAME).ld
-MEMORY_MAP	:= $(DEBUG)/$(NAME).map
-LIBS		:= -L../../lib -llibc -lgcc
+name		:= shell
+EXEC		:= $(output)/$(name)
+
+cflags		:= -Werror -Wall -W -Wextra -std=c11
+
+# Add arch specific flags
+ifeq "$(CONFIG.ARCH)" "casio"
+EXEC		:= $(output)/$(name).elf
+dflags		:= -Wl,-M -T $(name).ld
+lflags		:= -L../../lib -llibc -lgcc
+cflags		+= $(CONFIG.CEXTRA) -pie
+memmap		:= > $(debug)/$(name).map
+endif
+
+# Tools
+cc 		:= $(CONFIG.TOOLCHAIN)gcc
+ld 		:= $(CONFIG.TOOLCHAIN)ld
+objcopy 	:= $(CONFIG.TOOLCHAIN)objcpy
+objdump 	:= $(CONFIG.TOOLCHAIN)objdump
 
 
+# Colors
+red		:= \033[1;31m
+green		:= \033[1;32m
+blue		:= \033[1;34m
+white		:= \033[1;37m
+nocolor		:= \033[1;0m
 
 
 ##---
@@ -34,48 +63,69 @@ $(foreach path,$(DIRECTORY),$(eval		\
 			$(wildcard $(path)/*.s)	\
 ))
 # Geneate all object files
-OBJ	:= $(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))))
+OBJ	:= $(patsubst ._%,$(build)/%.o,$(subst /,_,$(subst src/,,$(basename $(SRC)))))
 
 
 
 
 ##---
-##	General rules
+##	Building rules
 ##---
 all: $(EXEC)
 
-$(EXEC): $(OBJ) | $(DEBUG)
-	$(CC) -pie -Wl,-M $(LDFLAG) $(CFLAGS) -o $@ $(OBJ) $(HEADER) $(LIBS) > $(MEMORY_MAP)
+$(EXEC): $(OBJ) | $(debug)
+	$(cc) $(dflags) $(cflags) -o $@ $(OBJ) $(header) $(lflags) $(memmap)
 
-$(BUILD) $(DEBUG):
+$(build) $(debug):
 	@ printf "Create $(blue)$@$(nocolor) directory\n"
 	@ mkdir -p $@
 
+
+
+
+##---
+##	Install / tests rules 
+##---
+# Install is only available for CASIO arch
+ifeq "$(CONFIG.ARCH)" "casio"
 install: $(EXEC)
 	sudo p7 send --force -d VHEX $^
+else
+install: $(EXEC)
+	valgrind $(EXEC)
+endif
 
+
+
+##---
+##	Debug rules
+##---
 check:
 	@ echo 'src: $(SRC)'
 	@ echo 'obj: $(OBJ)'
 	@ echo 'directory: $(DIRECTORY)'
+	@ echo 'clfags: $(cflags)'
+	@ echo 'cc: $(cc)'
 
 asm:
-	@ $(OBJDUMP) -D $(EXEC) | less
+	@ $(objdump) -D $(EXEC) | less
 
 map:
-	@ cat $(MEMORY_MAP) | less
+	@ cat $(memmap) | less
 
 sec:
-	@ $(OBJDUMP) -h $(EXEC)
+	@ $(objdump) -h $(EXEC)
+
+
 
 
 ##---
 ##	  Automated rules
 ##---
 define rule-src
-$(patsubst ._%,$(BUILD)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1 | $(BUILD)
+$(patsubst ._%,$(build)/%.o,$(subst /,_,$(subst src/,,$(basename $1)))): $1 | $(build)
 	@ printf "compiling $(white)$$<$(nocolor)..."
-	@ $(CC) -pie $(CFLAGS) -o $$@ -c $$< $(HEADER) -lgcc
+	@ $(cc) $(cflags) -o $$@ -c $$< $(header) -lgcc
 	@ printf "$(green)[ok]$(nocolor)\n"
 endef
 
@@ -90,8 +140,8 @@ $(foreach source,$(SRC),$(eval		\
 ##	Cleaning rules
 ##---
 clean:
-	rm -rf $(BUILD)
-	rm -rf $(DEBUG)
+	rm -rf $(build)
+	rm -rf $(debug)
 
 fclean: clean
 	rm -f $(EXEC)

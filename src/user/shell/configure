@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# Define global variables
+confile='gcc.cfg'
+debug='false'
+arch='casio'
+
+
+
+
+##---
+##	Help screen
+##---
+function fhelp()
+{
+	cat << EOF
+Usage:  ./configure [-h] [--help] [--arch=<TARGET>] [--debug]
+-h, --help                Display this help
+--arch=<TARGET>           Specify POSIX architecture to compile with:
+                            - casio (Casio calculators)
+			    - native (use clasic gcc compiler)
+--debug                   Enable "-g3" compialtion flags to have more
+                          informations about program
+EOF
+	exit 0
+}
+
+
+
+
+##---
+##	Parse entry
+##---
+for opt in "$@"
+do
+	# Check flags
+	case "$1" in
+		-h | --help)	fhelp;;
+		--arch=*)	arch=${1#*=};;
+		--debug)	debug='true';;
+		*)
+			echo  "'$1' invalide arg"
+			exit 84;;
+	esac
+
+	# Shift current arguments list
+	# to the left.
+	shift;
+done
+
+
+
+
+##---
+##	Check arguments
+##---
+if [ $arch != 'casio' ] && [ $arch != 'native' ]; then
+	echo "'$arch': Invalide architecture, abord"
+	exit 84
+fi
+
+
+
+
+##---
+##	Generate configuration file
+##---
+function generate_output()
+{
+	echo "CONFIG.ARCH := $arch"
+	if [ $arch == 'casio' ]; then
+		echo 'CONFIG.TOOLCHAIN := sh-elf-'
+		echo 'CONFIG.CEXTRA := -m3 -mb -mrenesas -ffreestanding -nostdlib'
+	else
+		[[ $debug == 'true' ]] && echo 'CONFIG.CEXTRA := -g3'
+	fi
+}
+generate_output > $confile
+echo "Configuration saved in $confile !"

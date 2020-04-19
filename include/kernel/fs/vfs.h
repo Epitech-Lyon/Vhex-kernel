@@ -3,9 +3,9 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <asm/types.h>
-#include <kernel/fs/filesystem.h>
+#include <sys/types.h>
 #include <kernel/fs/file.h>
+#include <kernel/fs/filesystem.h>
 #include <kernel/devices/device.h>
 
 // Internal VFS macros

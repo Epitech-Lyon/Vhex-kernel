@@ -20,7 +20,7 @@ static void *new_pages(struct pm_heap_page **page, size_t size)
 	// Initialize new page
 	(*page)->next = NULL;
 	(*page)->size = (nb_page * PM_PAGE_SIZE) - sizeof(struct pm_heap_page);
-	(*page)->brk = (void*)(*page) + (nb_page * PM_PAGE_SIZE); 
+	(*page)->brk = ((void*)(*page)) + (nb_page * PM_PAGE_SIZE); 
 
 	// Initialize first block
 	(*page)->heap.status = 0;
@@ -37,7 +37,7 @@ static void *pm_heap_page_check(struct pm_heap_page *page, size_t size)
 	// Walk into the page and check each block x_x
 	block = &page->heap;
 	rest_size = page->size;
-	while ((void*)block < page->brk && rest_size > size)
+	while ((void*)&block[1] < page->brk && rest_size > size)
 	{
 		// Check if the block is used or not
 		if (block->status == 0)

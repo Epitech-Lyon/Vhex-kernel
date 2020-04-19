@@ -9,7 +9,7 @@ static int pm_block_free(struct pm_heap_page *page, void *ptr)
 
 	block_parent = NULL;
 	block = &page->heap;
-	while ((void*)block < page->brk)
+	while ((void*)&block[1] < page->brk)
 	{
 		// check block validity
 		if ((void*)&block[1] != ptr)
@@ -56,7 +56,7 @@ void pm_heap_free(struct pm_heap_page *page, void *ptr)
 	// No block found, display error.
 	earlyterm_write(
 		"pm_free: Warning, you try to free unused"
-		" or allocated memory (%p)", ptr
+		" or allocated memory (%p)\n", ptr
 	);
 	DBG_WAIT;
 

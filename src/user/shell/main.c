@@ -3,27 +3,6 @@
 #include <stdio.h>
 #include "util.h"
 
-static int manual_proc_call(char **argv)
-{
-	char pathname[32];
-	int wstatus;
-	pid_t child;
-
-	// Generate pathname
-	// TODO: handle PATH
-	strcpy(pathname, "/mnt/casio/VHEX/");
-	strcat(pathname, argv[0]);
-
-	// Try to call binary from eeprom
-	printf("try to call '%s'\n", pathname);
-	child = fexecve(pathname, argv, NULL);
-	if (child != 0)
-		return (-1);
-
-	waitpid(child, &wstatus, 0);
-	return (WEXITSTATUS(wstatus));
-}
-
 //TODO: documentation.
 int main(void)
 {

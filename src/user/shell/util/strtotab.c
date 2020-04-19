@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <asm/types.h>
+#include <sys/types.h>
 #include <errno.h>
 
 //

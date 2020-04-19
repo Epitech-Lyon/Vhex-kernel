@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdio.h>
+#include <sys/wait.h>
 #include "builtin.h"
 
 int builtin_proc(void)

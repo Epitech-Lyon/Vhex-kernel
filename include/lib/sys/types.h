@@ -16,16 +16,7 @@ typedef int32_t ssize_t;
 # define __ssize_t_defined
 #endif
 
-// Define MPU arch.
-typedef enum mpu_e
-{
-	MPU_SH7305,
-	MPU_SH7724,
-	MPU_SH7337,
-	MPU_SH7355,
-	MPU_UNKNOWN,
-} mpu_t;
-
+// Define alias
 typedef int32_t pid_t;
 typedef int16_t mode_t;
 typedef uint16_t dev_t;

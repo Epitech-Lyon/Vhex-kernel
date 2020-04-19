@@ -52,7 +52,7 @@ struct pm_heap_page
 	size_t size;			/* Page size (without header) */
 	struct pm_heap_page *next;	/* Next heap page */
 	struct pm_heap_block heap;	/* Start of block informations */
-} __attribute__((packed, aligned(4)));
+};
 
 // Real physical memory informations
 struct pm_page

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <asm/types.h>
+#include <sys/types.h>
 
 // Process
 extern pid_t sys_getpid(void);

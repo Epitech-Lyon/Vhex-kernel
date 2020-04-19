@@ -20,7 +20,7 @@ static void *casio_smem_get_data_base_address(smemfs_fragdata_t *fragment)
 	// If the block ID is missing, return error
 	if (block->info.id != fragment->data_block_id)
 		return (NULL);
-	return ((void *)(block->offset + fragment->data_offset));
+	return ((void *)(uintptr_t)(block->offset + fragment->data_offset));
 }
 
 /* casio_smem_read() - Read the file data (based on internal cursor) */
@@ -32,6 +32,9 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 	void *data_base_addr;
 	size_t current_size;
 	size_t real_size;
+
+	earlyterm_write("pos = %#x\n", pos);
+	DBG_WAIT;
 
 	// Get Check obvious error.
 	if (inode == NULL || buf == NULL)
@@ -76,8 +79,8 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 	}
 
 	// Read file data
-	current_size = 0;
 	fragment_data_offset = pos - current_size;
+	current_size = 0;
 	while (current_size < count &&
 			fragment->magic == CASIO_SMEM_FRAGMENT_MAGIC &&
 			fragment->info == CASIO_SMEM_FRAGMENT_INFO_EXIST)

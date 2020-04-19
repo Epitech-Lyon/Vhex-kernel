@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <asm/types.h>
+#include <sys/types.h>
 #include <kernel/fs/file.h>
 
 #define CASIO_SMEM_NAME_LENGHT			12

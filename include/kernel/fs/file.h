@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <asm/types.h>
+#include <sys/types.h>
 #include <kernel/fs/filesystem.h>
 
 #ifndef FILE_OPEN_NUMBER
