@@ -15,7 +15,7 @@ static struct sched_task *sched_alloc(void)
 	return (NULL);
 }
 
-int sched_add_task(struct process *process)
+int sched_task_add(struct process *process)
 {
 	extern struct sched_task *sched_task_queue;
 	struct sched_task *sched_slot;
@@ -34,16 +34,16 @@ int sched_add_task(struct process *process)
 		atomic_stop();
 		return (-2);
 	}
-
-	// Change process status
-	process->status = PROC_RUNNING;
 	
+	// Update internal process data
+	process->sched_task = sched_slot;
+
 	// Initialize new task
 	// TODO: update quantum ticks management
 	sched_slot->priority._static = SCHED_QUANTUM_TICKS;
 	sched_slot->priority._dynamic = 0;
 	sched_slot->process = process;
-	sched_slot->status = SCHED_RUNNING;
+	sched_slot->status = SCHED_TASK_RUNNING;
 
 	// Register task into scheduler task queue
 	sched_slot->next = sched_task_queue;

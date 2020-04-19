@@ -18,7 +18,7 @@ int sched_schedule(common_context_t **context_current, common_context_t **contex
 	while (task_next != sched_task_current)
 	{
 		// Check process validity
-		if (task_next->process->status == PROC_RUNNING)
+		if (task_next->status == SCHED_TASK_RUNNING)
 			break;
 
 		// Get next task
@@ -40,42 +40,7 @@ int sched_schedule(common_context_t **context_current, common_context_t **contex
 	// Update scheduler task / process current
 	sched_task_current = task_next;
 	process_current = sched_task_current->process;
+
+	//TODO: signals handling !!!
 	return (0);
-
-
-	// Check current task
-	// TODO: check process status !!
-/*	if (sched_task_current == NULL)
-	{
-		task_current = NULL;
-		task_next = (sched_task_queue != NULL) ? sched_task_queue : NULL;
-	} else {
-		task_current = sched_task_current;
-		task_next = (sched_task_current->next != NULL)
-			? sched_task_current->next
-			: sched_task_queue;
-	}
-
-	// Check potantial error
-	if (task_next == NULL || task_next == sched_task_current)
-		return (-1);
-	
-	// Update internal scheduler task cursor
-	sched_task_current = task_next;
-	process_current = sched_task_current->process;
-
-	// Get context
-	*context_current = (task_current != NULL) ? &task_current->process->context : NULL;
-	*context_next = &task_next->process->context;
-*/
-	// DEBUG !
-	/*kvram_clear();
-	printk(0, 0, "Scheduler_schudele !");
-	printk(0, 1, "task current = %p", task_current);
-	printk(0, 2, "task next = %p", task_next);
-	printk(0, 3, "context current = %p", *context_current);
-	printk(0, 4, "context next = %p", *context_next);
-	kvram_display();
-	DBG_WAIT;*/
-	//return (0);
 }

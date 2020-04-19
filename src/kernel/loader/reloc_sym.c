@@ -12,7 +12,7 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 
 	// Get sections string header tables
 	offset = header->e_shoff + (header->e_shstrndx * header->e_shentsize);
-	earlyterm_write("pos = %#x\n", offset);
+	//earlyterm_write("pos = %#x\n", offset);
 	if (vfs_pread(file, &shdr, header->e_shentsize, offset) != header->e_shentsize)
 	{
 		earlyterm_write("relo_sym: shdr size\n");
@@ -20,7 +20,7 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 	}
 
 	// Allocate dump area
-	earlyterm_write("Try to alloc strtab (%do)\n", shdr.sh_size);
+	//earlyterm_write("Try to alloc strtab (%do)\n", shdr.sh_size);
 	shstrtab = (char*)kmem_alloc(shdr.sh_size);
 	if (shstrtab == NULL)
 	{
@@ -29,7 +29,7 @@ static char *get_shstrtab(FILE *file, Elf32_Ehdr *header)
 	}
 
 	// Get string tables
-	earlyterm_write("pos = %#x\n", shdr.sh_offset);
+	//earlyterm_write("pos = %#x\n", shdr.sh_offset);
 	if (vfs_pread(file, shstrtab, shdr.sh_size, shdr.sh_offset) != (ssize_t)shdr.sh_size)
 	{
 		earlyterm_write("relo_sym: shstrtab size error\n");
@@ -51,7 +51,7 @@ static int reloc_section(struct process *process, FILE *file, Elf32_Shdr *shdr)
 	{
 		// Get relocatable entry
 		offset = shdr->sh_offset + (i * shdr->sh_entsize);
-		earlyterm_write("rela\npos = %#x\n", offset);
+		//earlyterm_write("rela\npos = %#x\n", offset);
 		if (vfs_pread(file, &rela, shdr->sh_entsize, offset) != (ssize_t)shdr->sh_entsize)
 		{
 			earlyterm_write("relo_sym: reloc section size error\n");
@@ -73,9 +73,9 @@ int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header)
 	off_t offset;
 
 	// DEBUG
-	earlyterm_write("e_shoff    = %d\n", header->e_shoff);
-	earlyterm_write("e_shnum    = %d\n", header->e_shnum);
-	earlyterm_write("e_shstrndx = %d\n", header->e_shstrndx);
+	//earlyterm_write("e_shoff    = %d\n", header->e_shoff);
+	//earlyterm_write("e_shnum    = %d\n", header->e_shnum);
+	//earlyterm_write("e_shstrndx = %d\n", header->e_shstrndx);
 	//DBG_WAIT;
 
 	// Get the shstrtab
@@ -102,7 +102,7 @@ int loader_reloc_sym(struct process *process, FILE *file, Elf32_Ehdr *header)
 			continue;
 
 		// Diplay section name
-		earlyterm_write("[%d] %s - %d\n", i, &shstrtab[shdr.sh_name], shdr.sh_size / shdr.sh_entsize);
+		//earlyterm_write("[%d] %s - %d\n", i, &shstrtab[shdr.sh_name], shdr.sh_size / shdr.sh_entsize);
 		if (reloc_section(process, file, &shdr) != 0)
 			return (-3);
 	}

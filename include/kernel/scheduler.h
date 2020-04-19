@@ -23,19 +23,19 @@ struct sched_task
 
 	// Task status
 	enum {
-		SCHED_RUNNING,
-		SCHED_SLEEPING,
-		SCHED_DOWN,
-		SCHED_STOPPED,
-		SCHED_ZOMBIE
+		SCHED_TASK_UNUSED,
+		SCHED_TASK_RUNNING,
+		SCHED_TASK_ZOMBIE,
+		SCHED_TASK_INTERRUPTIBLE,
+		SCHED_TASK_UNINTERRUPTIBLE,
+		SCHED_TASK_STOPPED,
 	} status;
 
-	// Preemptif part
+	// Preemptif part (not implemented yet)
 	struct {
 		uint8_t _static;
 		int8_t _dynamic;
 	} priority;
-
 };
 
 //---
@@ -50,7 +50,13 @@ extern void sched_initialize(void);
 /*
 ** Add new process to sheduler
 */
-extern int sched_add_task(struct process *process);
+extern int sched_task_add(struct process *process);
+
+/*
+** Internal function wich will allow process to "restart".
+** (SIGCONT, continue signal)
+*/
+extern void sched_task_continue(struct process *process);
 
 /*
 ** Start shedluler (in theory, this function is called only

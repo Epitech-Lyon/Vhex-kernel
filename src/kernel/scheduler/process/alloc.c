@@ -21,14 +21,15 @@ struct process *process_alloc(void)
 	while (++proc_table_idx < proc_table_max && *proc != NULL)
 	{
 		// Check free slot
-		if ((*proc)->status != PROC_DEAD) {
+		// @note: we use 0xdeadbeef to mark free process
+		if ((*proc)->parent != (void*)0xdeadbeef) {
 			proc = &(*proc)->next;
 			continue;
 		}
 	
 		// Indicate init phase, stop atomic
 		// operations and return the process
-		(*proc)->status = PROC_INIT;
+		(*proc)->parent = NULL;
 		(*proc)->pgid = 0;
 		atomic_stop();
 		return (*proc);
@@ -41,7 +42,7 @@ struct process *process_alloc(void)
 		return (NULL);
 	}
 
-	// Alloc new process manually
+	// If no process is free, alloc new process manually
 	*proc = (struct process *)kmem_alloc(sizeof(struct process));
 	if (*proc == NULL) {
 		earlyterm_write("proc_alloc: ENOMEM !\n");
@@ -50,7 +51,7 @@ struct process *process_alloc(void)
 	}
 
 	// Init and return the now process
-	(*proc)->status = PROC_INIT;
+	(*proc)->parent = NULL;
 	(*proc)->pid = proc_table_idx + 1;
 	(*proc)->pgid = 0;
 	(*proc)->next = NULL;

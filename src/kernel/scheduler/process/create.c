@@ -91,6 +91,10 @@ struct process *process_create(void)
 	// Initialize heap
 	process->memory.heap = NULL;
 
+	// Initialize internal data
+	process->sched_task = NULL;
+	process->__stat_loc = 0x00000000;
+
 	// DEBUG !
 	//earlyterm_write("proc_create: success !\n");
 	//earlyterm_write("* user stack:   %p\n", process->context.reg[15]);

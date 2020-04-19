@@ -46,6 +46,7 @@ static int generate_arguments(struct process *proc, char **argv, char **envp)
 }
 
 //TODO
+//TODO RENAME ME !!!!!
 //TODO Return EAGAIN if no proc can be created !!
 //TODO Return ENOMEM if no memories can be allocated !!
 //TODO
@@ -101,7 +102,7 @@ pid_t sys_fexecve(const char *pathname, char **argv, char **envp)
 	process_current->child = proc;
 
 	// Add new process into task queue
-	if (sched_add_task(proc))
+	if (sched_task_add(proc))
 	{
 		earlyterm_write("sys_fexecve: scheduler error !");
 		DBG_WAIT;

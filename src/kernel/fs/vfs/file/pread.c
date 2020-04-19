@@ -17,7 +17,7 @@ ssize_t vfs_pread(FILE *file, void *buf, size_t count, off_t offset)
 		return (-1);
 
 	// Debug
-	earlyterm_write("pos = %#x\n", offset);
+	//earlyterm_write("pos = %#x\n", offset);
 
 	// Check error
 	// Read with FS specifique primitive and return the numbe of reading bytes.

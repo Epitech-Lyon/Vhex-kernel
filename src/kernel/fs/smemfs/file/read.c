@@ -33,8 +33,8 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 	size_t current_size;
 	size_t real_size;
 
-	earlyterm_write("pos = %#x\n", pos);
-	DBG_WAIT;
+	//earlyterm_write("pos = %#x\n", pos);
+	//DBG_WAIT;
 
 	// Get Check obvious error.
 	if (inode == NULL || buf == NULL)

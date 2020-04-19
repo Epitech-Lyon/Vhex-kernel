@@ -1,4 +1,5 @@
 #include <kernel/process.h>
+#include <kernel/scheduler.h>
 #include <kernel/devices/earlyterm.h>
 #include <kernel/util/atomic.h>
 
@@ -31,14 +32,16 @@ pid_t sys_waitpid(pid_t pid, int *wstatus, int options)
 		while (*proc != NULL)
 		{
 			// Check terminated child
-			if ((*proc)->status == PROC_ZOMBIE &&
-				((pid < -1 && (*proc)->pgid == -pid) ||
-				pid == -1 ||
-				(pid == 0 && (*proc)->pgid == process_current->pgid) ||
-				(pid > 0 && (*proc)->pid == pid)))
+			if ((*proc)->sched_task->status == SCHED_TASK_ZOMBIE &&
+				((pid < -1 && (*proc)->pgid == -pid)
+				 || pid == -1
+				 || (pid == 0 && (*proc)->pgid == process_current->pgid)
+				 || (pid > 0 && (*proc)->pid == pid)))
 			{
 				// Change the child process state
-				(*proc)->status = PROC_DEAD;
+				// @note: internal address used to determine if
+				// the process is alive or not
+				(*proc)->parent = (void*)0xdeadbeef;
 
 				// Get the child process PID and stat_loc
 				ret = (*proc)->pid;
@@ -46,11 +49,6 @@ pid_t sys_waitpid(pid_t pid, int *wstatus, int options)
 
 				// Remove process form the child list
 				*proc = (*proc)->sibling;
-
-				//DEBUG
-				//earlyterm_write("waitpid: find %d\n", ret);
-				//DBG_WAIT;
-				//DBG_WAIT;
 
 				// Stop atomic operation and return
 				atomic_stop();
@@ -63,16 +61,14 @@ pid_t sys_waitpid(pid_t pid, int *wstatus, int options)
 
 		// Force process to sleep
 		// TODO:
-		// Schedule !! and change the niciess of the
-		// process !!
+		// * Force schedule !!
+		// * change the niciess of the process !!
+		// * wait child process dead signal ?
 		//
 		// Stop atomic operation and wait
 		atomic_stop();
 		__asm__ volatile ("sleep; nop");
 	}
-
 	// Error
-	//earlyterm_write("waitpid: error\n");
-	//DBG_WAIT;
 	return (-1);
 }

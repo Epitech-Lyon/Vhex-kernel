@@ -6,6 +6,7 @@
 #include <kernel/fs/file.h>
 #include <kernel/fs/filesystem.h>
 #include <kernel/context.h>
+#include <sys/signal.h>
 #include <sys/types.h>
 
 #define PROCESS_NB_OPEN_FILE		(4)
@@ -13,6 +14,9 @@
 #define PROCESS_KERNEL_STACK_SIZE	(1024)
 #define PROCESS_NAME_LENGHT		(16)
 #define PROCESS_MAX			(4)
+
+// Circular error fix (scheduler.h -> process.h -> scheduler.h)
+struct sched_task;
 
 // define process struct.
 //TODO: signal !
@@ -50,7 +54,9 @@ struct process
 	//---
 	// Signals management.
 	//---
-	//sighandler_t signal[NSIG];
+	sighandler_t signal[NSIG];
+	uint32_t sig_pending;
+	uint32_t sig_blocked;
 
 
 	//---
@@ -97,20 +103,15 @@ struct process
 	pid_t pid;
 	pid_t pgid;
 
-	// Indicate process status
-	enum {
-		PROC_INIT,
-		PROC_RUNNING,
-		PROC_SLEEP,
-		PROC_STOP,
-		PROC_ZOMBIE,
-		PROC_DEAD
-	} status;
+	// *DO NOT USE* internaly used to modify the
+	// scheduler task state
+	struct sched_task *sched_task;
 
-	// Used to by the _exit() syscall
+	// Used by the _exit() syscall
 	uint32_t __stat_loc;
 
-	// Used by the allocator
+	// Used by the processes allocator to
+	// avoid process creation 
 	struct process *next;
 };
 

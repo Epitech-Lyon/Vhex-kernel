@@ -11,7 +11,7 @@ void sched_initialize(void)
 	// Initialize internal scheduler cache
 	for (int i = 0 ; i < SCHED_TASK_NB_MAX ; i = i + 1)
 	{
-		sched_task_queue[i].status = SCHED_DOWN;
+		sched_task_queue[i].status = SCHED_TASK_UNUSED;
 		sched_task_queue[i].process = NULL;
 		sched_task_queue[i].priority._static = 0;
 		sched_task_queue[i].priority._dynamic = 0;

@@ -24,7 +24,9 @@ struct process *process_get(pid_t pid)
 		}
 		
 		// Check if the process is alive
-		if (proc->status == PROC_DEAD)
+		// @note: we use 0xdeadbeef to determine
+		// the process state
+		if (proc->parent == (void*)0xdeadbeef)
 			proc = NULL;
 
 		// Stop atomic operations

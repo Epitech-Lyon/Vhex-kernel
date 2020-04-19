@@ -226,7 +226,7 @@ int start(void)
 	//---
 	earlyterm_write("Initialize scheduler...\n");
 	sched_initialize();
-	sched_add_task(vhex_process);
+	sched_task_add(vhex_process);
 	sched_start();
 
 	// normally the kernel SHOULD / CAN not arrive here.

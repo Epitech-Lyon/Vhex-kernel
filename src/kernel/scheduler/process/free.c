@@ -14,7 +14,7 @@ int process_free(struct process *process)
 	{
 		if (proc == process)
 		{
-			proc->status = PROC_DEAD;
+			proc->parent = (void *)0xdeadbeef;
 			return (0);
 		}
 	}
