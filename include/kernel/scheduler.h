@@ -53,10 +53,20 @@ extern void sched_initialize(void);
 extern int sched_task_add(struct process *process);
 
 /*
+** Internal function wich will stop process (SIGSTOP)
+*/
+extern void sched_task_stop(struct process *process);
+
+/*
 ** Internal function wich will allow process to "restart".
 ** (SIGCONT, continue signal)
 */
 extern void sched_task_continue(struct process *process);
+
+/*
+** Wake up sleeping process if it's can be interrupted
+*/
+extern void sched_task_wake_up(struct process *process);
 
 /*
 ** Start shedluler (in theory, this function is called only

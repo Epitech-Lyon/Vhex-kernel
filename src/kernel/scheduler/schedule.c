@@ -1,4 +1,5 @@
 #include <kernel/scheduler.h>
+#include <kernel/signal.h>
 
 //TODO: assembly !
 // @note: This part *SHOULD* be exeption safe !
@@ -18,7 +19,8 @@ int sched_schedule(common_context_t **context_current, common_context_t **contex
 	while (task_next != sched_task_current)
 	{
 		// Check process validity
-		if (task_next->status == SCHED_TASK_RUNNING)
+		if (task_next->status == SCHED_TASK_RUNNING
+				&& signal_deliver_pending((void*)process_current) == 0)
 			break;
 
 		// Get next task
@@ -40,7 +42,5 @@ int sched_schedule(common_context_t **context_current, common_context_t **contex
 	// Update scheduler task / process current
 	sched_task_current = task_next;
 	process_current = sched_task_current->process;
-
-	//TODO: signals handling !!!
 	return (0);
 }

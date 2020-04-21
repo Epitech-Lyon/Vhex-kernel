@@ -4,16 +4,18 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <sys/types.h>
+#include <bits/waitflags.h>
+#include <bits/waitstatus.h>
 
-// Wait options
-#define WNOHANG		0
-#define WUNTRACED	1
-#define WCONTINUED	2
-
-// Signals
-#define	__W_EXITCODE(ret, sig)	((ret) << 8 | (sig))
-#define	__WEXITSTATUS(status)	(((status) & 0xff00) >> 8)
-#define WEXITSTATUS(status)	__WEXITSTATUS(status)
+/* Macros for the `waitpid`'s wstatus argument. */
+#define WEXITSTATUS(status)	__WEXITSTATUS (status)
+#define WTERMSIG(status)	__WTERMSIG (status)
+#define WSTOPSIG(status)	__WSTOPSIG (status)
+#define WIFEXITED(status)	__WIFEXITED (status)
+#define WIFSIGNALED(status)	__WIFSIGNALED (status)
+#define WIFSTOPPED(status)	__WIFSTOPPED (status)
+#define WIFCONTINUED(status)	__WIFCONTINUED (status)
+#define WCOREDUMP(status)	__WCOREDUMP(status)
 
 // Wait process
 extern pid_t waitpid(pid_t pid, int *wstatus, int options);

@@ -7,5 +7,6 @@
 
 // Internal
 extern int signal_raise(struct process *proc, int sig);
+extern int signal_deliver_pending(struct process *proc);
 
 #endif /*__KERNEL_SIGNAL_H__*/

@@ -80,10 +80,6 @@ struct process
 			void *start;
 			size_t size;
 		} program;
-		struct {
-			void *start;
-			size_t size;
-		} exit;
 		struct pm_heap_page *heap;
 	} memory; 
 
@@ -125,5 +121,6 @@ extern int process_switch(pid_t pid);
 extern struct process *process_alloc(void);
 extern struct process *process_get(pid_t pid);
 extern int process_free(struct process *process);
+extern void process_terminate(struct process *proc, int __stat_loc);
 
 #endif /*__KERNEL_PROCESS_H__*/

@@ -63,7 +63,7 @@ pid_t sys_waitpid(pid_t pid, int *wstatus, int options)
 		// TODO:
 		// * Force schedule !!
 		// * change the niciess of the process !!
-		// * wait child process dead signal ?
+		// * wait SIGCHLD !!!!
 		//
 		// Stop atomic operation and wait
 		atomic_stop();
