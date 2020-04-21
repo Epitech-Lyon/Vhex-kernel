@@ -1,4 +1,5 @@
 #include <kernel/scheduler.h>
+#include <kernel/devices/earlyterm.h>
 #include <bits/waitstatus.h>
 
 void sys_exit(int status)

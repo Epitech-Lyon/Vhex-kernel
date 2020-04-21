@@ -2,6 +2,7 @@
 #include <kernel/process.h>
 #include <kernel/scheduler.h>
 #include <kernel/util/atomic.h>
+#include <kernel/devices/earlyterm.h>
 #include <sys/signal.h>
 
 int signal_raise(struct process *proc, int sig)

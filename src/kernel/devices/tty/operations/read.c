@@ -6,10 +6,12 @@
 #include <kernel/util/casio.h>
 #include <kernel/context.h>
 #include <kernel/syscall.h>
+#include <kernel/signal.h>
 #include <lib/string.h>
+#include <sys/signal.h>
 
 // Intenral functions
-static int check_signal(struct keyboard_obj_s *keyboard, key_t key);
+static void check_signal(struct keyboard_obj_s *keyboard);
 static int check_special(struct keyboard_obj_s *keyboard, key_t key);
 static int update_buffer(struct keyboard_obj_s *keyboard, key_t key);
 static int buffer_insert(struct keyboard_obj_s *keyboard, char n);
@@ -17,13 +19,14 @@ static void tty_buffer_display(struct keyboard_obj_s *keyboard);
 static void cursor_callback(struct keyboard_obj_s *keyboard);
 
 //FIXME: this function is device-specifique !!
+//FIXME: shared device error !!!
 ssize_t tty_read(void *inode, void *buffer, size_t count)
 {
 	extern struct keycache_s *keylist;
 	struct keyboard_obj_s keyboard;
 	struct keycache_s *keynode;
 	int first_key;
-	int timer_fd;
+	//int timer_fd;
 
 	// Check potential error.
 	if (count < 2)
@@ -35,7 +38,9 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	keyboard.buffer.size = count;
 	keyboard.buffer.cursor = 0;
 	keyboard.buffer.clen = 0;
-	keyboard.mode = 0x00;
+	keyboard.mode.enter = 0;
+	keyboard.mode.maj = 0;
+	keyboard.mode.special = 0;
 	keyboard.cvisible = 0;
 	keyboard.tty = inode;
 
@@ -45,12 +50,12 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 
 	// Initialize timer for cursor.
 	// FIXME: find real ticks value !!
-	timer_fd = timer_install(&cursor_callback, &keyboard, 500 * 500 * 2, TIMER_START);
-	if (timer_fd == -1)
-		return (0);
+	//timer_fd = timer_install(&cursor_callback, &keyboard, 500 * 500 * 2, TIMER_START);
+	//if (timer_fd == -1)
+	//	return (0);
 
 	// Main Loop, wait [EXE] key. 
-	while ((keyboard.mode & 0x04) == 0)
+	while (keyboard.mode.enter == 0)
  	{
 		// Wait user interruption.
 		keyboard_wait_event();
@@ -61,21 +66,29 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 		atomic_start();
 		keynode = keylist;
 		first_key = 0;
+		keyboard.mode.ctrl = 0;
+		keyboard.saved.signal.keycode = KEY_UNUSED;
 		while (keynode != NULL &&
-			(keynode->counter == 1 ||
+			(keynode->counter == 1 || keynode->keycode == KEY_OPTN ||
 			(first_key == 0 && keynode->counter > 10 && (keynode->counter & 1) == 0)))
 		{
-			// Repeat key flags.
-			first_key = 1;
-
 			// Handle current key
-			if (check_signal(&keyboard, keynode->keycode) == 0 &&
-					check_special(&keyboard, keynode->keycode) == 0)
+			if (check_special(&keyboard, keynode->keycode) == 0)
 				update_buffer(&keyboard, keynode->keycode);
+
+			// Dump the the fist pressed key
+			if (first_key == 0) {
+				keyboard.saved.signal.keycode = keynode->keycode;
+				keyboard.saved.signal.cursor = keyboard.buffer.cursor;
+			}
+			first_key = 1;
 
 			// Get next key.
 			keynode = keynode->next;
 		}
+
+		// Check signal
+		check_signal(&keyboard);
 
 		// Stop atomic operations
 		atomic_stop();
@@ -85,19 +98,56 @@ ssize_t tty_read(void *inode, void *buffer, size_t count)
 	}
 
 	// uninstall cursor timer.
-	timer_uninstall(timer_fd);
+	//timer_uninstall(timer_fd);
 	
 	// Return the number of input char.
 	return (keyboard.buffer.clen);
 }
 
 //TODO: move me
-static int check_signal(struct keyboard_obj_s *keyboard, key_t key)
+static void check_signal(struct keyboard_obj_s *keyboard)
 {
-	//TODO
-	(void)key;
-	(void)keyboard;
-	return (0);
+	extern struct process *process_current;
+	struct { uint8_t keycode; int signal; } echapment[3] = {
+		{.keycode = KEY_LN, .signal = SIGINT},
+		{.keycode = KEY_DIV, .signal = SIGQUIT},
+		{.keycode = KEY_0, .signal = SIGTSTP}
+	};
+	int signal;
+
+	// Check signal sending request
+	if (keyboard->mode.ctrl == 0)
+		return;
+
+	// Try to find the signal to send
+	signal = -1;
+	for (int i = 0 ; i < 3 ; ++i) {
+		if (echapment[i].keycode != keyboard->saved.signal.keycode)
+			continue;
+		signal = echapment[i].signal;
+		break;
+	}
+	if (signal == -1)
+		return;
+
+	// Remove the cheracter
+	if (keyboard->saved.signal.cursor > 0)
+	{
+		// Move seconde part.
+		memcpy(
+			&keyboard->buffer.addr[keyboard->buffer.cursor - 1],
+			&keyboard->buffer.addr[keyboard->buffer.cursor],
+			keyboard->buffer.clen - keyboard->buffer.cursor
+		);
+
+		// Add null char and update clen.
+		keyboard->buffer.clen = keyboard->buffer.clen - 1;
+		keyboard->buffer.addr[keyboard->buffer.clen] = '\0';
+		keyboard->buffer.cursor = keyboard->buffer.cursor - 1;
+	}
+
+	// Send signal
+	signal_raise(process_current, signal);
 }
 
 // TODO: move me
@@ -107,20 +157,26 @@ static int check_special(struct keyboard_obj_s *keyboard, key_t key)
 	extern fx9860_context_t casio_context;
 	extern fx9860_context_t vhex_context;
 
-		// Check MAJ.
+	// Check CTRL key (KEY_OPT)
+	if (key == KEY_OPTN) {
+		keyboard->mode.ctrl = 1;
+		return (1);
+	}
+
+	// Check MAJ.
 	if (key == KEY_ALPHA) {
-		keyboard->mode = keyboard->mode ^ 0x02;
+		keyboard->mode.maj ^= 1;
 		return (1);
 	}
 
-	// Check Alpha / num mode. 
+	// Check Alpha / num mode. (special)
 	if (key == KEY_SHIFT) {
-		keyboard->mode = keyboard->mode ^ 0x01;
+		keyboard->mode.special ^= 0x01;
 		return (1);
 	}
 
-	// Check space key
-	if (key == KEY_DOT && (keyboard->mode & 1) == 0) {
+	// Check space key (workaround)
+	if (key == KEY_DOT && keyboard->mode.special == 0) {
 		buffer_insert(keyboard, ' ');
 		return (1);
 	}
@@ -177,7 +233,7 @@ static int check_special(struct keyboard_obj_s *keyboard, key_t key)
 		keyboard->buffer.addr[keyboard->buffer.clen] = '\0';
 			
 		// indicate that the EXE has been pressed.
-		keyboard->mode = keyboard->mode | 0x04;
+		keyboard->mode.enter = 1;
 		return (1);
 	}
 
@@ -216,10 +272,9 @@ static void tty_buffer_display(struct keyboard_obj_s *keyboard)
 	keyboard->tty->cursor.y = keyboard->saved.tty.cursor.y;
 
 	// Workaround for [EXE] key.
-	size =
-		((keyboard->mode & 0x04) == 0)
-		? keyboard->buffer.clen + 1
-		: keyboard->buffer.clen;
+	size = keyboard->buffer.clen;
+	if (keyboard->mode.enter == 0)
+		size = keyboard->buffer.clen + 1;
 
 	// Write buffer.
 	tty_write(keyboard->tty, keyboard->buffer.addr, size);
@@ -248,10 +303,9 @@ static int update_buffer(struct keyboard_obj_s *keyboard, key_t key)
 	int i;
 
 	// Get the appropriate key list.
-	keycode_list =
-		((keyboard->mode & 1) == 0)
-		? keylist_alpha
-		: keylist_num;
+	keycode_list = keylist_alpha;
+	if (keyboard->mode.special == 1)
+		keycode_list = keylist_num;
 
 	// Try to find the pressed key.
 	i = -1;
@@ -259,12 +313,14 @@ static int update_buffer(struct keyboard_obj_s *keyboard, key_t key)
 	if (keycode_list[i] != key)
 		return (0);
 
-	// If the key match, update buffer.
-	// Get the char to be written
-	if ((keyboard->mode & 1) == 0)
-		character = (keyboard->mode & 2) ? 'A' + i : 'a' + i;
-	else
-		character = keylist_num_char[i];
+	// If the key match, update buffer and get the
+	// character to be written
+	character = keylist_num_char[i];
+	if (keyboard->mode.special == 0) {
+		character =  'a' + i;
+		if (keyboard->mode.maj == 1)
+			character = 'A' + i;;
+	}
 	
 	// Insert new character if possible.
 	buffer_insert(keyboard, character);

@@ -2,18 +2,14 @@
 #include <stdio.h>
 #include <sys/wait.h>
 #include "builtin.h"
+#include "util.h"
 
-int builtin_proc(void)
+int builtin_proc(int argc, char **argv)
 {
-	char *argv[2] = {"test", NULL};
 	pid_t child;
-	int wstatus;
-
-	//puts("proc test entry :)\n");
-	//printf("  PPID   PID  PGID\n");
-	//printf("%-6d%-6d%-6d\n", getppid(), getpid(), getpgid());
 
 	// Try to create first child
+	(void)argc;
 	child = fexecve("/mnt/casio/VHEX/test.elf", argv, NULL);
 	if (child == -1)
 	{
@@ -21,8 +17,7 @@ int builtin_proc(void)
 		return (0);
 	}
 
-	// Wait child death
-	waitpid(child, &wstatus, 0);
-	printf("+++ exited with %d +++\n", WEXITSTATUS(wstatus));
+	// Wait child process
+	wait_child(child);
 	return (0);
 }

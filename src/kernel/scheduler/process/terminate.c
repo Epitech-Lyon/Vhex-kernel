@@ -6,7 +6,7 @@
 
 void process_terminate(struct process *proc, int __stat_lock)
 {
-	struct pm_heap_page *page;
+	struct pm_heap_page **page;
 	void *tmp;
 
 	// Start atomic operation
@@ -19,16 +19,21 @@ void process_terminate(struct process *proc, int __stat_lock)
 			vfs_close(&proc->opfile[i].file);
 	}
 
-	// Frre'd all allocated space
+	// Free'd all allocated space
 	pm_pages_free(proc->memory.stack.user);
 	pm_pages_free(proc->memory.stack.kernel);
 	pm_pages_free(proc->memory.program.start);
-	page = proc->memory.heap;
-	while (page != NULL) {
-		tmp = page->next;
-		pm_pages_free(page);
-		page = tmp;
+	page = &proc->memory.heap;
+	while (*page != NULL) {
+		tmp = (*page)->next;
+		pm_pages_free(*page);
+		*page = tmp;
 	}
+
+	// Secure error
+	proc->memory.stack.user = NULL;
+	proc->memory.stack.kernel = NULL;
+	proc->memory.program.start = NULL;
 
 	// Change scheduler task state
 	proc->sched_task->status = SCHED_TASK_ZOMBIE;

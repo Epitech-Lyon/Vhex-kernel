@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 #include <stdio.h>
 #include "util.h"
 
@@ -13,6 +14,13 @@ int main(void)
 
 	// Shell main loop.
 	write(STDOUT_FILENO, "Boot Complete !\n", 16);
+
+	// Ignore internal signals (keyboard)
+	//signal(SIGINT, SIG_IGN);
+	//signal(SIGQUIT, SIG_IGN);
+	//signal(SIGTSTP, SIG_IGN);
+
+	// Main loop
 	while (1)
 	{
 		// Get user command.

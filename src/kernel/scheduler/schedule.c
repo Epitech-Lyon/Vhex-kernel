@@ -20,7 +20,7 @@ int sched_schedule(common_context_t **context_current, common_context_t **contex
 	{
 		// Check process validity
 		if (task_next->status == SCHED_TASK_RUNNING
-				&& signal_deliver_pending((void*)process_current) == 0)
+				&& signal_deliver_pending(task_next->process) == 0)
 			break;
 
 		// Get next task

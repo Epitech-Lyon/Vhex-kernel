@@ -8,13 +8,13 @@
 #include <bits/waitstatus.h>
 
 /* Macros for the `waitpid`'s wstatus argument. */
-#define WEXITSTATUS(status)	__WEXITSTATUS (status)
-#define WTERMSIG(status)	__WTERMSIG (status)
-#define WSTOPSIG(status)	__WSTOPSIG (status)
-#define WIFEXITED(status)	__WIFEXITED (status)
-#define WIFSIGNALED(status)	__WIFSIGNALED (status)
-#define WIFSTOPPED(status)	__WIFSTOPPED (status)
-#define WIFCONTINUED(status)	__WIFCONTINUED (status)
+#define WEXITSTATUS(status)	__WEXITSTATUS(status)
+#define WTERMSIG(status)	__WTERMSIG(status)
+#define WSTOPSIG(status)	__WSTOPSIG(status)
+#define WIFEXITED(status)	__WIFEXITED(status)
+#define WIFSIGNALED(status)	__WIFSIGNALED(status)
+#define WIFSTOPPED(status)	__WIFSTOPPED(status)
+#define WIFCONTINUED(status)	__WIFCONTINUED(status)
 #define WCOREDUMP(status)	__WCOREDUMP(status)
 
 // Wait process

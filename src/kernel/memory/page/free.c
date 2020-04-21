@@ -54,7 +54,7 @@ void pm_pages_free(void *ptr)
 	// No block found, display error.
 	earlyterm_write(
 		"pm_free: Warning, you try to free unused"
-		"allocated memory (%p)", sptr
+		"/ allocated memory (%p)\n", sptr
 	);
 	DBG_WAIT;
 

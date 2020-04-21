@@ -104,6 +104,7 @@ static void proc_signal_init(struct process *proc)
 	proc->signal[SIGTERM] = SIG_DFL;
 	proc->signal[SIGKILL] = SIG_DFL;
 	proc->signal[SIGSEGV] = SIG_DFL;
+	proc->signal[SIGINT] = SIG_DFL;
 	proc->signal[SIGHUP] = SIG_IGN;
 	proc->signal[SIGFPE] = SIG_DFL;
 }

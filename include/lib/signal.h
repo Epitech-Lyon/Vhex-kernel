@@ -11,5 +11,6 @@ typedef __sighandler_t sighandler_t;
 
 // Prototype
 extern int kill(pid_t pid, int sig);
+extern sighandler_t signal(int signum, sighandler_t handler);
 
 #endif /*__LIB_SIGNAL_H__*/

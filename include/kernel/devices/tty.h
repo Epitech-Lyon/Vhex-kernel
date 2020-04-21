@@ -57,7 +57,13 @@ struct keyboard_obj_s
 		size_t clen;
 		off_t cursor;
 	} buffer;
-	uint8_t mode;
+	struct {
+		uint8_t enter	: 1;
+		uint8_t maj	: 1;
+		uint8_t special	: 1;
+		uint8_t ctrl	: 1;
+		uint8_t const	: 4;
+	} mode;
 	uint8_t cvisible;
 	struct {
 		struct {
@@ -66,6 +72,10 @@ struct keyboard_obj_s
 				int16_t y;
 			} cursor;
 		} tty;
+		struct {
+			uint8_t keycode;
+			off_t cursor;
+		} signal;
 	} saved;
 
 	// FIXME Dirty place, remove / move me !

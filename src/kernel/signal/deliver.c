@@ -1,5 +1,7 @@
 #include <kernel/signal.h>
 #include <kernel/scheduler.h>
+#include <kernel/util/atomic.h>
+#include <kernel/devices/earlyterm.h>
 #include <bits/waitstatus.h>
 #include <sys/signal.h>
 
@@ -29,6 +31,7 @@ static int sig_deliver(struct process *proc, int sig)
 
 			/* Process terination (default) */
 			case SIGTERM:	// termination
+			case SIGINT:	// interruption
 			case SIGHUP:	// hang up
 			case SIGKILL:	// kill
 			case SIGBUS:	// bus error
@@ -52,6 +55,13 @@ int signal_deliver_pending(struct process *proc)
 	int need_schedule;
 	uint32_t sig;
 
+	// Check process valitidy
+	if (proc->sched_task->status != SCHED_TASK_RUNNING)
+		return (-1);
+
+	// Start atomic operation
+	atomic_start();
+
 	// Get all pending signals
 	sig = proc->sig_pending & (~proc->sig_blocked);
 
@@ -65,11 +75,14 @@ int signal_deliver_pending(struct process *proc)
 
 		// Check signal validity and try to
 		// deliver the signal
-		if (proc->signal[i] != __SIGUNDEF)
-			sig_deliver(proc, i);
+		if (proc->signal[i + 1] != __SIGUNDEF)
+			need_schedule = sig_deliver(proc, i + 1);
 
 		// Clear the signal mask
 		proc->sig_pending = proc->sig_pending & (~i);
 	}
+
+	// Stop atomic operation
+	atomic_stop();
 	return (need_schedule);
 }
