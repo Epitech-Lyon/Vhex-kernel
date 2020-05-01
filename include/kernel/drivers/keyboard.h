@@ -16,6 +16,17 @@ struct keycache_s
 	struct keycache_s *next;
 };
 
+// Structure used by the keybaord abstraction
+// FIXME: this macros is hardware specific !!
+#define KEYBOARD_NB_KEYS	(96)
+struct keyscan_s
+{
+	uint8_t keycode;
+	uint32_t counter;
+};
+typedef struct keyscan_s keyscan_t;
+
+
 typedef enum key_e
 {
 	KEY_F1		= 0x41,
@@ -85,6 +96,6 @@ extern ssize_t keyboard_read(void *buffer, size_t count);
 extern int keyboard_close(void);
 
 // Helpers
-extern void keyboard_wait_event(void);
+extern void keyboard_wait_event(keyscan_t *list);
 
 #endif /*__KERNEL_DEVICES_KEYBOARD_H__*/

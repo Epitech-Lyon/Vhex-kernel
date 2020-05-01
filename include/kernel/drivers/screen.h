@@ -13,6 +13,6 @@ typedef enum {
 
 // Internal hardware abstract
 extern size_t screen_get(screen_getter_t getter);
-extern void (*screen_update)(void *vram);
+extern void screen_update(void *vram);
 
 #endif /*__KERNEL_DRIVERS_SCREEN_H__*/

@@ -76,8 +76,10 @@ struct dentry
 	// File name.
 	char name[VFS_DENTRY_NAME_LENGHT];
 
-	// Internal inode 
+	// Internal inode OR device address / informations
 	void *inode;
+	struct device *device;
+	dev_t dev_id;
 
 	// Internal counter used by opne() and close()
 	uint32_t counter;

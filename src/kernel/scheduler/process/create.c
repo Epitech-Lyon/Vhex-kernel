@@ -2,8 +2,10 @@
 #include <asm/unistd_32.h>
 #include <kernel/memory.h>
 #include <kernel/devices/earlyterm.h>
-#include <lib/string.h>
+#include <kernel/fs/vfs.h>
 #include <sys/signal.h>
+#include <string.h>
+#include <unistd.h>
 
 /* proc_stacks_create() - create user and kernel stack */
 static int proc_stacks_create(struct process *proc)
@@ -81,9 +83,18 @@ static void proc_file_init(struct process *proc)
 		proc->opfile[i].file.cursor = 0;
 	}
 
-	// Initialize "special" file
+	// Initialize working directory path
 	proc->working_dir = vfs_root_node;
-	proc->tty.private = NULL;
+
+	// Open TTY for stdin, stdout, stderr
+	// TODO: add correct stderr configurations
+	// TODO: do not open TTY each time ?
+	vfs_open(&proc->opfile[STDIN_FILENO].file, "/dev/tty", O_RDWR);
+	vfs_open(&proc->opfile[STDOUT_FILENO].file, "/dev/tty", O_RDWR);
+	vfs_open(&proc->opfile[STDERR_FILENO].file, "/dev/tty", O_RDWR);
+	proc->opfile[STDIN_FILENO].status = PROCESS_FILE_SLOT_USED;
+	proc->opfile[STDOUT_FILENO].status = PROCESS_FILE_SLOT_USED;
+	proc->opfile[STDERR_FILENO].status = PROCESS_FILE_SLOT_USED;
 }
 
 /* proc_signal_init() - Initialize signal management */

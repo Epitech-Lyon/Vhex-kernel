@@ -1,7 +1,9 @@
 #include <kernel/scheduler.h>
+#include <kernel/process.h>
 #include <kernel/signal.h>
 
-//TODO: assembly !
+//TODO: assembly ?
+//TODO: preemptive handling !!
 // @note: This part *SHOULD* be exeption safe !
 int sched_schedule(common_context_t **context_current, common_context_t **context_next)
 {
@@ -20,7 +22,7 @@ int sched_schedule(common_context_t **context_current, common_context_t **contex
 	{
 		// Check process validity
 		if (task_next->status == SCHED_TASK_RUNNING
-				&& signal_deliver_pending(task_next->process) == 0)
+				&& signal_deliver_pending((void*)task_next->process) == 0)
 			break;
 
 		// Get next task
@@ -30,8 +32,12 @@ int sched_schedule(common_context_t **context_current, common_context_t **contex
 	}
 
 	// Check error
-	if (task_next == sched_task_current)
+	// FIXME: check terminate signal ?!
+	if (task_next == sched_task_current) {
+		if (task_next != NULL)
+			signal_deliver_pending((void*)task_next->process);
 		return (-1);
+	}
 
 	// Get contexts
 	*context_current = NULL;

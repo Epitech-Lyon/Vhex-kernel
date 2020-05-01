@@ -230,6 +230,6 @@ int start(void)
 	sched_start();
 
 	// normally the kernel SHOULD / CAN not arrive here.
-	earlyterm_write("Kernel job fini !");
+	earlyterm_write("Kernel job fini !\n");
 	while (1) { __asm__ volatile ("sleep"); }
 }

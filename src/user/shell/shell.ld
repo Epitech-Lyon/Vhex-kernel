@@ -33,7 +33,8 @@ SECTIONS
 		/*  Procedure Linkage Table */
 		*(.plt)
 
-		/* GLobal Offset Table */
+		/* Global Offset Table */
+		/* TODO: move me into .data section ? */
 		*(.got.plt)
 		*(.got.*)
 		*(.got)

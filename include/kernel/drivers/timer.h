@@ -23,9 +23,11 @@ typedef enum {
 } tmode_t;
 
 // Prototypes
-extern int timer_uninstall(int timer_ID);
-extern int timer_install(void *callback, void *arg, uint32_t ticks, tmode_t mode);
-extern int timer_start(int timer_ID);
-extern int timer_stop(int timer_ID);
+extern int timer_uninstall(int timerID);
+extern int timer_install(void *callback, void *arg, int hertz, tmode_t mode);
+extern int timer_set_callback(int timerID, void *callback, void *arg);
+extern int timer_set_ticks(int timerID, uint32_t ticks);
+extern int timer_start(int timerID);
+extern int timer_stop(int timerID);
 
 #endif /*__KERNEL_UTIL_TIMER_H__*/

@@ -28,10 +28,13 @@ int main(int argc, char **argv)
 			break;
 		write(STDOUT_FILENO, c, ret);
 	}
+	printf("test oui:");
 
 	// Wait signal
 	// TODO: better signal management (kernel)
-	printf("wait signal....\n");
-	while (read(STDIN_FILENO, c, 3) != 4);
+	if (argc != 1) {
+		printf("wait signal....\n");
+		while (read(STDIN_FILENO, c, 3) != 4);
+	}
 	return (0);
 }

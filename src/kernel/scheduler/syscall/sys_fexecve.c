@@ -11,15 +11,11 @@
 //TODO
 static void proc_dump_shared(struct process *child, struct process *parent)
 {
-	// Dump all opened file
 	for (int i = 0 ; i < PROCESS_NB_OPEN_FILE ; ++i)
 	{
 		memcpy(&child->opfile[i].file, &parent->opfile[i].file, sizeof(FILE));
 		child->opfile[i].status = parent->opfile[i].status;
 	}
-
-	// Dump specific
-	memcpy(&child->tty, &parent->tty, sizeof(FILE));
 }
 
 static int generate_arguments(struct process *proc, char **argv, char **envp)
@@ -80,7 +76,7 @@ pid_t sys_fexecve(const char *pathname, char **argv, char **envp)
 	// Try to load binary into physical memory
 	if (loader(proc, pathname) != 0)
 	{
-		earlyterm_write("sys_fexecve: loader error !");
+		earlyterm_write("sys_fexecve: loader error !\n");
 		DBG_WAIT;
 		process_free(proc);
 		atomic_stop();
@@ -104,7 +100,7 @@ pid_t sys_fexecve(const char *pathname, char **argv, char **envp)
 	// Add new process into task queue
 	if (sched_task_add(proc))
 	{
-		earlyterm_write("sys_fexecve: scheduler error !");
+		earlyterm_write("sys_fexecve: scheduler error !\n");
 		DBG_WAIT;
 		process_free(proc);
 		atomic_stop();

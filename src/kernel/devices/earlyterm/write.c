@@ -49,7 +49,7 @@ static void print_base(struct earlyterm *earlyterm, uint32_t nb,
 	while (--digits >= 0)
 	{
 		dascii(&earlyterm->display, earlyterm->cursor.x,
-				earlyterm->cursor.y, buffer[digits]);
+				earlyterm->cursor.y, buffer[digits], 0);
 		earlyterm_horizontal_update(earlyterm);
 	}
 }
@@ -93,6 +93,13 @@ void earlyterm_write(const char *format, ...)
 		// String format "simple"
 		if (format[i] == '%')
 		{
+			if (format[i + 1] == 'c') {
+				nb = (char)va_arg(ap, int);
+				dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, nb, 0);
+				earlyterm_horizontal_update(&earlyterm);
+				i = i + 1;
+				continue;
+			}
 			if (format[i + 1] == 'd' || format[i + 1] == 'x')
 			{
 				// Check negative value
@@ -101,7 +108,7 @@ void earlyterm_write(const char *format, ...)
 				if (nb < 0 && format[i + 1] == 'd')
 				{
 					nb = 0 - nb;
-					dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, '-');
+					dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, '-', 0);
 					earlyterm_horizontal_update(&earlyterm);
 				}
 				print_base(&earlyterm, nb, (format[i + 1] == 'd') ? 10 : 16, 1);
@@ -113,14 +120,14 @@ void earlyterm_write(const char *format, ...)
 				// add @ if 'p' (pointer)
 				if (format[i + 1] == 'p')
 				{
-					dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, '@');
+					dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, '@', 0);
 					earlyterm_horizontal_update(&earlyterm);
 				}
 
 				// Add "0x"
-				dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, '0');
+				dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, '0', 0);
 				earlyterm_horizontal_update(&earlyterm);
-				dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, 'x');
+				dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, 'x', 0);
 				earlyterm_horizontal_update(&earlyterm);
 
 				// Get value
@@ -138,7 +145,7 @@ void earlyterm_write(const char *format, ...)
 				{
 					if (line_discipline(&earlyterm, *(char*)nb) != 0)
 						continue;
-					dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, *(char*)nb);
+					dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, *(char*)nb, 0);
 					earlyterm_horizontal_update(&earlyterm);
 				}
 				i = i + 1;
@@ -147,7 +154,7 @@ void earlyterm_write(const char *format, ...)
 		}
 
 		// Default, display character
-		dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, format[i]);
+		dascii(&earlyterm.display, earlyterm.cursor.x, earlyterm.cursor.y, format[i], 0);
 		earlyterm_horizontal_update(&earlyterm);
 	}
 

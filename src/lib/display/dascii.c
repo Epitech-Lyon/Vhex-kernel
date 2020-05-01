@@ -1,6 +1,7 @@
 #include <display.h>
 
-static void font_draw_core(uint32_t *vram, struct font_s *font, struct font_block_s *fblock)
+static void font_draw_core(uint32_t *vram, struct font_s *font,
+		struct font_block_s *fblock, int mode)
 {
 	uint8_t vram_offset_y;
 	uint32_t pixel_cursor;
@@ -34,6 +35,9 @@ static void font_draw_core(uint32_t *vram, struct font_s *font, struct font_bloc
 			{
 				vram[((fblock->x + x) >> 5) + vram_offset_y] |=
 					0x80000000 >> ((fblock->x + x) & 31);
+			} else if (mode == 1) {
+				vram[((fblock->x + x) >> 5) + vram_offset_y] &=
+					~(0x80000000 >> ((fblock->x + x) & 31));
 			}
 		}
 
@@ -45,7 +49,7 @@ static void font_draw_core(uint32_t *vram, struct font_s *font, struct font_bloc
 
 
 /* dascii() - Draw ASCII character into Video RAM */
-void dascii(display_t *disp, int x, int y, char const c)
+void dascii(display_t *disp, int x, int y, char const c, int mode)
 {
 	struct font_block_s fblock;
 
@@ -94,5 +98,5 @@ void dascii(display_t *disp, int x, int y, char const c)
 		return;
 
 	// Draw ASCII character.
-	font_draw_core(disp->vram, disp->font, &fblock);
+	font_draw_core(disp->vram, disp->font, &fblock, mode);
 }

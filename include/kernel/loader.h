@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <kernel/fs/file.h>
 #include <kernel/process.h>
-#include <kernel/util/elf.h>
+#include <elf.h>
 
 // Function
 extern int loader(struct process *process, const char *path);

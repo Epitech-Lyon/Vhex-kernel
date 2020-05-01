@@ -12,6 +12,9 @@ struct dentry *vfs_dentry_alloc(const char *name, mode_t mode)
 	if (node == NULL)
 		return (NULL);
 
+	// Wipe all informations
+	memset(node, 0x00, sizeof(struct dentry));
+
 	// Initialize dentry
 	memset(node->name, 0x00, VFS_DENTRY_NAME_LENGHT);
 
@@ -24,6 +27,7 @@ struct dentry *vfs_dentry_alloc(const char *name, mode_t mode)
 
 	// Set default value
 	node->inode = NULL;
+	node->device = NULL;
 	node->parent = NULL;
 	node->child = NULL;
 	node->next = NULL;

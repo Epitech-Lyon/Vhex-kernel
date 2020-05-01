@@ -55,10 +55,11 @@ struct font_block_s
 // Draw primitives
 extern int dopen(display_t *disp, const char *fontname);
 extern void dclear(display_t *disp);
-extern void dascii(display_t *disp, int row, int colomn, char const c);
+extern void dascii(display_t *disp, int row, int colomn, char const c, int mode);
 extern size_t dprint(display_t *disp, int x, int y, char const *str, ...);
 extern void dscroll(display_t *disp, int line);
 extern void dreverse(display_t *disp, int x, int y, int width, int height);
+extern void drect(display_t *disp, int x, int y, int width, int height);
 extern void dupdate(display_t *disp);
 
 #endif /*__LIB_DISPLAY_H__*/

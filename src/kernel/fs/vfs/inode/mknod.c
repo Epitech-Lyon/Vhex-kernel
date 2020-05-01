@@ -50,27 +50,24 @@ int vfs_mknod(const char *pathname, mode_t mode, dev_t dev)
 	name = (name == NULL) ? (void *)pathname : &name[1];
 	
 	// Try to find the device
-	// TODO: handle othe file (mode) !!!
+	// TODO: handle other file (mode) !!!
 	device = device_get(dev_get_major(dev));
 	if (device == NULL) {
 		atomic_stop();
 		return (-2);
 	}
 
-	// Tru to create empty node
+	// Try to create empty node
 	file = vfs_dentry_alloc(name, mode | __S_IFCHR);
 	if (file == NULL) {
 		atomic_stop();
 		return (-3);
 	}
 
-
-	// Try to open device
-	file->inode = device->open(dev_get_major(dev), dev_get_minor(dev));
-	if (file->inode == NULL) {
-		atomic_stop();
-		return (-4);
-	}
+	// Indicate device file
+	file->inode = NULL;
+	file->device = device;
+	file->dev_id = dev;
 
 	// Set file operations
 	file->dentry_op.file_op = &device->file_op;

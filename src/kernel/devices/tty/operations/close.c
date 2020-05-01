@@ -1,22 +1,27 @@
 #include <kernel/devices/tty.h>
+#include <kernel/drivers/timer.h>
+#include <kernel/util/atomic.h>
 #include <kernel/util/kmem.h>
 
 int tty_close(void *inode)
 {
-	struct tty_s *tty;
-	int line;
+	struct tty *tty;
 
 	// Get tty object
 	tty = inode;
 
-	// Free'd all allocated memory for the
-	// output buffer
-	line = tty->cursor.max.y;
-	while (line >= 0)
-		kmem_free(tty->buffers.output[line]);
-	kmem_free(tty->buffers.output);
+	// Force flush internal buffers
+	tty_keyboard_buffer_flush(tty);
+	tty_screen_buffer_flush(tty);
 
-	// Free'd tty object
-	kmem_free(tty);
+	// Start atomic operations
+	atomic_start();
+
+	// Call each module destructors
+	tty_keyboard_destructor(tty);
+	tty_screen_destructor(tty);
+
+	// Stop atomic operations
+	atomic_stop();
 	return (0);
 }

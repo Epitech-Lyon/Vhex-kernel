@@ -19,7 +19,6 @@
 struct sched_task;
 
 // define process struct.
-//TODO: signal !
 struct process
 {
 	//---
@@ -48,7 +47,6 @@ struct process
 		FILE file;
 	} opfile[PROCESS_NB_OPEN_FILE];
 	struct dentry *working_dir;
-	FILE tty;
 
 
 	//---

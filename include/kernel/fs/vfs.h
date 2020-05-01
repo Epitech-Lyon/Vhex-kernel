@@ -7,6 +7,7 @@
 #include <kernel/fs/file.h>
 #include <kernel/fs/filesystem.h>
 #include <kernel/devices/device.h>
+#include <fcntl.h>
 
 // Internal VFS macros
 #define VFS_MOUNT_ROOT				(-1)

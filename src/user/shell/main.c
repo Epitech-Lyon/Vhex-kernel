@@ -13,7 +13,7 @@ int main(void)
 	int argc;
 
 	// Shell main loop.
-	write(STDOUT_FILENO, "Boot Complete !\n", 16);
+	printf("Boot Complete !\n");
 
 	// Ignore internal signals (keyboard)
 	//signal(SIGINT, SIG_IGN);
@@ -29,12 +29,12 @@ int main(void)
 		cmd_size = read(STDIN_FILENO, input, 12);
 
 		// Check no char
-		if (cmd_size == 1)
+		if (cmd_size < 1)
 			continue;
 
 		// Generate argc / argv.
 		if (strtotab(&argc, &argv, input) != 0) {
-			printf("parser: internal error\n");
+			write(STDOUT_FILENO, "\n", 1);
 			continue;
 		}
 

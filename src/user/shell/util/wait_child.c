@@ -43,9 +43,6 @@ void wait_child(pid_t pid)
 	// Wait child death
 	waitpid(pid, &wstatus, 0);
 
-	// FIXME: workaround dto display
-	printf("\n");
-
 	// Check exit() return
 	if (WIFEXITED(wstatus))
 	{
