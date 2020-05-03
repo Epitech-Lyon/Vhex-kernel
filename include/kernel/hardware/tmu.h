@@ -3,8 +3,18 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/def/union_types.h>
-#include <kernel/def/attributes.h>
+#include <kernel/bits/union_types.h>
+#include <kernel/bits/attributes.h>
+
+struct __sh7305_tmu_context
+{
+	uint8_t tstr;
+	struct {
+		uint32_t tcor;
+		uint32_t tcnt;
+		uint16_t tcr;
+	} timer[3];
+};
 
 struct timer_s
 {

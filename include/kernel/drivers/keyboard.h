@@ -5,9 +5,11 @@
 #include <stdint.h>
 #include <sys/types.h>
 
+// Macros which generate keycode
 #define KEYCODE_GEN(row, column) \
 	(((row & 0x0f) << 4) | ((column & 0x0f) << 0))
 
+// Internal struct used by the keyboard abstraction
 struct keycache_s
 {
 	uint8_t keycode;
@@ -26,7 +28,7 @@ struct keyscan_s
 };
 typedef struct keyscan_s keyscan_t;
 
-
+// Define all keycode
 typedef enum key_e
 {
 	KEY_F1		= 0x41,
@@ -90,10 +92,11 @@ typedef enum key_e
 	KEY_UNUSED	= 0xff
 } key_t;
 
-// Primitives
-extern int keyboard_open(void);
-extern ssize_t keyboard_read(void *buffer, size_t count);
-extern int keyboard_close(void);
+
+// key cache abstrations functions
+extern void keycache_initialize(void);
+extern void keycache_clean(int key_frame);
+extern void keycache_update(int row, int column, uint8_t key_frame);
 
 // Helpers
 extern void keyboard_wait_event(keyscan_t *list);

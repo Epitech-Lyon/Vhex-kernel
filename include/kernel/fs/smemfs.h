@@ -6,6 +6,58 @@
 #include <sys/types.h>
 #include <kernel/fs/file.h>
 
+
+
+/*******************************************/
+/**                                       **/
+/**        Common SMEM driver part        **/
+/**                                       **/
+/*******************************************/
+extern void smemfs_initialize(void);
+extern void smemfd_uninitialize(void);
+
+
+
+
+/*******************************************/
+/**                                       **/
+/** USB Power Graphic II SMEM driver part **/
+/**                                       **/
+/*******************************************/
+// Internal Casio's structure to dump file's informations
+struct smem_USB3_file_info
+{
+	uint16_t id;			// File index
+	uint16_t type;			// File type
+	struct {
+		uint32_t file;		// File size (data + header)
+		uint32_t data;		// Data size (without header)
+	} size;
+	uint32_t address;		// Data address ?
+};
+
+// Superblock primitives
+extern void *	smemfs_USB3_mount(void);
+extern int	smemfs_USB3_umount(void);
+
+// File primitives
+extern ssize_t	smemfs_USB3_read(void *inode, void *buf, size_t count, off_t pos);
+
+// Inode primitive
+extern void *	smemfs_USB3_find_parent(void *inode);
+extern void *	smemfs_USB3_find_first_child(void *inode);
+extern void *	smemfs_USB3_find_next_sibling(void *inode);
+extern int	smemfs_USB3_get_name(void *inode, char *name, size_t count);
+extern mode_t	smemfs_USB3_get_mode(void *inode);
+
+
+/*******************************************/
+/**                                       **/
+/** USB Power Graphic II SMEM driver part **/
+/**                                       **/
+/*******************************************/
+
+// Define internal SMEM informations /flags
 #define CASIO_SMEM_NAME_LENGHT			12
 #define CASIO_SMEM_ROOT_ID			0xffff
 #define CASIO_SMEM_BLOCK_ENTRY_MAGIC		0x4200
@@ -17,7 +69,6 @@
 #define CASIO_SMEM_FRAGMENT_INFO_DELETE		CASIO_SMEM_HEADER_INFO_DELETE
 #define CASIO_SMEM_FRAGMENT_MAGIC		0x0120
 #define CASIO_SMEM_ROOT_ID			0xffff
-
 
 // Define block data. 
 struct casio_smem_block_s
@@ -86,28 +137,26 @@ struct smemfs_superblock_s
 	smemfs_sector_t  *sector_table;
 };
 
-// Constructor
-extern void smemfs_initialize();
 
 // Superblock primitives
-extern void *smemfs_mount(void);
-extern int smemfs_umount(void);
+extern void *	smemfs_USB2_mount(void);
+extern int	smemfs_USB2_umount(void);
 
 // File primitives
-extern ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos);
+extern ssize_t	smemfs_USB2_read(void *inode, void *buf, size_t count, off_t pos);
 
 // Inode primitive
-extern void *smemfs_find_next_sibling(void *inode);
-extern void *smemfs_find_first_child(void *inode);
-extern void *smemfs_find_parent(void *inode);
-extern int smemfs_get_name(void *inode, char *name, size_t count);
-extern mode_t smemfs_get_mode(void *inode);
+extern void *	smemfs_USB2_find_parent(void *inode);
+extern void *	smemfs_USB2_find_first_child(void *inode);
+extern void *	smemfs_USB2_find_next_sibling(void *inode);
+extern int	smemfs_USB2_get_name(void *inode, char *name, size_t count);
+extern mode_t	smemfs_USB2_get_mode(void *inode);
 
 
 // Internal helper !
 #define WALK_FLAG_ID_CHECK_PARENT	(1 << 0)
 #define WALK_FLAG_ID_CHECK_DIRECTORY	(0 << 0)
-extern smemfs_inode_t *smemfs_walk(smemfs_inode_t *current,
-						smemfs_inode_t *entry, uint16_t folder_id, int flags);
+extern smemfs_inode_t *smemfs_USB2_walk(smemfs_inode_t *current,
+					smemfs_inode_t *entry, uint16_t folder_id, int flags);
 
 #endif /*_CASIO_SMEM_H__*/

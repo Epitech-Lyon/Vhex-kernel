@@ -1,12 +1,12 @@
-#ifndef __KERNEL_MODULES_SH7724_KEYSC_H__
-# define __KERNEL_MODULES_SH7724_KEYSC_H__
+#ifndef __KERNEL_HARDWARE_KEYSC_H__
+# define __KERNEL_HARDWARE_KEYSC_H__
 
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/def/union_types.h>
-#include <kernel/def/attributes.h>
+#include <kernel/bits/union_types.h>
+#include <kernel/bits/attributes.h>
 
-struct sh7305_keysc_s
+struct __sh7305_keysc_s
 {
 	volatile const uint16_t KIUDATA[6];
 	volatile word_union(CONTROL,
@@ -61,6 +61,19 @@ struct sh7305_keysc_s
 	);
 };
 
-#define SH7305_KEYSC	(*(volatile struct sh7305_keysc_s *)0xa44b0000)
+struct __sh7305_keysc_context
+{
+	uint16_t control;
+	uint16_t autofix;
+	uint16_t scan_mode;
+	uint16_t scan_state;
+	uint16_t interrupt;
+	uint16_t scan_wait;
+	uint16_t scan_interval;
+	uint16_t kyoutdr;
+	uint16_t kyindr;
+};
 
-#endif /*__KERNEL_MODULES_SH7724_KEYSC_H__*/
+#define SH7305_KEYSC	(*(volatile struct __sh7305_keysc_s *)0xa44b0000)
+
+#endif /*__KERNEL_HARDWARE_KEYSC_H__*/

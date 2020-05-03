@@ -1,15 +1,12 @@
+#include <kernel/drivers/keyboard.h>
 #include <kernel/hardware/keysc.h>
 #include <kernel/hardware/intc.h>
-
-// Internal functions
-extern void keycache_update(int row, int column, uint8_t key_frame);
-extern void keycache_clean(uint8_t key_frame);
 
 // Device internal indicator to
 // avoid reentrace with the key list.
 volatile uint8_t keylist_isUpdate = 0;
 
-void keysc_handler(void)
+void sh7305_keysc_int_handler(void)
 {
 	static uint8_t key_frame = 0;
 	int column;

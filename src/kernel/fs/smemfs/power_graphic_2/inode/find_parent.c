@@ -2,7 +2,7 @@
 #include <kernel/util/atomic.h>
 
 /* smemfs_find_parent() - Return the parent inode */
-void *smemfs_find_parent(void *inode)
+void *smemfs_USB2_find_parent(void *inode)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
 	void *parent_inode;
@@ -27,7 +27,7 @@ void *smemfs_find_parent(void *inode)
 	folder_id = ((struct casio_smem_header_s *)inode)->parent.id;
 
 	// Return first inode find
-	parent_inode = smemfs_walk(inode, smemfs_superblock.inode_table, folder_id,
+	parent_inode = smemfs_USB2_walk(inode, smemfs_superblock.inode_table, folder_id,
 						WALK_FLAG_ID_CHECK_DIRECTORY);
 
 	// Stop atomic operation

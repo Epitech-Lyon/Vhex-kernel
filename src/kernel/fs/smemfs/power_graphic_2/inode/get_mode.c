@@ -3,7 +3,7 @@
 #include <kernel/util/atomic.h>
 
 /* smemfs_get_mode() - Return the permission dans the type of a file (sync) */
-mode_t smemfs_get_mode(void *inode)
+mode_t smemfs_USB2_get_mode(void *inode)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
 	struct casio_smem_header_s *header;

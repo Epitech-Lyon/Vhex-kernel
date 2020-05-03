@@ -3,7 +3,8 @@
 #include <kernel/devices/earlyterm.h>
 #include <kernel/util/atomic.h>
 
-// Kernel FS block
+// Casio SMEM FileSystem primitives
+// @note: We use USB PowerGraphic 2 primitives
 struct file_system_type smemfs_filesystem =
 {
 	// internal informations
@@ -12,22 +13,23 @@ struct file_system_type smemfs_filesystem =
 
 	// FS specific openrations	
 	.filesystem_operations = {
-		.mount  = &smemfs_mount,
-		.umount = &smemfs_umount
+		.mount  = &smemfs_USB2_mount,
+		.umount = &smemfs_USB2_umount
 	},
 
 	// File operations
 	.file_operations = {
-		.read  = &smemfs_read,
-		.write = NULL
+		.read  = &smemfs_USB2_read,
+		.write = NULL,
+		.ioctl = NULL
 	},
 
 	// Inode operations
 	.inode_operations = {
 		// Walk
-		.find_next_sibling	= &smemfs_find_next_sibling,
-		.find_first_child	= &smemfs_find_first_child,
-		.find_parent		= &smemfs_find_parent,
+		.find_next_sibling	= &smemfs_USB2_find_next_sibling,
+		.find_first_child	= &smemfs_USB2_find_first_child,
+		.find_parent		= &smemfs_USB2_find_parent,
 
 		// Memory
 		.create			= NULL,
@@ -36,12 +38,31 @@ struct file_system_type smemfs_filesystem =
 		.rename			= NULL,
 
 		// Informations
-		.get_name		= &smemfs_get_name,
-		.get_mode		= &smemfs_get_mode
+		.get_name		= &smemfs_USB2_get_name,
+		.get_mode		= &smemfs_USB2_get_mode
 	}
 };
 
+// Internal superblock informations
 struct smemfs_superblock_s smemfs_superblock;
+
+
+// switch USB Power Graphic II driver to
+// USB Power Graphic III (Casio syscall wrapper)
+static void use_dump_smem_driver(void)
+{
+/*	smemfs_filesystem.filesystem_operations.mount = &smemfs_USB3_mount;
+	smemfs_filesystem.filesystem_operations.umount = &smemfs_USB3_umount;
+	smemfs_filesystem.file_operations.read = &smemfs_USB3_read;
+	smemfs_filesystem.inode_operations.find_next_sibling = &smemfs_USB3_find_next_sibling;
+	smemfs_filesystem.inode_operations.find_first_child = &smemfs_USB3_find_first_child;
+	smemfs_filesystem.inode_operations.find_parent = &smemfs_USB3_find_parent;
+	smemfs_filesystem.inode_operations.get_name = &smemfs_USB3_get_name;
+	smemfs_filesystem.inode_operations.get_mode = &smemfs_USB3_get_mode;
+	smemfs_superblock.sector_table = NULL;
+	smemfs_superblock.inode_table = NULL;*/
+	while (1);
+}
 
 void smemfs_initialize(void)
 {
@@ -56,11 +77,8 @@ void smemfs_initialize(void)
 	smemfs_superblock.sector_table = (void *)0xa0270000;
 	if (smemfs_superblock.sector_table->magic_start != CASIO_SMEM_BLOCK_ENTRY_MAGIC)
 	{
-		earlyterm_clear();
 		earlyterm_write("SMEMFS: Casio sector table error !");
-		earlyterm_write("Wait manual reset...");
-		atomic_stop();
-		while (1){ __asm__ volatile ("sleep"); }
+		return (use_dump_smem_driver());
 	}
 
 	// Try to find Casio SMEM inode table start always at the end of
@@ -76,11 +94,8 @@ void smemfs_initialize(void)
 			smemfs_superblock.inode_table->parent.id != 0xffff ||
 			smemfs_superblock.inode_table->parent.type != 0xffff)
 	{
-		earlyterm_clear();
 		earlyterm_write("SMEMFS: Casio inode table error !");
-		earlyterm_write("Wait manual reset...");
-		atomic_stop();
-		while (1){ __asm__ volatile ("sleep"); }
+		return (use_dump_smem_driver());
 	}
 
 	// Stop atomic operations

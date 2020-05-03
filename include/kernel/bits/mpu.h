@@ -1,5 +1,5 @@
-#ifndef __KERNEL_HARDWARE_MPU_H__
-# define __KERNEL_HARDWARE_MPU_H__
+#ifndef __KERNEL_BITS_MPU_H__
+# define __KERNEL_BITS_MPU_H__
 
 // Define MPU arch.
 typedef enum mpu_e
@@ -11,4 +11,4 @@ typedef enum mpu_e
 	MPU_UNKNOWN,
 } mpu_t;
 
-#endif /*__KERNEL_HARDWARE_MPU_H__*/
+#endif /*__KERNEL_BITS_MPU_H__*/

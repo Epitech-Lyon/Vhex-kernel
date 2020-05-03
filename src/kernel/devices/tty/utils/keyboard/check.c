@@ -43,13 +43,10 @@ void tty_keyboard_check_signal(struct tty *tty)
 }
 
 
-//TODO update ?
+//TODO update me
 //@note: Call this function ONLY if the device is locked !!
 int tty_keyboard_check_special(struct tty *tty, key_t key)
 {
-	extern fx9860_context_t casio_context;
-	extern fx9860_context_t vhex_context;
-
 	// Check CTRL key (KEY_OPT)
 	if (key == KEY_OPTN) {
 		tty->keyboard.mode.ctrl = 1;
@@ -81,25 +78,8 @@ int tty_keyboard_check_special(struct tty *tty, key_t key)
 	}
 
 	// Check MENU key.
-	// TODO: fix me !
-	if (key == KEY_MENU)
-	{
-		// Save current Vhex context and restore Casio's context.
-		atomic_start();
-		fx9860_context_save(&vhex_context);
-		fx9860_context_restore(&casio_context);
-		atomic_stop();
-
-		// Inject MENU key and call GetKey().
-		// FIXME !!!
-		//casio_GetKeyWait(&row, &column, 0, 0, 0, &key);
-		casio_GetKey(&key);
-			
-		// Save current Casio's context and restore Vhex's context.
-		atomic_start();
-		fx9860_context_save(&casio_context);
-		fx9860_context_restore(&vhex_context);
-		atomic_stop();
+	if (key == KEY_MENU) {
+		casio_return_menu(0);
 		return (1);
 	}
 

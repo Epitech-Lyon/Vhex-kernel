@@ -2,7 +2,7 @@
 #include <kernel/util/atomic.h>
 
 /* smemfs_get_name() - Dump the name of a file (sync) */
-int smemfs_get_name(void *inode, char *buf, size_t count)
+int smemfs_USB2_get_name(void *inode, char *buf, size_t count)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
 	struct casio_smem_header_s *header;

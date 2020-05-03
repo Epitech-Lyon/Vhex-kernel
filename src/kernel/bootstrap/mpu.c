@@ -1,5 +1,8 @@
 #include <stdint.h>
-#include <kernel/hardware/mpu.h>
+#include <kernel/bits/mpu.h>
+
+// Internal symbols
+mpu_t current_mpu = MPU_UNKNOWN;
 
 /* check_sh3 - Detecting sh3-based MPU */
 static mpu_t check_sh3(uint16_t tplcr)
@@ -50,7 +53,10 @@ mpu_t mpu_get(void)
 	volatile uint16_t *plcr	= (void *)0xa4000114;
 	uint16_t splcr;
 	uint16_t tplcr;
-	mpu_t mpu;
+
+	// Check if the MPU is already find
+	if (current_mpu != MPU_UNKNOWN)
+		return (current_mpu);
 
 	// Check port L control register.
 	splcr = *plcr;
@@ -58,8 +64,9 @@ mpu_t mpu_get(void)
 	tplcr = *plcr;
 	*plcr = splcr;
 
-	mpu = check_sh3(tplcr);
-	if (mpu != MPU_UNKNOWN)
-		return (mpu);
-	return (check_sh4());
+	// Check MPU arch
+	current_mpu = check_sh3(tplcr);
+	if (current_mpu == MPU_UNKNOWN)
+		current_mpu = check_sh4();
+	return (current_mpu);
 }

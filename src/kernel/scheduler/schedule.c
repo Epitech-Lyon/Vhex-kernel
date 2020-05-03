@@ -1,11 +1,12 @@
 #include <kernel/scheduler.h>
+#include <kernel/devices/earlyterm.h>
 #include <kernel/process.h>
 #include <kernel/signal.h>
 
 //TODO: assembly ?
 //TODO: preemptive handling !!
 // @note: This part *SHOULD* be exeption safe !
-int sched_schedule(common_context_t **context_current, common_context_t **context_next)
+int sched_schedule(struct cpu_context **context_current, struct cpu_context **context_next)
 {
 	extern struct sched_task *sched_task_current;
 	extern struct sched_task *sched_task_queue;

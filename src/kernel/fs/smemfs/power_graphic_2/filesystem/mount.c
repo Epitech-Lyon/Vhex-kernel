@@ -2,7 +2,7 @@
 #include <kernel/util/atomic.h>
 
 /* casio_smem_mount() - Mount the file system (sync) */
-void *smemfs_mount(void)
+void *smemfs_USB2_mount(void)
 {
 	extern struct smemfs_superblock_s smemfs_superblock;
 	void *root_inode;

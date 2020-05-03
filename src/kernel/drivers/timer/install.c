@@ -41,7 +41,7 @@ int timer_install(void *callback, void *arg, int hertz, tmode_t mode)
 	// Calculate real ticks needed
 	// FIXME: correct ticks calculation (remove / 2 ?)
 	ticks = cpg_get_frequency(CPG_PERIPHERAL) / 2;
-	ticks = ticks /  prescaler[SH7305_TMU.TIMER[timerID].TCR.TPSC];
+	ticks = ticks / prescaler[SH7305_TMU.TIMER[timerID].TCR.TPSC];
 	ticks = ticks / hertz;
 
 	// Setup Timer

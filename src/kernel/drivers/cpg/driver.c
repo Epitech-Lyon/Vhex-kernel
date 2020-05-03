@@ -1,12 +1,12 @@
 #include <kernel/drivers/cpg.h>
 #include <kernel/hardware/cpg.h>
-#include <kernel/devices/earlyterm.h>
+#include <kernel/bits/driver.h>
 
 // Internal struct
 struct cpg cpg_info;
 
-__attribute__((constructor))
-static void cpg_init(void)
+// @note: we just get the frequencies
+static void sh7305_cpg_driver_install(void)
 {
 	// Calculate FLL frequency (Khz)
 	// @note: RCLK = 32 768 Hz
@@ -27,7 +27,8 @@ static void cpg_init(void)
 	
 
 	// Debug
-	earlyterm_write("Calibrate frequencies...\n");
+	// TODO: device 
+	/*earlyterm_write("Calibrate frequencies...\n");
 	earlyterm_write(
 		"* FLL freq: %d.%d Mhz\n"
 		"* PLL freq: %d.%d Mhz\n"
@@ -39,6 +40,18 @@ static void cpg_init(void)
 		cpg_info.cpu_freq / 1000000, (((cpg_info.cpu_freq - ((cpg_info.cpu_freq / 1000000)) * 1000000)) + 999) / 1000,
 		cpg_info.bus_freq / 1000000, (((cpg_info.bus_freq - ((cpg_info.bus_freq / 1000000)) * 1000000)) + 999) / 1000,
 		cpg_info.per_freq / 1000000, (((cpg_info.per_freq - ((cpg_info.per_freq / 1000000)) * 1000000)) + 999) / 1000
-	);
-	DBG_WAIT;
+	);*/
 }
+
+static void sh7305_cpg_driver_uninstall(void)
+{
+	// Nothing for now
+}
+
+// Create driver object
+VHEX_DRIVER(2, driver_cpg_sh7305) = {
+	.arch = MPU_SH7305,
+	.install = &sh7305_cpg_driver_install,
+	.uninstall = &sh7305_cpg_driver_uninstall,
+	.name = "cpg"
+};

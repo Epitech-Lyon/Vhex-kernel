@@ -47,6 +47,11 @@ SECTIONS
 		. = ALIGN(4);
 		*(.rodata)
 		*(.rodata.*)
+
+		/* Drivers */
+		_bdrivers_section = ALIGN(4);
+		*(SORT_BY_NAME(.driver.*));
+		_edrivers_section = . ;
 	
 		/* Constructors, destructors */
 		_bctors = ALIGN(4) ;

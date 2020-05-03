@@ -1,12 +1,12 @@
-#ifndef __KERNEL_MODULES_SH7724_INTC_H__
-# define __KERNEL_MODULES_SH7724_INTC_H__
+#ifndef __KERNEL_HARDWARE_INTC_H__
+# define __KERNEL_HARDWARE_INTC_H__
 
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/def/union_types.h>
-#include <kernel/def/attributes.h>
+#include <kernel/bits/union_types.h>
+#include <kernel/bits/attributes.h>
 
-struct SH7305_intc_s
+struct __sh7305_intc_s
 {
 	//---
 	// Interrupt priority register.
@@ -510,5 +510,29 @@ struct SH7305_intc_s
 	);
 };
 
-#define SH7305_INTC	(*(volatile struct SH7305_intc_s	*)0xa4080000)
-#endif /*__KERNEL_MODULES_SH7724_INTC_H__*/
+struct __sh7305_intc_context
+{
+	uint16_t ipra;
+	uint16_t iprb;
+	uint16_t iprc;
+	uint16_t iprd;
+	uint16_t ipre;
+	uint16_t iprf;
+	uint16_t iprg;
+	uint16_t iprh;
+	uint16_t ipri;
+	uint16_t iprj;
+	uint16_t iprk;
+	uint16_t iprl;
+	uint8_t imr[12];
+	uint16_t icr[2];
+	uint32_t intpri00;
+	uint8_t intreq00;
+	uint8_t intmsk00;
+	uint8_t intmskclr00;
+	uint16_t nmifcr;
+	uint32_t usermsk;
+} __attribute__((packed, aligned(2)));
+
+#define SH7305_INTC	(*(volatile struct __sh7305_intc_s	*)0xa4080000)
+#endif /*__KERNEL_HARDWARE_INTC_H__*/

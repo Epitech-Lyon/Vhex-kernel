@@ -10,7 +10,7 @@ static void sys_test(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 	earlyterm_write("* b = %#x\n", b);
 	earlyterm_write("* c = %#x\n", c);
 	earlyterm_write("* d = %#x\n", d);
-	DBG_WAIT;
+	while (1);
 }
 
 static const void *sys_handler[__NR_MAX] = {

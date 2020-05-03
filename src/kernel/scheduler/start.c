@@ -40,11 +40,12 @@ void sched_start(void)
 	sched_timer_tstr_bit = 1 << sched_timer_id;
 
 	// Debug
-	//earlyterm_write("* timer ID:    %d\n", sched_timer_id);
-	//earlyterm_write("* timer addr:  %#x\n", sched_timer_address);
-	//earlyterm_write("* timer event: %#x\n", sched_timer_intevt);
-	//earlyterm_write("* timer TSTR:  %#x\n", sched_timer_tstr_bit);
-	//DBG_WAIT;
+	/*earlyterm_write("* timer ID:    %d\n", sched_timer_id);
+	earlyterm_write("* timer addr:  %#x\n", sched_timer_address);
+	earlyterm_write("* timer event: %#x\n", sched_timer_intevt);
+	earlyterm_write("* timer TSTR:  %#x\n", sched_timer_tstr_bit);
+	DBG_WAIT;
+	while (1);*/
 
 	// Start scheduler timer
 	timer_start(sched_timer_id);

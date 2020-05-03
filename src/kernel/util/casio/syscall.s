@@ -23,6 +23,10 @@
 .global	_casio_WriteFile
 .global	_casio_CloseFile
 
+.global	_casio_TimerInstall
+.global	_casio_TimerUninstall
+.global	_casio_TimerStart
+.global	_casio_TimerStop
 
 
 
@@ -50,6 +54,9 @@
 .type	_casio_WriteFile, @function
 .type	_casio_CloseFile, @function
 
+
+.type	_casio_SetTimer, @function
+.type	_casio_KillTimer, @function
 
 
 
@@ -174,8 +181,29 @@ _casio_CloseFile:
 	nop
 
 
+_casio_TimerInstall:
+	mov.l	.syscall_entry, r1
+	mov.l	.sys_TimerInstall, r0
+	jmp @r1
+	nop
 
+_casio_TimerStart:
+	mov.l	.syscall_entry, r1
+	mov.l	.sys_TimerStart, r0
+	jmp @r1
+	nop
 
+_casio_TimerUninstall:
+	mov.l	.syscall_entry, r1
+	mov.l	.sys_TimerUninstall, r0
+	jmp @r1
+	nop
+
+_casio_TimerStop:
+	mov.l	.syscall_entry, r1
+	mov.l	.sys_TimerStop, r0
+	jmp @r1
+	nop
 
 .align 4
 .syscall_entry:		.long 0x80010070
@@ -198,4 +226,8 @@ _casio_CloseFile:
 .sys_closeFile:		.long 0x0000042d
 .sys_getkeywait:	.long 0x00000247
 .sys_putKeycode:	.long 0x0000024f
+.sys_TimerInstall:	.long 0x00000118
+.sys_TimerUninstall:	.long 0x00000119
+.sys_TimerStart:	.long 0x0000011a
+.sys_TimerStop:		.long 0x0000011b
 .end

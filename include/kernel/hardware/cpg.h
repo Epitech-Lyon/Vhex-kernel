@@ -3,8 +3,8 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <kernel/def/union_types.h>
-#include <kernel/def/attributes.h>
+#include <kernel/bits/union_types.h>
+#include <kernel/bits/attributes.h>
 
 struct SH7305_cpg_s
 {

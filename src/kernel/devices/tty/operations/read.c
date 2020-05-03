@@ -1,10 +1,7 @@
 #include <kernel/devices/tty.h>
-#include <kernel/devices/earlyterm.h>
 #include <kernel/drivers/keyboard.h>
 #include <kernel/drivers/timer.h>
 #include <kernel/util/atomic.h>
-#include <kernel/context.h>
-#include <kernel/syscall.h>
 #include <kernel/signal.h>
 #include <sys/signal.h>
 #include <pthread.h>

@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/def/union_types.h>
-#include <kernel/def/attributes.h>
+#include <kernel/bits/union_types.h>
+#include <kernel/bits/attributes.h>
 
 struct sh7305_ubc_s
 {

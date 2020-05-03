@@ -24,7 +24,7 @@ static void *casio_smem_get_data_base_address(smemfs_fragdata_t *fragment)
 }
 
 /* casio_smem_read() - Read the file data (based on internal cursor) */
-ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
+ssize_t smemfs_USB2_read(void *inode, void *buf, size_t count, off_t pos)
 {
 	smemfs_fragdata_t *fragment;
 	smemfs_header_t *header;
@@ -32,9 +32,6 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 	void *data_base_addr;
 	size_t current_size;
 	size_t real_size;
-
-	//earlyterm_write("pos = %#x\n", pos);
-	//DBG_WAIT;
 
 	// Get Check obvious error.
 	if (inode == NULL || buf == NULL)
@@ -66,7 +63,6 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 	if (fragment->magic != CASIO_SMEM_FRAGMENT_MAGIC ||
 			fragment->info != CASIO_SMEM_FRAGMENT_INFO_EXIST)
 	{
-		atomic_stop();
 		earlyterm_write("smemfs: fragment error !\n");
 		earlyterm_write("* current_size = %d\n", current_size);
 		earlyterm_write("* pos = %#x\n", pos);
@@ -75,6 +71,7 @@ ssize_t smemfs_read(void *inode, void *buf, size_t count, off_t pos)
 		DBG_WAIT;
 		DBG_WAIT;
 		DBG_WAIT;
+		atomic_stop();
 		return (-1);
 	}
 

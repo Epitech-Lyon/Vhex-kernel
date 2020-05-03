@@ -1,11 +1,11 @@
-#include <kernel/context.h>
+/*#include <kernel/bits/context.h>
 #include <kernel/hardware/tmu.h>
 #include <kernel/devices/earlyterm.h>
 
 // Test
 uint32_t counter = 0;
 
-void sched_debug(common_context_t *context_current, common_context_t *context_next)
+void sched_debug(struct cpu_context *context_current, struct cpu_context *context_next)
 {
 	extern uint32_t sched_timer_id;
 	extern uint32_t sched_timer_address;
@@ -33,4 +33,4 @@ void sched_debug(common_context_t *context_current, common_context_t *context_ne
 	earlyterm_write("TCOR: %#x", tcor);
 	earlyterm_write("TCNT: %#x", tcnt);
 	earlyterm_write("TCR:  %#x", tcr);
-}
+}*/

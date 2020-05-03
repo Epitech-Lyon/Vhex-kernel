@@ -2,7 +2,7 @@
 
 /* smemfs_walk() - Find inode based on directory ID and flags */
 /* @note: This function is internal of smemFS, do not call it ! */
-smemfs_inode_t *smemfs_walk(smemfs_inode_t *current,
+smemfs_inode_t *smemfs_USB2_walk(smemfs_inode_t *current,
 				smemfs_inode_t *file, uint16_t folder_id, int flags)
 {
 	smemfs_fragdata_t *fragdata;

@@ -4,6 +4,13 @@
 #include <stddef.h>
 #include <stdint.h>
 
+//---
+//	Casio's wrapper
+//---
+extern void casio_return_menu(int mode);
+
+
+
 // Internal Casio datat structure
 struct rect
 {
@@ -12,6 +19,11 @@ struct rect
 	int right;
 	int bottom;
 };
+
+// GetKeyWait macros
+#define KEYWAIT_HALTON_TIMEROFF 	0
+#define KEYWAIT_HALTOFF_TIMEROFF	1
+#define KEYWAIT_HALTON_TIMERON		2
 
 //
 // Casio prototypes.
@@ -59,6 +71,12 @@ static inline void dclear_area(int x1, int y1, int x2, int y2)
 	struct rect area = {.left = x1, .top = y1, .right = x2, .bottom = y2};
 	casio_Bdisp_AreaClr_VRAM(&area);
 }
+
+// Timer syscalls
+extern int casio_TimerInstall(int id, void (*handler)(void), int delay_ms);
+extern int casio_TimerUninstall(int id);
+extern int casio_TimerStart(int id);
+extern int casio_TimerStop(int id);
 
 
 

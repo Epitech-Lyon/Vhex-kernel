@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <kernel/fs/file.h>
 #include <kernel/fs/filesystem.h>
-#include <kernel/context.h>
+#include <kernel/bits/context.h>
 #include <sys/signal.h>
 #include <sys/types.h>
 
@@ -33,7 +33,7 @@ struct process
 	//---
 	// Context management
 	//---
-	common_context_t context;
+	struct cpu_context context;
 
 
 	//---

@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <kernel/process.h>
+#include <kernel/bits/context.h>
 
 // Define the number of task
 #define SCHED_TASK_NB_MAX	PROCESS_MAX
@@ -78,12 +79,12 @@ extern void sched_start(void);
 ** Get the current task context and the next one
 ** based on internal task priority / status.
 */
-extern int sched_schedule(common_context_t **current, common_context_t **next);
+extern int sched_schedule(struct cpu_context **current, struct cpu_context **next);
 
 /*
 ** Internal function wich will switch current process
 ** context with the next context
 */
-extern void sched_context_switch(common_context_t *current, common_context_t *next);
+extern void sched_context_switch(struct cpu_context *current, struct cpu_context *next);
 
 #endif /*__KERNEL_SHEDULER_H__*/
