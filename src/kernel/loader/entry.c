@@ -18,7 +18,7 @@ int loader(struct process *process, const char *path)
 	if (process == NULL || vfs_open(&file, path, O_RDONLY) != 0)
 	{
 		earlyterm_write("loader: Fault error !\n");
-		earlyterm_write("* path:    %s$\n", path);
+		earlyterm_write("* path: %s$\n", path);
 		earlyterm_write("* process: %p\n", process);
 		DBG_WAIT;
 		return (-1);
@@ -32,10 +32,6 @@ int loader(struct process *process, const char *path)
 	{
 		earlyterm_write("loader: ELF file header error ! (%d)\n", err);
 		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
 		return (-2);
 	}
 
@@ -44,11 +40,6 @@ int loader(struct process *process, const char *path)
 	if (err != 0)
 	{
 		earlyterm_write("loader: ELF file image error ! (%d)\n", err);
-		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
 		DBG_WAIT;
 		return (-3);
 	}
@@ -59,14 +50,10 @@ int loader(struct process *process, const char *path)
 	{
 		earlyterm_write("loader: ELF relo error ! (%d)\n", err);
 		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
-		DBG_WAIT;
 		return (-4);
 	}
+
+	// Close file
 	vfs_close(&file);
 	return (0);
 }

@@ -4,7 +4,7 @@
 /* smemfs_find_first_child() - Find the fist file in the (folder) inode (sync) */
 void *smemfs_USB2_find_first_child(void *inode)
 {
-	extern struct smemfs_superblock_s smemfs_superblock;
+	extern struct smemfs_USB2_superblock smemfs_USB2_superblock;
 	uint16_t folder_id;
 	void *child_inode;
 
@@ -16,7 +16,7 @@ void *smemfs_USB2_find_first_child(void *inode)
 	atomic_start();
 
 	// Check root inode
-	if (inode == smemfs_superblock.sector_table)
+	if (inode == smemfs_USB2_superblock.sector_table)
 	{
 		folder_id = CASIO_SMEM_ROOT_ID;
 	} else {
@@ -33,7 +33,7 @@ void *smemfs_USB2_find_first_child(void *inode)
 	}
 
 	// Return the first child of the file.
-	child_inode = smemfs_USB2_walk(inode, smemfs_superblock.inode_table,
+	child_inode = smemfs_USB2_walk(inode, smemfs_USB2_superblock.inode_table,
 					folder_id, WALK_FLAG_ID_CHECK_PARENT);
 
 	// Stop atomic operation

@@ -4,7 +4,7 @@
 /* smemfs_find_next_sibling() - Find the next file from the same parent (sync) */
 void *smemfs_USB2_find_next_sibling(void *inode)
 {
-	extern struct smemfs_superblock_s smemfs_superblock;
+	extern struct smemfs_USB2_superblock smemfs_USB2_superblock;
 	void *sibling_inode;
 	uint16_t folder_id;
 
@@ -16,7 +16,7 @@ void *smemfs_USB2_find_next_sibling(void *inode)
 	atomic_start();
 
 	// Check inode validity (and root)
-	if (inode == smemfs_superblock.sector_table ||
+	if (inode == smemfs_USB2_superblock.sector_table ||
 		((struct casio_smem_header_s *)inode)->info != CASIO_SMEM_HEADER_INFO_EXIST)
 	{
 		atomic_stop();

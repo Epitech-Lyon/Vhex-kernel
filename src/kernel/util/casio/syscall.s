@@ -17,11 +17,14 @@
 
 .global	_casio_Bkey_PutKeymatrix
 
-.global	_casio_CreateFile
-.global	_casio_OpenFile
-.global	_casio_ReadFile
-.global	_casio_WriteFile
-.global	_casio_CloseFile
+.global	_casio_Bfile_CreateFile
+.global	_casio_Bfile_OpenFile
+.global	_casio_Bfile_ReadFile
+.global	_casio_Bfile_WriteFile
+.global	_casio_Bfile_CloseFile
+.global	_casio_Bfile_FindFirst
+.global	_casio_Bfile_FindNext
+.global	_casio_Bfile_FindClose
 
 .global	_casio_TimerInstall
 .global	_casio_TimerUninstall
@@ -48,11 +51,14 @@
 
 .type	_casio_Bkey_PutKeymatrix, @function
 
-.type	_casio_CreateFile, @function
-.type	_casio_OpenFile, @function
-.type	_casio_ReadFile, @function
-.type	_casio_WriteFile, @function
-.type	_casio_CloseFile, @function
+.type	_casio_Bfile_CreateFile, @function
+.type	_casio_Bfile_OpenFile, @function
+.type	_casio_Bfile_ReadFile, @function
+.type	_casio_Bfile_WriteFile, @function
+.type	_casio_Bfile_CloseFile, @function
+.type	_casio_Bfile_FindFirst, @function
+.type	_casio_Bfile_FindNext, @function
+.type	_casio_Bfile_FindClose, @function
 
 
 .type	_casio_SetTimer, @function
@@ -67,7 +73,6 @@ _casio_Bdisp_GetVRAM:
 	mov.l	.sys_getVRAM, r0
 	jmp @r1
 	nop
-
 
 _casio_Bdisp_PrintMini:
 	mov.l	.syscall_entry, r1
@@ -118,6 +123,8 @@ _casio_Bdisp_SaveDisp:
 	nop
 
 
+
+
 _casio_Malloc:
 	mov.l	.syscall_entry, r1
 	mov.l	.sys_malloc, r0
@@ -129,6 +136,8 @@ _casio_Free:
 	mov.l	.sys_free, r0
 	jmp @r1
 	nop
+
+
 
 
 _casio_GetKey:
@@ -143,42 +152,64 @@ _casio_GetKeyWait:
 	jmp @r1
 	nop
 
-
 _casio_Bkey_PutKeymatrix:
 	mov.l	.syscall_entry, r1
 	mov.l	.sys_putKeycode, r0
 	jmp @r1
 	nop
 
-_casio_CreateFile:
+
+
+
+_casio_Bfile_CreateFile:
 	mov.l	.syscall_entry, r1
-	mov.l	.sys_createFile, r0
+	mov.l	.sys_Bfile_CreateFile, r0
 	jmp @r1
 	nop
 
-_casio_OpenFile:
+_casio_Bfile_OpenFile:
 	mov.l	.syscall_entry, r1
-	mov.l	.sys_openFile, r0
+	mov.l	.sys_Bfile_OpenFile, r0
 	jmp @r1
 	nop
 
-_casio_WriteFile:
+_casio_Bfile_WriteFile:
 	mov.l	.syscall_entry, r1
-	mov.l	.sys_writeFile, r0
+	mov.l	.sys_Bfile_WriteFile, r0
 	jmp @r1
 	nop
 
-_casio_ReadFile:
+_casio_Bfile_ReadFile:
 	mov.l	.syscall_entry, r1
-	mov.l	.sys_readFile, r0
+	mov.l	.sys_Bfile_ReadFile, r0
 	jmp @r1
 	nop
 
-_casio_CloseFile:
+_casio_Bfile_CloseFile:
 	mov.l	.syscall_entry, r1
-	mov.l	.sys_closeFile, r0
+	mov.l	.sys_Bfile_CloseFile, r0
 	jmp @r1
 	nop
+
+_casio_Bfile_FindFirst:
+	mov.l	.syscall_entry, r1
+	mov.l	.sys_Bfile_FindFirst, r0
+	jmp @r1
+	nop
+
+_casio_Bfile_FindNext:
+	mov.l	.syscall_entry, r1
+	mov.l	.sys_Bfile_FindNext, r0
+	jmp @r1
+	nop
+
+_casio_Bfile_FindClose:
+	mov.l	.syscall_entry, r1
+	mov.l	.sys_Bfile_FindClose, r0
+	jmp @r1
+	nop
+
+
 
 
 _casio_TimerInstall:
@@ -219,13 +250,18 @@ _casio_TimerStop:
 .sys_save_disp:		.long 0x00000813
 .sys_malloc:		.long 0x00000acd
 .sys_free:		.long 0x00000acc
-.sys_createFile:	.long 0x00000434
-.sys_openFile:		.long 0x0000042c
-.sys_writeFile:		.long 0x00000435
-.sys_readFile:		.long 0x00000432
-.sys_closeFile:		.long 0x0000042d
 .sys_getkeywait:	.long 0x00000247
 .sys_putKeycode:	.long 0x0000024f
+
+.sys_Bfile_CreateFile:	.long 0x00000434
+.sys_Bfile_OpenFile:	.long 0x0000042c
+.sys_Bfile_WriteFile:	.long 0x00000435
+.sys_Bfile_ReadFile:	.long 0x00000432
+.sys_Bfile_CloseFile:	.long 0x0000042d
+.sys_Bfile_FindFirst:	.long 0x0000043b
+.sys_Bfile_FindNext:	.long 0x0000043c
+.sys_Bfile_FindClose:	.long 0x0000043d
+
 .sys_TimerInstall:	.long 0x00000118
 .sys_TimerUninstall:	.long 0x00000119
 .sys_TimerStart:	.long 0x0000011a

@@ -7,11 +7,11 @@
 /* casio_smem_data_base_address() - Generate the fragmented data address (0xa0000000 + offset) */
 static void *casio_smem_get_data_base_address(smemfs_fragdata_t *fragment)
 {
-	extern struct smemfs_superblock_s smemfs_superblock;
+	extern struct smemfs_USB2_superblock smemfs_USB2_superblock;
 	struct casio_smem_block_s *block;
 
 	// Find the appropriate block
-	block = smemfs_superblock.sector_table;
+	block = smemfs_USB2_superblock.sector_table;
 	while (block->magic_start == CASIO_SMEM_BLOCK_ENTRY_MAGIC &&
 		block->info.id != fragment->data_block_id)
 	{

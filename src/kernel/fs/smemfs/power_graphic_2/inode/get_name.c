@@ -4,7 +4,7 @@
 /* smemfs_get_name() - Dump the name of a file (sync) */
 int smemfs_USB2_get_name(void *inode, char *buf, size_t count)
 {
-	extern struct smemfs_superblock_s smemfs_superblock;
+	extern struct smemfs_USB2_superblock smemfs_USB2_superblock;
 	struct casio_smem_header_s *header;
 
 	// Check error
@@ -15,7 +15,7 @@ int smemfs_USB2_get_name(void *inode, char *buf, size_t count)
 	atomic_start();
 
 	// Check root inode
-	if (inode == smemfs_superblock.sector_table)
+	if (inode == smemfs_USB2_superblock.sector_table)
 	{
 		buf[0] = '/';
 		buf[1] = '\0';

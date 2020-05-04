@@ -12,6 +12,7 @@
 #include <kernel/syscall.h>
 #include <kernel/scheduler.h>
 #include <kernel/loader.h>
+#include <kernel/driver.h>
 // Devices
 #include <kernel/devices/earlyterm.h>
 // Libs
@@ -33,7 +34,6 @@ extern uint32_t edtors;
 
 // Internal bootstrap funtions
 extern mpu_t mpu_get(void);
-extern void bootstrap_drivers_install(void);
 extern void bootstrap_filesystem_init(void);
 
 //
@@ -90,7 +90,7 @@ int start(void)
 	earlyterm_write("Kernel initialisation...\n");
 
 	// Load all drivers on-the-fly
-	bootstrap_drivers_install();
+	drivers_install(1);
 
 	// Execute constructor.
 	// FIXME: remove me ?
@@ -137,6 +137,9 @@ int start(void)
 	sched_start();
 
 	// normally the kernel SHOULD / CAN not arrive here.
+	uint32_t sr;
+	__asm__ volatile ("stc sr, %0" : "=r"(sr) );
 	earlyterm_write("Kernel job fini !\n");
+	earlyterm_write("SR -> %p\n", sr);
 	while (1) { __asm__ volatile ("sleep"); }
 }

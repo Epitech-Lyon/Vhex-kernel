@@ -5,7 +5,7 @@
 /* smemfs_get_mode() - Return the permission dans the type of a file (sync) */
 mode_t smemfs_USB2_get_mode(void *inode)
 {
-	extern struct smemfs_superblock_s smemfs_superblock;
+	extern struct smemfs_USB2_superblock smemfs_USB2_superblock;
 	struct casio_smem_header_s *header;
 	mode_t inode_type;
 
@@ -17,7 +17,7 @@ mode_t smemfs_USB2_get_mode(void *inode)
 	atomic_start();
 
 	// Check root inode
-	if (inode == smemfs_superblock.sector_table)
+	if (inode == smemfs_USB2_superblock.sector_table)
 	{
 		atomic_stop();
 		return (__S_IFDIR | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);

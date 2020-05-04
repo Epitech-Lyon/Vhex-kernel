@@ -4,7 +4,7 @@
 /* smemfs_find_parent() - Return the parent inode */
 void *smemfs_USB2_find_parent(void *inode)
 {
-	extern struct smemfs_superblock_s smemfs_superblock;
+	extern struct smemfs_USB2_superblock smemfs_USB2_superblock;
 	void *parent_inode;
 	uint16_t folder_id;
 
@@ -16,7 +16,7 @@ void *smemfs_USB2_find_parent(void *inode)
 	atomic_start();
 
 	// Check inode validity (and root)
-	if (inode == smemfs_superblock.sector_table ||
+	if (inode == smemfs_USB2_superblock.sector_table ||
 		((struct casio_smem_header_s *)inode)->info != CASIO_SMEM_HEADER_INFO_EXIST)
 	{
 		atomic_stop();
@@ -27,7 +27,7 @@ void *smemfs_USB2_find_parent(void *inode)
 	folder_id = ((struct casio_smem_header_s *)inode)->parent.id;
 
 	// Return first inode find
-	parent_inode = smemfs_USB2_walk(inode, smemfs_superblock.inode_table, folder_id,
+	parent_inode = smemfs_USB2_walk(inode, smemfs_USB2_superblock.inode_table, folder_id,
 						WALK_FLAG_ID_CHECK_DIRECTORY);
 
 	// Stop atomic operation

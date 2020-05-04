@@ -2,10 +2,7 @@
 #include <kernel/util/atomic.h>
 #include <kernel/bits/context.h>
 #include <kernel/devices/earlyterm.h>
-
-// Internal bootstrap primitives
-extern void bootstrap_drivers_install(void);
-extern void bootstrap_drivers_uninstall(void);
+#include <kernel/driver.h>
 
 // Internal informations
 int casio_timer_id;
@@ -30,7 +27,7 @@ void casio_return_menu(int mode)
 	int col;
 
 	// unistall / restore all drivers
-	bootstrap_drivers_uninstall();
+	drivers_uninstall(0);
 
 	// If we should involve main menu manually
 	// we need to setup one timer which will inject
@@ -47,5 +44,5 @@ void casio_return_menu(int mode)
 	} while (mode == 1);
 	
 	// Re-install Vhex drivers
-	bootstrap_drivers_install();
+	drivers_install(0);
 }

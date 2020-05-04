@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <sys/types.h>
 
 //---
 //	Casio's wrapper
@@ -78,6 +79,52 @@ extern int casio_TimerUninstall(int id);
 extern int casio_TimerStart(int id);
 extern int casio_TimerStop(int id);
 
+//---
+// Bfile syscalls
+//---
+//@note: Graph35+II define
+// DT_ADDIN_APP -> 65
+// DT_DIRECTORY -> 0
+// DT_DOT	-> 8
+// DT_DOT_DOT	-> 9
+#define DT_DIRECTORY            0x0000      // Directory
+#define DT_FILE                 0x0001      // File
+#define DT_ADDIN_APP            0x0002      // Add-In application
+#define DT_EACT                 0x0003      // eActivity
+#define DT_LANGUAGE             0x0004      // Language
+#define DT_BITMAP               0x0005      // Bitmap
+#define DT_MAINMEM              0x0006      // Main Memory data
+#define DT_TEMP                 0x0007      // Temporary data
+#define DT_DOT                  0x0008      // .  (Current directory)
+#define DT_DOTDOT               0x0009      // .. (Parent directory)
+#define DT_VOLUME               0x000A      // Volume label
+
+// @note: unsed with Graph35+
+#define _OPENMODE_READ              0x01
+#define _OPENMODE_READ_SHARE        0x80
+#define _OPENMODE_WRITE             0x02
+#define _OPENMODE_READWRITE         0x03
+#define _OPENMODE_READWRITE_SHARE   0x83
+
+
+// Internal Casio's structure to dump file's informations
+struct casio_file_info
+{
+	uint16_t id;			// File index
+	uint16_t type;			// File type
+	struct {
+		uint32_t file;		// File size (data + header)
+		uint32_t data;		// Data size (without header)
+	} size;
+	uint32_t address;		// Data address ?
+};
+extern int casio_Bfile_OpenFile(uint16_t *pathname, int mode);
+extern int casio_Bfile_ReadFile(int handle, void *buffer, size_t count, off_t pos);
+extern int casio_Bfile_FindFirst(uint16_t *search_path, int *handle,
+		uint16_t *pathname, struct casio_file_info *file_info);
+extern int casio_Bfile_FindNext(int handle, uint16_t *pathname, struct casio_file_info *file_info);
+extern int casio_Bfile_FindClose(int handle);
+extern int casio_Bfile_CloseFile(int handle);
 
 
 #endif /*__KERNEL_UTIL_CASIO_H__*/

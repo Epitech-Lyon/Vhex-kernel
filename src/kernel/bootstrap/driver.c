@@ -9,7 +9,7 @@
 extern mpu_t mpu_get(void);
 
 //TODO: secure if no driver is found !!
-void bootstrap_drivers_install(void)
+void drivers_install(int verbose)
 {
 	extern uint32_t bdrivers_section;
 	extern uint32_t edrivers_section;
@@ -17,8 +17,11 @@ void bootstrap_drivers_install(void)
 	mpu_t mpu;
 	int i;
 
+	// Verbose
+	if (verbose == 1)
+		earlyterm_write("Load drivers...\n");
+
 	// Start atomic operations
-	earlyterm_write("Load drivers...\n");
 	atomic_start();
 
 	i = -1;
@@ -38,7 +41,8 @@ void bootstrap_drivers_install(void)
 
 		// Try to install the driver
 		// TODO: check driver error ?
-		earlyterm_write("* install driver [%s]\n", driver[i].name);
+		if (verbose == 1)
+			earlyterm_write("* install driver [%s]\n", driver[i].name);
 		(*driver[i].install)();
 	}
 
@@ -46,7 +50,7 @@ void bootstrap_drivers_install(void)
 	atomic_stop();
 }
 
-void bootstrap_drivers_uninstall(void)
+void drivers_uninstall(int verbose)
 {
 	extern uint32_t bdrivers_section;
 	extern uint32_t edrivers_section;
@@ -54,8 +58,11 @@ void bootstrap_drivers_uninstall(void)
 	mpu_t mpu;
 	int i;
 
+	// Verbose
+	if (verbose == 1)
+		earlyterm_write("Unload drivers...\n");
+
 	// Start atomic operations
-	earlyterm_write("Unload drivers...\n");
 	atomic_start();
 
 	// Uninstall driver (fifo style)
@@ -76,7 +83,8 @@ void bootstrap_drivers_uninstall(void)
 
 		// Try to uninstall the driver
 		// TODO: check driver error ?
-		earlyterm_write("* uninstall driver [%s]\n", driver[i].name);
+		if (verbose == 1)
+			earlyterm_write("* uninstall driver [%s]\n", driver[i].name);
 		(*driver[i].uninstall)();
 	}
 

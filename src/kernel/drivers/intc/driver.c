@@ -134,5 +134,5 @@ VHEX_DRIVER(2, driver_intc_sh7305) = {
 	.arch = MPU_SH7305,
 	.install = &sh7305_intc_driver_install,
 	.uninstall = &sh7305_intc_driver_uninstall,
-	.name = "cpg"
+	.name = "intc"
 };

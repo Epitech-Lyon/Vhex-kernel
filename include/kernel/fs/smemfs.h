@@ -24,16 +24,28 @@ extern void smemfd_uninitialize(void);
 /** USB Power Graphic II SMEM driver part **/
 /**                                       **/
 /*******************************************/
-// Internal Casio's structure to dump file's informations
-struct smem_USB3_file_info
+// Internal superblock use by the USB3 abstractions
+struct smemfs_USB3_superblock
 {
-	uint16_t id;			// File index
-	uint16_t type;			// File type
-	struct {
-		uint32_t file;		// File size (data + header)
-		uint32_t data;		// Data size (without header)
-	} size;
-	uint32_t address;		// Data address ?
+	struct smemfs_USB3_inode *root_inode;
+	struct smemfs_USB3_inode *fake_root_inode;
+};
+
+// Internal struct used to store SMEM dump
+struct smemfs_USB3_inode
+{
+	// File name
+	char name[32];
+
+	// Internal file's informations
+	int type;
+	size_t fsize;
+	size_t dsize;
+
+	// Internal abstraction informations
+	struct smemfs_USB3_inode *child;
+	struct smemfs_USB3_inode *sibling;
+	struct smemfs_USB3_inode *parent;
 };
 
 // Superblock primitives
@@ -50,13 +62,15 @@ extern void *	smemfs_USB3_find_next_sibling(void *inode);
 extern int	smemfs_USB3_get_name(void *inode, char *name, size_t count);
 extern mode_t	smemfs_USB3_get_mode(void *inode);
 
+// Superblock
+extern struct smemfs_USB3_inode *smemfs_USB3_alloc_inode(void);
 
 /*******************************************/
 /**                                       **/
 /** USB Power Graphic II SMEM driver part **/
 /**                                       **/
 /*******************************************/
-
+//TODO: update this part !!
 // Define internal SMEM informations /flags
 #define CASIO_SMEM_NAME_LENGHT			12
 #define CASIO_SMEM_ROOT_ID			0xffff
@@ -131,7 +145,7 @@ typedef struct casio_smem_header_s smemfs_header_t;
 
 
 // Define internal superblock
-struct smemfs_superblock_s
+struct smemfs_USB2_superblock
 {
 	smemfs_inode_t *inode_table;
 	smemfs_sector_t  *sector_table;
