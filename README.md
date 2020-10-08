@@ -25,7 +25,7 @@ The goal is to isolate Casio from the device and execute some pieces of Casio's 
 ---
 
 ## Features
-* Bootloader (custom, isolate Casio then initialise hardware)
+* Bootloader (custom, isolate Casio then initialize hardware)
 * ELF Loader (shared libraries not supported, see [this GCC issue](https://gcc.gnu.org/legacy-ml/gcc-help/current/000075.html))
 * Scheduler (not prehemptive yet)
 * Drivers (screen, keyboard, timers, ...)
